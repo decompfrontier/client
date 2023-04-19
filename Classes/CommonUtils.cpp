@@ -194,3 +194,15 @@ bool CommonUtils::containsPoint(const cocos2d::CCRect& rect, const cocos2d::CCPo
 	CCRect newRect(originGL.x, originGL.y - rect.size.height, rect.size.width, rect.size.height);
 	return newRect.containsPoint(pointGL);
 }
+
+cocos2d::CCPoint CommonUtils::convertPosition(cocos2d::CCLayer* layer, float width, float height)
+{
+	auto rheight = layer-> ? ();
+
+	if (rheight == 0.0)
+	{
+		rheight = CCDirector::sharedDirector()->getWinSize().height;
+	}
+
+	return cocos2d::CCPoint(width, rheight - height);
+}

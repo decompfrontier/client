@@ -29,6 +29,7 @@ public:
 	static bool canAccessToPhotos();
 	static bool canOpenUrl(std::string url);
 	static bool containsPoint(const cocos2d::CCRect& rect, const cocos2d::CCPoint& point);
+	static cocos2d::CCPoint convertPosition(cocos2d::CCLayer* layer, float width, float height);
 
 	/* todo: to finish ... */
 };
