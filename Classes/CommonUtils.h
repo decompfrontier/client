@@ -30,6 +30,20 @@ public:
 	static bool canOpenUrl(std::string url);
 	static bool containsPoint(const cocos2d::CCRect& rect, const cocos2d::CCPoint& point);
 	static cocos2d::CCPoint convertPosition(cocos2d::CCLayer* layer, float width, float height);
+	static cocos2d::CCPoint convertPosition(const cocos2d::CCPoint& point);
+	static cocos2d::CCPoint convertPosition(float width, float height);
+	static cocos2d::CCPoint convertPosition(int layerId, float width, float height);
+	static void* convertUIImage(void* imgptr);
+	static void copyClipboard(const std::string& str);
+	static std::string decodeCStringForBase64(const char* data, const char* key);
+	static std::string decompress_string(const char* data, int);
+	static void deleteCache();
+	static void deleteLocalFile(const std::string& str);
+	static void deleteLocalFile(const std::string&, const std::string);
+	static void deleteLocalFilesWithExtension(std::string);
+	static void dictionaryWordBreak(std::string&, std::string&);
+	static uint disableBit(uint&, uint);
+	static void disableDim();
 
 	/* todo: to finish ... */
 };
