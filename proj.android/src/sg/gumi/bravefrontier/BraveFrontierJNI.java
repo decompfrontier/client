@@ -81,10 +81,11 @@ public class BraveFrontierJNI {
         ((android.app.AlarmManager)a.getSystemService("alarm")).set(0, a0.getTimeInMillis(), a2);
     }
     
+	/* data, key */
     public static String decodeCStringForBase64(String s, String s0) {
         String s1 = null;
         try {
-            byte[] a = new byte[16];
+            byte[] a = new byte[16]; 
             System.arraycopy((Object)s0.getBytes("UTF-8"), 0, (Object)a, 0, Math.min(16, s0.getBytes("UTF-8").length));
             javax.crypto.spec.SecretKeySpec a0 = new javax.crypto.spec.SecretKeySpec(a, "AES");
             javax.crypto.Cipher a1 = javax.crypto.Cipher.getInstance("AES");

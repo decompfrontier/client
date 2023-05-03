@@ -5,6 +5,9 @@
 #include "SimpleAudioEngine.h"
 #include "CCMutableArray.h" // COMPATIBILITY WITH COCOS2D-X v1 API
 
+// zlib
+#include <zlib.h>
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "jni/JniHelper.h"
 constexpr const char* BF_JNI_CLASS = ",/sg/gumi/bravefrontier/BraveFrontierJNI";
