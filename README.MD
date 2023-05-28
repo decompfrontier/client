@@ -21,11 +21,19 @@ If you look for a recreation or something that has a proper goal, take a
 look at [Brave Frontier: ReCoded](https://twitter.com/BFRecoded), a project with fairly better scope than this decomp.
 
 ## Compiling
-At the moment it only works for Windows (VS2022), while preliminary code for Android is being made. No support for iOS at this time.
-No cmake support, I wish that once something like this is done we can switch to Cocos v4 and cmake :)
 
-### Building
-Open "Project.win32/BraveFrontier.sln"
+### Windows
+1. Install Visual Studio 2022
+2. Open "Project.win32/BraveFrontier.sln"
+
+### Android
+**NOTE:** Building of libgame.so (actual brave frontier) is currently NOT supported!
+1. Install Android Studio (or IntelliJ IDEA)
+2. Open "Proj.android" directory
+
+### Other platforms
+This decompilation currently does **NOT** support any other platform than Android and Windows, if the project eventually gets finished
+I would like to enroll with cocos2d-x 4.0, cmake fixes to avoid as much JNI as possible so PC platforms (Windows, Linux and MacOS) would work. Once that is actually done, eventually iOS support can be remade entirely (or decompiled providing someone does know how...).
 
 ## Legal
 The source code of DecompFrontier is for **non-commercial use only**. If you use this code or create a derivate work you might not
