@@ -11,15 +11,36 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "jni/JniHelper.h"
 constexpr const char* BF_JNI_CLASS = ",/sg/gumi/bravefrontier/BraveFrontierJNI";
+
+#define RANDOM_FUNC() arc4random()
+#else
+#define RANDOM_FUNC() rand()
 #endif
 
 // C++
 #include <vector>
 #include <string>
+#include <algorithm>
 
 // typedefs
+using byte = unsigned char;
 using ushort = unsigned short;
 using uint = unsigned int;
+using ulonglong = unsigned long long;
+
+enum class GemType : uint
+{
+	Free,
+	Paid,
+	Max,
+};
+
+enum class ReinforcementType : uint
+{
+	Ex1,
+	Ex2,
+	Max,
+};
 
 // game
 #include "Singleton.h"
