@@ -7,6 +7,9 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "AppDelegate.h"
 #include "SuperAnim.h"
+#include "PTRateThisAppPopup.h"
+
+/* jni */
 #include <jni.h>
 #include <android/log.h>
 
@@ -19,13 +22,22 @@ using namespace cocos2d;
 extern "C"
 {
 
+jint JNI_OnLoad(JavaVM *vm, void *reserved)
+{
+    JniHelper::setJavaVM(vm);
+#if USE_TAPJOY
+    tapjoy::Tapjoy::setJavaVM(vm);
+#endif
+    return JNI_VERSION_1_4;
+}
+
 void Java_jp_co_alim_brave_BraveFrontierJNI_setMultiInvateSchemeData()
 {
     /* stub, perhaps this was left from JP */
 }
 
 /* The REAL android entry point */
-void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thiz, jint w, jint h)
+void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv* env, jobject thiz, jint w, jint h)
 {
     if (!CCDirector::sharedDirector()->getOpenGLView())
     {
@@ -45,6 +57,11 @@ void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thi
         CCNotificationCenter::sharedNotificationCenter()->postNotification(EVENT_COME_TO_FOREGROUND, NULL);
         CCDirector::sharedDirector()->setGLDefaultValues(); 
     }
+}
+
+void Java_sg_gumi_bravefrontier_BraveFrontierJNI_nativeRateThisAppPopupCallback(JNIEnv* env, jboejct thisz, jint unk)
+{
+    PTRateThisAppPopup::alertCloseCallback(unk);
 }
 
 
