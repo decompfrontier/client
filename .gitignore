@@ -488,7 +488,7 @@ Debug.win32/
 Release.win32/
 .vs/
 Resources/
-proj.android/res/
+proj.android/app/src/main/res/
 
 metadata
 bin/
@@ -682,3 +682,5 @@ fabric.properties
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
+
+google-services.json
