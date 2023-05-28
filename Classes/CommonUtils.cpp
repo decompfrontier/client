@@ -242,7 +242,7 @@ void CommonUtils::copyClipboard(const std::string& str)
 }
 
 /*
-	AES_CBC.decrypt(base64(data), key) 
+	AES_ECB.decrypt(base64(data), key) 
 	
 	key max size -> 16 bytes, if it's smaller then simply add a bunch of 0x0
 					if it's bigger than just copy the first 16 bytes
@@ -252,14 +252,16 @@ std::string CommonUtils::decodeCStringForBase64(const char* data, const char* ke
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	GET_JNI("decodeCStringForBase64", "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
-	auto jstr = method.env->NewStringUTF(a2);
-	auto jstr2 = method.env->NewStringUTF(a3);
+	auto jstr = method.env->NewStringUTF(data);
+	auto jstr2 = method.env->NewStringUTF(key);
 	auto jstr_ret = method.env->CallStaticVoidMethod(method.classID, method.methodID);
 	std::string retstr = "";
 
 	if (!method.env->ExceptionCheck())
 	{
-		retstr = method.env->GetStringUTFChars(jstr_ret, 0);
+		const char* utfstr = method.env->GetStringUTFChars(jstr_ret, 0);
+		retstr = utfstr;
+		method.env->ReleaseStringUTFChars(jstr_ret, utfstr);
 		method.env->DeleteLocalRef(jstr_ret);
 	}
 
@@ -317,11 +319,11 @@ void CommonUtils::deleteCache()
 #endif
 }
 
-std::string CommonUtils::dictionaryWordBreak(std::string& a1, std::string& a2)
+std::string CommonUtils::dictionaryWordBreak(std::string& wordBreak, std::string& result)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	GET_JNI("dictionaryWordBreak", "(Ljava/lang/String;)Ljava/lang/String;");
-	auto jstr = method.env->NewStringUTF(a1.c_str());
+	auto jstr = method.env->NewStringUTF(wordBreak.c_str());
 	auto jstr_ret = method.env->CallStaticObjectMethod(method.classID, method.methodID, jstr);
 	std::string retstr = "";
 
@@ -329,18 +331,19 @@ std::string CommonUtils::dictionaryWordBreak(std::string& a1, std::string& a2)
 
 	if (jstr_ret)
 	{
-		a2 = method.env->GetStringUTFChars(jstr_ret, 0);
-		(*v26.env)->ReleaseStringUTFChars(v26.env, v10, v11);
+		const char* resdata = method.env->GetStringUTFChars(jstr_ret, 0);
+		result = resdata;
+		method.env->ReleaseStringUTFChars(jstr_ret, resdata);
 		method.env->DeleteLocalRef(jstr_ret);
 		method.env->DeleteLocalRef(method.classID);
 		return a2;
 	}
 
-	if (a1 != a2)
-		a2 = a1;
+	if (wordBreak != result)
+		result = wordBreak;
 
 	method.env->DeleteLocalRef(method.classID);
-	return a2;
+	return result;
 #else
 	/* __DECOMP__ TODO */
 #endif
