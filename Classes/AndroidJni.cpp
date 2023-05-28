@@ -1,10 +1,15 @@
+/*
+    libgame.so definitions
+    Android Jni
+*/
+#include "pch.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "AppDelegate.h"
 #include "SuperAnim.h"
-#include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 #include <android/log.h>
 
-#include "cocos2d.h"
 
 #define  LOG_TAG    "main"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -14,15 +19,12 @@ using namespace cocos2d;
 extern "C"
 {
 
-/* ok */
-jint JNI_OnLoad(JavaVM *vm, void *reserved)
+void Java_jp_co_alim_brave_BraveFrontierJNI_setMultiInvateSchemeData()
 {
-    JniHelper::setJavaVM(vm);
-
-    return JNI_VERSION_1_4;
+    /* stub, perhaps this was left from JP */
 }
 
-/* ok */
+/* The REAL android entry point */
 void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thiz, jint w, jint h)
 {
     if (!CCDirector::sharedDirector()->getOpenGLView())
@@ -45,4 +47,7 @@ void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thi
     }
 }
 
-}
+
+} /* extern "C" */
+
+#endif /* PLATFORM_ANDROID */
