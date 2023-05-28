@@ -18,6 +18,15 @@ USING_NS_CC;
 	buf >> c; \
 	return c;
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#define GET_JNI(method, signature) \
+	JniMethodInfo method; \
+	std::string className = BF_JNI_CLASS; \
+	if (!JniHelper::getStaticMethodInfo(&method, className.c_str(), method, signature)) \
+		return;
+#endif
+
+
 std::string CommonUtils::FloatToString(float conv, int _unused)
 {
 	TOSTR(conv);
@@ -130,11 +139,7 @@ std::string CommonUtils::appendStr(const char* a, const char* b)
 void CommonUtils::appsflyerStartTracking()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	JniMethodInfo method;
-	std::string className = BF_JNI_CLASS;
-	if (!JniHelper::getStaticMethodInfo(&method, className.c_str(), "appsflyerStartTracking", "()V"))
-		return;
-
+	GET_JNI("appsflyerStartTracking", "()V");
 	method.env->CallStaticVoidMethod(method.classID, method.methodID);
 	method.env->DeleteLocalRef(method.classID);
 #endif
@@ -158,11 +163,7 @@ double CommonUtils::calcPercent(double percent, double total)
 bool CommonUtils::canAccessToPhotos()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	JniMethodInfo method;
-	std::string className = BF_JNI_CLASS;
-	if (!JniHelper::getStaticMethodInfo(&method, className.c_str(), "canAccessToPhotos", "()Z"))
-		return;
-
+	GET_JNI("canAccessToPhotos", "()Z");
 	bool ret = method.env->CallStaticBooleanMethod(method.classID, method.methodID);
 	method.env->DeleteLocalRef(method.classID);
 	return ret;
@@ -174,11 +175,7 @@ bool CommonUtils::canAccessToPhotos()
 bool CommonUtils::canOpenUrl(std::string url)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	JniMethodInfo method;
-	std::string className = BF_JNI_CLASS;
-	if (!JniHelper::getStaticMethodInfo(&method, className.c_str(), "canLaunchUrl", "(Ljava/lang/String;)Z"))
-		return;
-
+	GET_JNI("canLaunchUrl", "(Ljava/lang/String;)Z");
 	jstring jstr = method.env->functions->NewStringUTF(url.c_str());
 	bool ret = method.env->CallStaticBooleanMethod(method.classID, method.methodID, jstr);
 	method.env->DeleteLocalRef(method.classID);
@@ -234,11 +231,7 @@ void* CommonUtils::convertUIImage(void* imgptr)
 void CommonUtils::copyClipboard(const std::string& str)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	JniMethodInfo method;
-	std::string className = BF_JNI_CLASS;
-	if (!JniHelper::getStaticMethodInfo(&method, className.c_str(), "copyToClipboard", "(Ljava/lang/String;)V"))
-		return;
-
+	GET_JNI("copyToClipboard", "(Ljava/lang/String;)V");
 	auto jstr = method.env->NewStringUTF(str.c_str());
 	method.env->CallStaticVoidMethod(method.classID, method.methodID);
 	method.env->DeleteLocalRef(jstr);
@@ -258,11 +251,7 @@ void CommonUtils::copyClipboard(const std::string& str)
 std::string CommonUtils::decodeCStringForBase64(const char* data, const char* key)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	JniMethodInfo method;
-	std::string className = BF_JNI_CLASS;
-	if (!JniHelper::getStaticMethodInfo(&method, className.c_str(), "decodeCStringForBase64", "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"))
-		return;
-
+	GET_JNI("decodeCStringForBase64", "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
 	auto jstr = method.env->NewStringUTF(a2);
 	auto jstr2 = method.env->NewStringUTF(a3);
 	auto jstr_ret = method.env->CallStaticVoidMethod(method.classID, method.methodID);
@@ -321,11 +310,7 @@ std::string CommonUtils::decompress_string(const char* data, int length)
 void CommonUtils::deleteCache()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	JniMethodInfo method;
-	std::string className = BF_JNI_CLASS;
-	if (!JniHelper::getStaticMethodInfo(&method, className.c_str(), "clearApplicationData", "()V"))
-		return;
-
+	GET_JNI("clearApplicationData", "()V");
 	auto jstr_ret = method.env->CallStaticVoidMethod(method.classID, method.methodID);
 	method.env->DeleteLocalRef(method.classID);
 	return retstr;
@@ -335,11 +320,7 @@ void CommonUtils::deleteCache()
 std::string CommonUtils::dictionaryWordBreak(std::string& a1, std::string& a2)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	JniMethodInfo method;
-	std::string className = BF_JNI_CLASS;
-	if (!JniHelper::getStaticMethodInfo(&method, className.c_str(), "dictionaryWordBreak", "(Ljava/lang/String;)Ljava/lang/String;"))
-		return;
-
+	GET_JNI("dictionaryWordBreak", "(Ljava/lang/String;)Ljava/lang/String;");
 	auto jstr = method.env->NewStringUTF(a1.c_str());
 	auto jstr_ret = method.env->CallStaticObjectMethod(method.classID, method.methodID, jstr);
 	std::string retstr = "";
@@ -374,13 +355,81 @@ uint CommonUtils::disableBit(uint& ret, uint bit)
 void CommonUtils::disableDim()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	JniMethodInfo method;
-	std::string className = BF_JNI_CLASS;
-	if (!JniHelper::getStaticMethodInfo(&method, className.c_str(), "disableDim", "()V"))
-		return;
-
+	GET_JNI("disableDim", "()V");
 	auto jstr_ret = method.env->CallStaticVoidMethod(method.classID, method.methodID);
 	method.env->DeleteLocalRef(method.classID);
 	return retstr;
 #endif
+}
+
+void CommonUtils::getLocalPath(std::string& p)
+{
+	if (existsLocalFile(p) || !existsBundleFile(p))
+	{
+		auto local = getLocalPath();
+		p = local + p;
+	}
+	else
+	{
+		std::string res;
+		getResourcePath(res);
+		p = res + p;
+	}
+}
+
+std::string CommonUtils::getLocalPath()
+{
+	return CCFileUtils::sharedFileUtils()->getWriteablePath();
+}
+
+void CommonUtils::deleteLocalFile(const std::string& fileName)
+{
+	std::string fileNameLow = fileName;
+	std::transform(fileNameLow.begin(), fileNameLow.end(), fileNameLow.begin(), tolower);
+
+	if (fileNameLow != "userdefault.xml")
+	{
+		getLocalPath(fileNameLow);
+		remove(fileNameLow.c_str());
+	}
+}
+
+time_t CommonUtils::getNowUnitxTime()
+{
+	time_t f;
+	time(&f);
+	return f;
+}
+
+ulonglong CommonUtils::getNowUnitxTimeMill()
+{
+	time_t f;
+	time(&f);
+	return (1000 * f);
+}
+
+std::string getFileName(const char* name)
+{
+	auto len = strlen(name);
+
+	for (int i = len; i > 0; i--)
+	{
+		if (name[len] == '/')
+			return &name[len + 1];
+	}
+
+	return name;
+}
+
+std::string CommonUtils::getFileExtension(const char* name)
+{
+	auto len = strlen(name);
+
+	for (int i = len; i > 0; i--)
+	{
+		if (name[len] == '.')
+			return &name[len + 1];
+	}
+
+	return "";
 }

@@ -41,9 +41,51 @@ public:
 	static void deleteLocalFile(const std::string& str);
 	static void deleteLocalFile(const std::string&, const std::string);
 	static void deleteLocalFilesWithExtension(std::string);
-	static void dictionaryWordBreak(std::string&, std::string&);
+	static std::string dictionaryWordBreak(std::string&, std::string&);
 	static uint disableBit(uint&, uint);
 	static void disableDim();
+	static void downloadBundlePriority(std::string, std::string, bool);
+	static void enableBit(uint&, uint);
+	static void enableDim();
+	static std::string encodeCStringForBase64(const char*, const char*);
+	static bool existsBundleFile(const std::string&);
+	static bool existsLocalFile(const std::string&);
+	static int getBatteryLevel();
+	static int getBatteryState();
+	static int getBlackTexture();
+	static int getBuildPlatformID();
+	static int getBuildPlatformName();
+	static int getChallengeArenaUrl();
+	static float getConstrainLabelScale(StringLabelList*, float);
+	static unk getCsvList(const std::string&);
+	static unk getCsvListForLocal(const std::string&);
+	static unk getCsvListForResource(const std::string&);
+	static int getDeviceAdvertisingID();
+	static int getDeviceID();
+	static int getDeviceManufacturer();
+	static int getDeviceName();
+	static int getDeviceVersion();
+	static int getDistance(int, int, int, int);
+	static std::string getFileExtension(const char*);
+	static std::string getFileName(const char*);
+	static std::string getFileName(const std::string& p) { return getFileName(p.c_str()); }
+	static std::string getFilePathFromLocalThenBundle(std::string) { return ""; }
+	static void getLocalPath(std::string&);
+	static std::string getLocalPath();
+	static int getNetworkState();
+	static time_t getNowUnitxTime();
+	static ulonglong getNowUnitxTimeMill();
+	static int getNowYMD();
+	static int getPercent(float, float);
+	static void getPhpReidUrl(const std::string&);
+	static int getPlistInfo(const char*);
+	static int getPlistInfo(const std::string&);
+	static int getPurhcasePhpUrl();
+	static int getQueryMap(const std::string&);
+	static int getRandom(int, int);
+	static int getRandomForFloat(float, float);
+	static int getResourcePath(std::string&);
+	static int getResourceUrl(bool);
 
 	/* todo: to finish ... */
 };

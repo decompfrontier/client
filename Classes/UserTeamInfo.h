@@ -6,216 +6,226 @@ class UserTeamInfo : public cocos2d::CCObject
 
 public:
 	
-	UserTeamInfo();
-	~UserTeamInfo();
+	UserTeamInfo() = default;
+	~UserTeamInfo() = default;
 
-	/* to fix */
+	void decActionRestTimer(void);
+	void decFightRestTimer(void) const;
+	int getActionPoint(void) const { return actionPointXor ^ actionPointMagic; }
+	int getActionRestTimer(void) const { return actionRestTimerXor ^ actionRestTimerMagic; }
+	int getActiveDeckNum(void) const { return activeDeckNum; }
+	unsigned int getAddFrdCnt(void) const { return addFrdCount; }
+	int getAddUnitCnt(void) const { return addUnitCountXor ^ addUnitCountMagic; }
+	int getAddWarehouseCnt(void) const { return addWarehouseCountXor ^ addWarehouseCountMagic; }
+	int getArenaDeckNum(void) const
+	{
+		if (arenaDeckNum != -1)
+			return arenaDeckNum;
 
-	int decActionRestTimer(void) const;
-	int decFightRestTimer(void) const;
-	int getActionPoint(void) const;
-	int getActionRestTimer(void) const;
-	int getActiveDeckNum(void) const;
-	unsigned int getAddFrdCnt(void) const { return addFrdCnt; }
-	int getAddUnitCnt(void) const;
-	int getAddWarehouseCnt(void) const;
-	int getArenaDeckNum(void) const;
-	int getBraveCoin(void) const;
-	int getBravePointsCurrent(void) const;
-	int getBravePointsTotal(void) const;
-	int getColosseumTicket(void) const;
-	int getCompletedTaskCount(void) const;
-	int getDeckCost(void) const;
-	int getEnergyTickets(void) const;
-	int getExp(void) const;
-	int getFightPoint(void) const;
+		return 0;
+	}
+	int getBraveCoin(void) const { return braveCoinXor ^ braveCoinMagic; }
+	int getBravePointsCurrent(void) const { return bravePointsCurrent; }
+	int getBravePointsTotal(void) const { return bravePointsTotal; }
+	int getColosseumTicket(void) const { return colosseumTickets; }
+	int getCompletedTaskCount(void) const { return completedTaskCount; }
+	int getDeckCost(void) const { return deckCost; }
+	short getEnergyTickets(void) const { return 1; }
+	int getExp(void) const { return expXor ^ expMagic; }
+	int getFightPoint(void) const { return fightPointXor ^ fightPointMagic; }
 	int getFightRecoveryTime(void) const;
-	int getFightRestTimer(void) const;
-	int getFreeGems(void) const;
-	int getFriendAgreeCnt(void) const;
-	int getFriendMessage(void) const;
-	int getFriendMessageOrg(void) const;
-	int getFriendPoint(void) const;
-	int getGiftRecieveCnt(void) const;
-	int getInboxMessagesCnt(void) const;
-	int getInventorySpaceTickets(void) const;
-	int getItemSpaceTickets(void) const;
-	int getKarma(void) const;
-	int getLv(void) const;
-	int getMaxActionPoint(void) const;
-	int getMaxEqpSlotCnt(void) const;
-	int getMaxFightPoint(void) const;
-	int getMaxFrdCnt(void) const;
-	int getMaxUnitCnt(void) const;
-	int getMaxWarehouseCnt(void) const;
-	int getMultiDeckNum(void) const;
-	int getMysteryBoxCount(void) const;
-	int getPaidGems(void) const;
-	int getPresentCnt(void) const;
-	int getRainbowCoin(void) const;
-	int getReinforcementDeckEx1Num(void) const;
-	int getReinforcementDeckEx2Num(void) const;
-	int getReinforcementDeckNum(void) const;
-	int getServerActiveDeckNum(void) const;
-	int getSlotgameFlg(void) const;
-	int getSumFrdCnt(void) const;
-	int getSumUnitCnt(void) const;
-	int getSummonTicket(void) const;
-	int getTotalGems(void) const;
-	int getTotalTickets(void) const;
-	int getUserID(void) const;
-	int getWantGift(void) const;
-	int getWarehouseCnt(void) const;
-	int getZel(void) const;
-	int incKarma(int) const;
-	int incZel(int) const;
-	int setActionPoint(int) const;
-	int setActionRestTimer(int) const;
-	int setActiveDeckNum(int) const;
-	int setAddFrdCnt(int) const;
-	int setAddUnitCnt(int) const;
-	int setAddWarehouseCnt(int) const;
-	int setArenaDeckNum(int) const;
-	int setBraveCoin(int) const;
-	int setBravePointsCurrent(int) const;
-	int setBravePointsTotal(int) const;
-	int setColosseumTicket(int) const;
-	int setCompletedTaskCount(int) const;
-	int setDeckCost(int) const;
-	int setEnergyTickets(ushort) const;
-	int setExp(int) const;
-	int setFightPoint(int) const;
-	int setFightRestTimer(int) const;
-	int setFreeGems(int) const;
-	int setFriendAgreeCnt(int) const;
-	int setFriendMessage(std::string) const;
-	int setFriendMessageOrg(std::string) const;
-	int setFriendPoint(int) const;
-	int setGiftRecieveCnt(int) const;
-	int setInboxMessagesCnt(int) const;
-	int setInventorySpaceTickets(ushort) const;
-	int setItemSpaceTickets(ushort) const;
-	int setKarma(int) const;
-	int setKarma(int) const;
-	int setLv(int) const;
-	int setMaxActionPoint(int) const;
-	int setMaxEqpSlotCnt(int) const;
-	int setMaxFightPoint(int) const;
-	int setMaxFrdCnt(int) const;
-	int setMaxUnitCnt(int) const;
-	int setMultiDeckNum(int) const;
-	int setMysteryBoxCount(int) const;
-	int setPaidGems(int) const;
-	int setPresentCnt(int) const;
-	int setRainbowCoin(int) const;
-	int setReinforcementDeckEx1Num(int) const;
-	int setReinforcementDeckEx2Num(int) const;
-	int setReinforcementDeckNum(int) const;
-	int setServerActiveDeckNum(int) const;
-	int setSlotgameFlg(bool) const;
-	int setSummonTicket(ushort) const;
-	int setUserID(std::string) const;
-	int setWantGift(std::string) const;
-	int setWarehouseCnt(int) const;
-	int setZel(int) const;
+	int getFightRestTimer(void) const { return fightRestTimerXor ^ fightRestTimerMagic; }
+	int getFreeGems(void) const { return gems[static_cast<int>(GemType::Free)]; }
+	int getFriendAgreeCnt(void) const { return friendAgreeCountXor ^ friendAgreeCountMagic; }
+	std::string getFriendMessage(void) const { return friendMessage; }
+	std::string getFriendMessageOrg(void) const { return friendMessageOrg; }
+	int getFriendPoint(void) const { return friendPointXor ^ friendPointMagic; }
+	int getGiftRecieveCnt(void) const { return giftReceiveCountXor ^ giftReceiveCountMagic; }
+	int getInboxMessagesCnt(void) const { return inboxMessageCount; }
+	int getInventorySpaceTickets(void) const { return 1; }
+	int getItemSpaceTickets(void) const { return 1; }
+	int getKarma(void) const { return karmaXor ^ karmaMagic; }
+	int getLv(void) const { return levelXor ^ levelMagic; }
+	int getMaxActionPoint(void) const { return maxActionPointXor ^ maxActionPointMagic; }
+	int getMaxEqpSlotCnt(void) const { return maxEqpSlotXor ^ maxEqpSlotMagic; }
+	int getMaxFightPoint(void) const { return maxFightPointXor ^ maxFightPointMagic; }
+	int getMaxFrdCnt(void) const { return maxFrdCountXor ^ maxFrdCountMagic; }
+	int getMaxUnitCnt(void) const { return maxUnitCountXor ^ maxUnitCountMagic; }
+	int getMaxWarehouseCnt(void) const { return (warehouseCntXor ^ warehouseCntMagic) + (addWarehouseCountXor ^ addWarehouseCountMagic); }
+	int getMultiDeckNum(void) const
+	{
+		if (multiDeckNum != -1)
+			return multiDeckNum;
+
+		return 0;
+	}
+
+	int getMysteryBoxCount(void) const { return mysteryBoxCount; }
+	int getPaidGems(void) const { return gems[static_cast<int>(GemType::Paid)]; }
+	int getPresentCnt(void) const { return presentCntXor ^ presentCntMagic; }
+	int getRainbowCoin(void) const { return rainbowCoin; }
+	int getReinforcementDeckEx1Num(void) const { return reinforcementDeckEx[static_cast<int>(ReinforcementType::Ex1)]; }
+	int getReinforcementDeckEx2Num(void) const { return reinforcementDeckEx[static_cast<int>(ReinforcementType::Ex2)]; }
+	int getReinforcementDeckNum(void) const { return reinforcementDeckNum; }
+	int getServerActiveDeckNum(void) const { return serverActiveDeckNum; }
+	int getSlotgameFlg(void) const { return slotgameFlg; }
+	int getSumFrdCnt(void) const { return addFrdCount + (maxFrdCountXor ^ maxFrdCountMagic); }
+	int getSumUnitCnt(void) const { return (maxUnitCountXor ^ maxUnitCountMagic) + (addUnitCountXor ^ addUnitCountMagic); }
+	int getSummonTicket(void) const { return summonTicket; }
+	int getTotalGems(void) const { return gems[static_cast<int>(GemType::Paid)] + gems[static_cast<int>(GemType::Free)]; }
+	int getTotalTickets(void) const { return summonTicket + energyTickets + itemSpaceTickets + inventorySpaceTickets; }
+	std::string getUserID(void) const { return userId; }
+	std::string getWantGift(void) const { return wantedGift; }
+	int getWarehouseCnt(void) const { return warehouseCntXor ^ warehouseCntMagic; }
+	int getZel(void) const { return zelXor ^ zelMagic; }
+	void incKarma(int karma);
+	void incZel(int zel);
+	void setActionPoint(int v);
+	void setActionRestTimer(int v);
+	void setActiveDeckNum(int v) { activeDeckNum = v; }
+	void setAddFrdCnt(int v) { addFrdCount = v; }
+	void setAddUnitCnt(int v);
+	void setAddWarehouseCnt(int v);
+	void setArenaDeckNum(int v) { arenaDeckNum = v; }
+	void setBraveCoin(int v);
+	void setBravePointsCurrent(int v) { bravePointsCurrent = v; }
+	void setBravePointsTotal(int v) { bravePointsTotal = v; }
+	void setColosseumTicket(int v) { colosseumTickets = v; }
+	void setCompletedTaskCount(int v) { completedTaskCount = v; }
+	void setDeckCost(int v) { deckCost = v; }
+	void setEnergyTickets(ushort v) { energyTickets = v; }
+	void setExp(int v);
+	void setFightPoint(int v);
+	void setFightRestTimer(int v);
+	void setFreeGems(int v) { gems[static_cast<int>(GemType::Free)] = v; }
+	void setFriendAgreeCnt(int v);
+	void setFriendMessage(std::string v) { friendMessage = v; }
+	void setFriendMessageOrg(std::string v) { friendMessageOrg = v; }
+	void setFriendPoint(int v);
+	void setGiftRecieveCnt(int v);
+	void setInboxMessagesCnt(int v)
+	{
+		if (v >= 0)
+			inboxMessageCount = v;
+		else
+			inboxMessageCount = 0;
+	}
+	void setInventorySpaceTickets(ushort v) { inventorySpaceTickets = v; }
+	void setItemSpaceTickets(ushort v) { itemSpaceTickets = v; }
+	void setKarma(int v);
+	void setLv(int v);
+	void setMaxActionPoint(int v);
+	void setMaxEqpSlotCnt(int v);
+	void setMaxFightPoint(int v);
+	void setMaxFrdCnt(int v);
+	void setMaxUnitCnt(int v);
+	void setMultiDeckNum(int v) { multiDeckNum = v; }
+	void setMysteryBoxCount(int v) { mysteryBoxCount = v; }
+	void setPaidGems(int v) { gems[static_cast<int>(GemType::Paid)] = v; }
+	void setPresentCnt(int v);
+	void setRainbowCoin(int v) { rainbowCoin = v; }
+	void setReinforcementDeckEx1Num(int v) { reinforcementDeckEx[static_cast<int>(ReinforcementType::Ex1)] = v; }
+	void setReinforcementDeckEx2Num(int v) { reinforcementDeckEx[static_cast<int>(ReinforcementType::Ex2)] = v; }
+	void setReinforcementDeckNum(int v) { reinforcementDeckNum = v; }
+	void setServerActiveDeckNum(int v) { serverActiveDeckNum = v; }
+	void setSlotgameFlg(bool v) { slotgameFlg = v; }
+	void setSummonTicket(ushort v) { summonTicket = v; }
+	void setUserID(std::string v) { userId = v; }
+	void setWantGift(std::string v) { wantedGift = v; }
+	void setWarehouseCnt(int v);
+	void setZel(int v);
 
 	private:
-		_DWORD dword30;
-		_BYTE byte34;
-		__attribute__((packed)) __attribute__((aligned(1))) _WORD word35;
-		_BYTE byte37;
-		_DWORD dword38;
-		_DWORD dword3C;
-		_BYTE byte40;
-		__attribute__((packed)) __attribute__((aligned(1))) _WORD word41;
-		_BYTE byte43;
-		_DWORD dword44;
-		_DWORD dword48;
-		_BYTE byte4C;
-		__attribute__((packed)) __attribute__((aligned(1))) _WORD word4D;
-		_BYTE byte4F;
-		_DWORD dword50;
-		_DWORD dword54;
-		_BYTE byte58;
-		__attribute__((packed)) __attribute__((aligned(1))) _WORD word59;
-		_BYTE byte5B;
-		_DWORD dword5C;
-		_DWORD dword60;
-		_BYTE byte64;
-		__attribute__((packed)) __attribute__((aligned(1))) _WORD word65;
-		_BYTE byte67;
-		_DWORD dword68;
-		_DWORD dword6C;
-		_BYTE byte70;
-		__attribute__((packed)) __attribute__((aligned(1))) _WORD word71;
-		_BYTE byte73;
-		_DWORD dword74;
-		_DWORD dword78;
-		_BYTE byte7C;
-		_BYTE gap7D[7];
-		_DWORD dword84;
-		_BYTE byte88;
-		_BYTE gap89[11];
-		_DWORD dword94;
-		_BYTE byte98;
-		__attribute__((aligned(8))) _DWORD dwordA0;
-		_BYTE byteA4;
-		__attribute__((packed)) __attribute__((aligned(1))) _WORD wordA5;
-		_BYTE byteA7;
-		_DWORD dwordA8;
-		unsigned int addFrdCnt;
-		_DWORD dwordB0;
-		_BYTE byteB4;
-		_BYTE gapB5[7];
-		_DWORD dwordBC;
-		_BYTE byteC0;
-		__attribute__((aligned(8))) _DWORD dwordC8;
-		_BYTE byteCC;
-		_BYTE gapCD[7];
-		_DWORD dwordD4;
-		_BYTE byteD8;
-		__attribute__((packed)) __attribute__((aligned(1))) _WORD wordD9;
-		_BYTE byteDB;
-		_DWORD dwordDC;
-		_OWORD owordE0;
-		_OWORD owordF0;
-		_OWORD oword100;
-		_BYTE gap110[12];
-		_DWORD dword11C;
-		_BYTE byte120;
-		__attribute__((packed)) __attribute__((aligned(8))) _OWORD oword128;
-		_BYTE gap138[20];
-		_DWORD dword14C;
-		_BYTE byte150;
-		__attribute__((packed)) __attribute__((aligned(1))) _WORD word151;
-		_BYTE byte153;
-		_DWORD dword154;
-		_DWORD dword158;
-		_BYTE byte15C;
-		__attribute__((packed)) __attribute__((aligned(1))) _WORD word15D;
-		_BYTE byte15F;
-		_DWORD dword160;
-		_DWORD dword164;
-		_BYTE byte168;
-		__attribute__((packed)) __attribute__((aligned(1))) _WORD word169;
-		_BYTE byte16B;
-		_DWORD dword16C;
-		_DWORD dword170;
-		_BYTE byte174;
-		__attribute__((packed)) __attribute__((aligned(1))) _WORD word175;
-		_BYTE byte177;
-		_DWORD dword178;
-		_BYTE gap17C[20];
-		_QWORD qword190;
-		_BYTE gap198[4];
-		__attribute__((packed)) __attribute__((aligned(1))) _QWORD qword19C;
-		_DWORD dword1A4;
-		_BYTE byte1A8;
-		__attribute__((packed)) __attribute__((aligned(4))) _QWORD qword1AC;
-		_DWORD dword1B4;
-		_QWORD qword1B8;
-		_QWORD qword1C0;
-		_DWORD dword1C8;
-		_DWORD dword1CC;
-		_OWORD oword1D0;
+		std::string userId;
+		int levelXor;
+		uint8_t levelMagic;
+		int level;
+		int expXor;
+		uint8_t expMagic;
+		int exp;
+		int actionPointXor;
+		uint8_t actionPointMagic;
+		int actionPoint;
+		int maxActionPointXor;
+		uint8_t maxActionPointMagic;
+		int maxActionPoint;
+		int fightPointXor;
+		uint8_t fightPointMagic;
+		int fightPoint;
+		int maxFightPointXor;
+		uint8_t maxFightPointMagic;
+		int maxFightPoint;
+		int maxUnitCountXor;
+		uint8_t maxUnitCountMagic;
+		int maxUnitCount;
+		int addUnitCountXor;
+		uint8_t addUnitCountMagic;
+		int addUnitCount;
+		int deckCost;
+		unsigned int maxEqpSlotXor;
+		uint8_t maxEqpSlotMagic;
+		int maxEqpSlot;
+		int maxFrdCountXor;
+		uint8_t maxFrdCountMagic;
+		int maxFrdCount;
+		int addFrdCount;
+		int friendPointXor;
+		uint8_t friendPointMagic;
+		int friendPoint;
+		int zelXor;
+		uint8_t zelMagic;
+		int zel;
+		int karmaXor;
+		uint8_t karmaMagic;
+		int karma;
+		int braveCoinXor;
+		uint8_t braveCoinMagic;
+		int braveCoin;
+		std::string friendMessage;
+		std::string friendMessageOrg;
+		int warehouseCntXor;
+		uint8_t warehouseCntMagic;
+		int warehouseCnt;
+		int addWarehouseCountXor;
+		uint8_t addWarehouseCountMagic;
+		int addWarehouseCount;
+		std::string wantedGift;
+		int presentCntXor;
+		uint8_t presentCntMagic;
+		int presentCnt;
+		int friendAgreeCountXor;
+		uint8_t friendAgreeCountMagic;
+		int friendAgreeCount;
+		int giftReceiveCountXor;
+		uint8_t giftReceiveCountMagic;
+		int giftReceiveCount;
+		int actionRestTimerXor;
+		uint8_t actionRestTimerMagic;
+		int actionRestTimer;
+		int fightRestTimerXor;
+		uint8_t fightRestTimerMagic;
+		int fightRestTimer;
+		//int gap17c4; // TODO: what is this?
+		time_t actionRestTimerTimestamp;
+		time_t fightRestTimerTimestamp;
+		int activeDeckNum;
+		int arenaDeckNum;
+		int multiDeckNum;
+		int reinforcementDeckNum;
+		int reinforcementDeckEx[static_cast<int>(ReinforcementType::Max)];
+		bool slotgameFlg;
+		int serverActiveDeckNum;
+		//int unk2; // TODO: What is this?
+		int colosseumTickets;
+		int bravePointsTotal;
+		int bravePointsCurrent;
+		short summonTicket;
+		short energyTickets;
+		short itemSpaceTickets;
+		short inventorySpaceTickets;
+		int rainbowCoin;
+		int inboxMessageCount;
+		int completedTaskCount;
+		int mysteryBoxCount;
+		int gems[static_cast<int>(GemType::Max)];
 };
