@@ -33,4 +33,4 @@ implement or impose a charge for any possible thing (like Microtransaction or ac
 
 Brave Frontier - (C) Alim Co., Ltd. All Rights Reserved.
 
-This project is not associated, affiliated or sponsed with/by Alim Co., Ltd or gumi Inc.
+This project is not associated, affiliated or sponsored with/by Alim Co., Ltd or gumi Inc.
