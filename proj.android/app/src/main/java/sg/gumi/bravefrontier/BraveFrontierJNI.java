@@ -605,7 +605,7 @@ public class BraveFrontierJNI {
     native public static void nativeDownloadCallback(long arg, byte[] arg0, String arg1);
     
     
-    native public static void nativeRateThisAppPopupCallback(int arg);
+    native public static void nativeRateThisAppPopupCallback(int unk);
     
     
     native public static void nativeSetDeviceRegistrationId(String arg);
