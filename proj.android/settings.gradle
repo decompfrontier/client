@@ -1,0 +1,22 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()  // Maven Central repository
+        google()
+    }
+
+    dependencies {
+        classpath 'com.google.gms:google-services:4.3.15'
+    }
+
+}
+
+rootProject.name = 'Brave Frontier'
+
+include ':app'
