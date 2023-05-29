@@ -148,7 +148,7 @@ final public class GameHelper extends GameService implements GameService.GameHel
                         Thread.sleep(100L);
                     } catch(Throwable ignoredException) {
                     }
-                    publishProgress(null);
+                    publishProgress();
                     continue;
                 }
                 return null;
@@ -475,11 +475,11 @@ final public class GameHelper extends GameService implements GameService.GameHel
     }
 
     static Dialog makeSimpleDialog(Activity activity, String msg) {
-        return new AlertDialog.Builder(activity).setMessage(msg).setNeutralButton(17039370, null).create();
+        return new AlertDialog.Builder(activity).setMessage(msg).setNeutralButton(android.R.string.ok, null).create();
     }
 
     static android.app.Dialog makeSimpleDialog(Activity activity, String title, String message) {
-        return new AlertDialog.Builder(activity).setMessage(message).setTitle(title).setNeutralButton(17039370, null).create();
+        return new AlertDialog.Builder(activity).setMessage(message).setTitle(title).setNeutralButton(android.R.string.ok, null).create();
     }
 
     private void onSignInFailedTask() {

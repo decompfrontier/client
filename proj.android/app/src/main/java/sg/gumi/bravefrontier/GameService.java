@@ -242,11 +242,11 @@ abstract public class GameService {
     
     
     final public void showAlert(String msg) {
-        new android.app.AlertDialog.Builder(getActivity()).setMessage(msg).setNeutralButton(17039370, null).create().show();
+        new android.app.AlertDialog.Builder(getActivity()).setMessage(msg).setNeutralButton(android.R.string.ok, null).create().show();
     }
     
     final public void showAlert(String title, String message) {
-        new AlertDialog.Builder(getActivity()).setTitle(title).setMessage(message).setNeutralButton(17039370, null).create().show();
+        new AlertDialog.Builder(getActivity()).setTitle(title).setMessage(message).setNeutralButton(android.R.string.ok, null).create().show();
     }
     
     public void showPlayPhoneButton(boolean visible) {

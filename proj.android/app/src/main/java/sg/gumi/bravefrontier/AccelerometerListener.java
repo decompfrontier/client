@@ -1,8 +1,8 @@
 package sg.gumi.bravefrontier;
 
-abstract public interface AccelerometerListener {
-    abstract public void onAccelerationChanged(float arg, float arg0, float arg1);
+public interface AccelerometerListener {
+    void onAccelerationChanged(float arg, float arg0, float arg1);
     
     
-    abstract public void onShake(float arg);
+    void onShake(float value);
 }

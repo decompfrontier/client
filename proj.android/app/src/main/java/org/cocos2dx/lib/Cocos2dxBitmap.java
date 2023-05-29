@@ -166,7 +166,7 @@ public class Cocos2dxBitmap {
 			/* Compute the max width. */
 			int temp = 0;
 			for (final String line : lines) {
-				temp = (int) FloatMath.ceil(pPaint.measureText(line, 0, line.length()));
+				temp = (int) Math.ceil(pPaint.measureText(line, 0, line.length())); // __DECOMP__ FIX
 				if (temp > maxContentWidth) {
 					maxContentWidth = temp;
 				}
@@ -230,7 +230,7 @@ public class Cocos2dxBitmap {
 			final LinkedList<String> strList = new LinkedList<String>();
 			for (final String line : lines) {
 				/* The width of line is exceed maxWidth, should divide it into two or more lines. */
-				final int lineWidth = (int) FloatMath.ceil(pPaint.measureText(line));
+				final int lineWidth = (int) Math.ceil(pPaint.measureText(line)); // __DECOMP__ FIX
 				if (lineWidth > pMaxWidth) {
 					strList.addAll(Cocos2dxBitmap.divideStringWithMaxWidth(line, pMaxWidth, pPaint));
 				} else {
@@ -275,7 +275,7 @@ public class Cocos2dxBitmap {
 
 		/* Break a String into String[] by the width & should wrap the word. */
 		for (int i = 1; i <= charLength; ++i) {
-			tempWidth = (int) FloatMath.ceil(pPaint.measureText(pString, start, i));
+			tempWidth = (int) Math.ceil(pPaint.measureText(pString, start, i)); // __DECOMP__ FIX
 			if (tempWidth >= pMaxWidth) {
 				final int lastIndexOfSpace = pString.substring(0, i).lastIndexOf(" ");
 

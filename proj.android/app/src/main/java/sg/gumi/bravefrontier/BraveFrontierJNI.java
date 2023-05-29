@@ -146,7 +146,7 @@ public class BraveFrontierJNI {
             AlertDialog dialog = builder.create();
             dialog.show();
             try {
-                ((TextView)dialog.findViewById(16908299)).setGravity(17);
+                ((TextView)dialog.findViewById(R.id.message)).setGravity(17);
             } catch(Exception ex) {
                 ex.printStackTrace();
             }
