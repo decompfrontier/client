@@ -10,7 +10,7 @@ The Java code was decompiled and fixed with [Krakatau](https://github.com/Storyy
 Any special code for the extended functionlities (like a possible Offline Mod or PC edition) will be marked with `__DECOMP__`.
 
 ## Why this and not a recreation?
-I always wanted to start a decompilation of some games, Brave Frontier left us debugging symbols that we can alayize and have fun,
+I always wanted to start a decompilation of some games, Brave Frontier left us debugging symbols that we can analyze and have fun,
 and I originally did some experiments back in 2019 and 2022 which lead me to attempt my first decompilation with Brave.
 
 I feel like I want to preserve Brave in the original way it was written (using cocos2d-x and all the other trashies), which is why

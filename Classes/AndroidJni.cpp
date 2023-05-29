@@ -59,11 +59,15 @@ void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv* env, jobject thiz
     }
 }
 
-void Java_sg_gumi_bravefrontier_BraveFrontierJNI_nativeRateThisAppPopupCallback(JNIEnv* env, jboejct thisz, jint unk)
+void Java_sg_gumi_bravefrontier_BraveFrontierJNI_nativeRateThisAppPopupCallback(JNIEnv* env, jobject thisz, jint status)
 {
-    PTRateThisAppPopup::alertCloseCallback(unk);
+    // status 0: app was rated, status 1: app was not rated
+    PTRateThisAppPopup::alertCloseCallback(status);
 }
 
+
+void Java_sg_gumi_bravefrontier_BraveFrontierJNI_backButtonCallback();
+void Java_sg_gumi_bravefrontier_BraveFrontierJNI_nativeDownloadCallback(JNIEnv* env, jobject thisz, jlong obj, jbyteArray downloadedData, jstring error);
 
 } /* extern "C" */
 
