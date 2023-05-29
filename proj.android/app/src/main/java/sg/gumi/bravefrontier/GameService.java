@@ -8,8 +8,46 @@ import android.content.Intent;
 import android.util.Log;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.ecommerce.Product;
+import com.google.android.gms.analytics.ecommerce.ProductAction;
 
 abstract public class GameService {
+
+    public interface GameHelperListener {
+        void onSignInFailed();
+
+
+        void onSignInSucceeded();
+
+
+        void onSignOutSucceeded();
+    }
+
+    public static class SignInFailureReason {
+        final public static int NO_ACTIVITY_RESULT_CODE = -100;
+        private int mActivityResultCode;
+        private int mServiceErrorCode;
+
+        public SignInFailureReason(int errorCode) {
+            this(errorCode, -100);
+        }
+
+        public SignInFailureReason(int errorCode, int resultCode) {
+            mServiceErrorCode = 0;
+            mActivityResultCode = NO_ACTIVITY_RESULT_CODE;
+            mServiceErrorCode = errorCode;
+            mActivityResultCode = resultCode;
+        }
+
+        final public int getActivityResultCode() {
+            return mActivityResultCode;
+        }
+
+        final public int getServiceErrorCode() {
+            return mServiceErrorCode;
+        }
+    }
+
     final public static int CLIENT_ALL = 5;
     final public static int CLIENT_APPSTATE = 4;
     final public static int CLIENT_GAMES = 1;
@@ -73,7 +111,7 @@ abstract public class GameService {
     abstract public Object getAppStateClient();
     
     
-    abstract public GameService$GameHelperListener getGameHelperListener();
+    abstract public GameService.GameHelperListener getGameHelperListener();
     
     
     abstract public Object getGamesClient();
@@ -94,13 +132,13 @@ abstract public class GameService {
     abstract public int getSignInCancellations();
     
     
-    abstract public GameService$SignInFailureReason getSignInError();
+    abstract public SignInFailureReason getSignInError();
     
     
-    public void googleAnalyticsSendScreenView(String s) {
+    public void googleAnalyticsSendScreenView(String screenName) {
         if (mTracker != null) {
             try {
-                mTracker.setScreenName(s);
+                mTracker.setScreenName(screenName);
                 mTracker.send((new HitBuilders.ScreenViewBuilder()).build());
             } catch(Throwable ignoredException) {
             }
@@ -125,16 +163,16 @@ abstract public class GameService {
         }
     }
     
-    public void googleAnalyticsTrackPurchase(String s, String s0, String s1, String s2, double d, long j, String s3) {
+    public void googleAnalyticsTrackPurchase(String transactionId, String name, String id, String category, double price, long quantity, String cu) {
         if (this.mTracker != null) {
             try {
-                com.google.android.gms.analytics.ecommerce.Product a = new com.google.android.gms.analytics.ecommerce.Product().setId(s1).setName(s0).setCategory(s2).setPrice(d).setQuantity((int)j);
-                com.google.android.gms.analytics.ecommerce.ProductAction a0 = new com.google.android.gms.analytics.ecommerce.ProductAction("purchase").setTransactionId(s);
-                com.google.android.gms.analytics.HitBuilders$ScreenViewBuilder a1 = (com.google.android.gms.analytics.HitBuilders$ScreenViewBuilder)((com.google.android.gms.analytics.HitBuilders$HitBuilder)new com.google.android.gms.analytics.HitBuilders$ScreenViewBuilder()).addProduct(a);
-                ((com.google.android.gms.analytics.HitBuilders$HitBuilder)a1).setProductAction(a0);
-                this.mTracker.setScreenName("transaction");
-                this.mTracker.set("&cu", s3);
-                this.mTracker.send(((com.google.android.gms.analytics.HitBuilders$HitBuilder)a1).build());
+                Product product = new Product().setId(id).setName(name).setCategory(category).setPrice(price).setQuantity((int)quantity);
+                ProductAction action = new ProductAction("purchase").setTransactionId(transactionId);
+                HitBuilders.ScreenViewBuilder screenView = new HitBuilders.ScreenViewBuilder().addProduct(product);
+                screenView.setProductAction(action);
+                mTracker.setScreenName("transaction");
+                mTracker.set("&cu", cu);
+                mTracker.send(screenView.build());
             } catch(Throwable ignoredException) {
             }
         }
@@ -143,7 +181,7 @@ abstract public class GameService {
     abstract public boolean hasSignInError();
     
     
-    public void initGoogleAnalytics(Activity a) {
+    public void initGoogleAnalytics(Activity activity) {
     }
     
     public void initializeAmazonPhoneManager() {
@@ -167,7 +205,7 @@ abstract public class GameService {
         }
     }
     
-    abstract public void onActivityResult(int arg, int arg0, Intent intent);
+    abstract public void onActivityResult(int requestId, int responseId, Intent intent);
     
     
     abstract public void onPause(Activity activity);
@@ -197,18 +235,18 @@ abstract public class GameService {
         mUnknownErrorMessage = err;
     }
     
-    abstract public void setup(GameService$GameHelperListener arg, int arg0, String[] arg1);
+    abstract public void setup(GameService.GameHelperListener listener, int reqClients, String[] args);
     
     
     abstract public void showAchievements();
     
     
     final public void showAlert(String msg) {
-        new android.app.AlertDialog.Builder(this.getActivity()).setMessage(msg).setNeutralButton(17039370, null).create().show();
+        new android.app.AlertDialog.Builder(getActivity()).setMessage(msg).setNeutralButton(17039370, null).create().show();
     }
     
     final public void showAlert(String title, String message) {
-        new AlertDialog.Builder(this.getActivity()).setTitle(title).setMessage(message).setNeutralButton(17039370, null).create().show();
+        new AlertDialog.Builder(getActivity()).setTitle(title).setMessage(message).setNeutralButton(17039370, null).create().show();
     }
     
     public void showPlayPhoneButton(boolean visible) {
@@ -223,5 +261,5 @@ abstract public class GameService {
     abstract public void unlockAchievement(String id);
     
     
-    abstract public void updateLeaderboard(int arg, String arg0);
+    abstract public void updateLeaderboard(int value, String name);
 }

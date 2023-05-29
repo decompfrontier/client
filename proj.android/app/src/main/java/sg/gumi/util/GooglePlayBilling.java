@@ -1,19 +1,96 @@
 package sg.gumi.util;
 
-import com.android.billingclient.api.PurchasesUpdatedListener;
-import com.android.billingclient.api.BillingClient;
+import android.util.Log;
+import com.android.billingclient.api.*;
+import sg.gumi.bravefrontier.BraveFrontier;
 
-import sg.gumi.util.GooglePlayBilling;
-import sg.gumi.util.BFConfig;
+import java.util.ArrayList;
+import java.util.List;
+
+//import com.soomla.store.domain.data.VirtualCurrencyPack;
+//import com.soomla.store.data.StoreInfo;
+//import com.soomla.store.StoreController;
 
 public class GooglePlayBilling implements PurchasesUpdatedListener {
+
+    static class SkuDetailsTask implements SkuDetailsResponseListener {
+        final GooglePlayBilling billing;
+
+        SkuDetailsTask(GooglePlayBilling billing) {
+            super();
+            this.billing = billing;
+        }
+
+        public void onSkuDetailsResponse(BillingResult result, List products) {
+            if (products != null) {
+                for (Object p: products)
+                {
+                    SkuDetails skuDetails = (SkuDetails)p;
+                    String sku = skuDetails.getSku();
+                    String price = skuDetails.getPrice();
+
+                    /*for (VirtualCurrencyPack pack: StoreInfo.getCurrencyPacks())
+                    {
+                        if (pack.getProductId().equals(sku)) {
+                            pack.setPriceString(price);
+                            pack.setSkuDetails(skuDetails);
+                            break;
+                        }
+                    }*/
+                }
+            }
+        }
+    }
+
+    static class ConsumeTask implements ConsumeResponseListener {
+        final GooglePlayBilling billing;
+        final String prodId;
+        final String signature;
+        final String signedData;
+
+        ConsumeTask(GooglePlayBilling billing, String signedData, String signature, String prodId) {
+            super();
+            this.billing = billing;
+            this.signedData = signedData;
+            this.signature = signature;
+            this.prodId = prodId;
+        }
+
+        public void onConsumeResponse(BillingResult result, String msg) {
+            Log.d("DEREKT", "onConsumeResponse Purchases consumed");
+            //com.soomla.store.StoreController.getInstance().onPurchaseStateChange(signedData, signature, prodId);
+        }
+    }
+
+    class SetupTask implements BillingClientStateListener {
+        final GooglePlayBilling billing;
+
+        SetupTask(sg.gumi.util.GooglePlayBilling billing) {
+            super();
+            this.billing = billing;
+
+        }
+
+        public void onBillingServiceDisconnected() {
+            Log.w("GooglePlay Billing Service", "Billing service disconnected v3");
+        }
+
+        public void onBillingSetupFinished(BillingResult result) {
+            try {
+                GooglePlayBilling.runPendingRequests(billing);
+            } catch(Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     final private static String TAG = "GooglePlay Billing Service";
     private BillingClient billingClient;
     
     public GooglePlayBilling() {
     }
     
-    static void access(GooglePlayBilling billing) {
+    static void runPendingRequests(GooglePlayBilling billing) {
         billing.runPendingRequests();
     }
 
@@ -25,7 +102,7 @@ public class GooglePlayBilling implements PurchasesUpdatedListener {
     }
     
     private void runPendingRequests() {
-
+        /* TODO: MISSING!!! */
     }
     
     public void OldRequestPurchase() {
@@ -34,28 +111,31 @@ public class GooglePlayBilling implements PurchasesUpdatedListener {
     public void OldSyncItemPricesAndPurchasesThread() {
     }
     
-    public void RequestPurchase(String s) {
-        com.soomla.store.domain.data.VirtualCurrencyPack a = null;
+    public void RequestPurchase(String productId) {
+        /*VirtualCurrencyPack pack;
         try {
-            a = com.soomla.store.data.StoreInfo.getPackByGoogleProductId(s);
-        } catch(Exception a0) {
-            a0.printStackTrace();
-            a = null;
+            pack = StoreInfo.getPackByGoogleProductId(productId);
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            pack = null;
         }
-        com.android.billingclient.api.SkuDetails a1 = a.getSkuDetails();
-        com.android.billingclient.api.BillingFlowParams a2 = com.android.billingclient.api.BillingFlowParams.newBuilder().setSkuDetails(a1).build();
-        this.billingClient.launchBillingFlow((android.app.Activity)sg.gumi.bravefrontier.BraveFrontier.getActivity(), a2);
+        SkuDetails sku = pack.getSkuDetails();
+        BillingFlowParams params= BillingFlowParams.newBuilder().setSkuDetails(sku).build();
+        billingClient.launchBillingFlow(BraveFrontier.getActivity(), params);*/
     }
     
     public void SyncItemPricesAndPurchasesThread() {
-        java.util.ArrayList a = new java.util.ArrayList();
-        Object a0 = com.soomla.store.data.StoreInfo.getCurrencyPacks().iterator();
-        while(((java.util.Iterator)a0).hasNext()) {
-            ((java.util.List)(Object)a).add((Object)((com.soomla.store.domain.data.VirtualCurrencyPack)((java.util.Iterator)a0).next()).getProductId());
-        }
-        com.android.billingclient.api.SkuDetailsParams$Builder a1 = com.android.billingclient.api.SkuDetailsParams.newBuilder();
-        a1.setSkusList((java.util.List)(Object)a).setType("inapp");
-        this.billingClient.querySkuDetailsAsync(a1.build(), (com.android.billingclient.api.SkuDetailsResponseListener)(Object)new sg.gumi.util.GooglePlayBilling$3(this));
+
+        ArrayList<String> products = new ArrayList<>();
+
+        /*for (VirtualCurrencyPack p: StoreInfo.getCurrencyPacks())
+        {
+            products.add(p.getProductId());
+        }*/
+
+        SkuDetailsParams.Builder sku = SkuDetailsParams.newBuilder();
+        sku.setSkusList(products).setType("inapp");
+        this.billingClient.querySkuDetailsAsync(sku.build(), new SkuDetailsTask(this));
     }
     
     public boolean bindToMarketBillingService() {
@@ -63,39 +143,40 @@ public class GooglePlayBilling implements PurchasesUpdatedListener {
     }
     
     public void initialize() {
-        com.android.billingclient.api.BillingClient a = com.android.billingclient.api.BillingClient.newBuilder((android.content.Context)sg.gumi.bravefrontier.BraveFrontier.getActivity()).setListener((com.android.billingclient.api.PurchasesUpdatedListener)(Object)this).enablePendingPurchases().build();
-        this.billingClient = a;
-        a.startConnection((com.android.billingclient.api.BillingClientStateListener)(Object)new sg.gumi.util.GooglePlayBilling$1(this));
+        billingClient = BillingClient.newBuilder(BraveFrontier.getActivity()).setListener(this).enablePendingPurchases().build();;
+        billingClient.startConnection(new SetupTask(this));
     }
     
-    public void onPurchasesUpdated(com.android.billingclient.api.BillingResult a, java.util.List a0) {
-        if (a == null) {
-            android.util.Log.wtf("GooglePlay Billing Service", "onPurchasesUpdated: null BillingResult");
+    public void onPurchasesUpdated(BillingResult result, List purchases) {
+        if (result == null) {
+            Log.wtf(TAG, "onPurchasesUpdated: null BillingResult");
             return;
         }
-        int i = a.getResponseCode();
-        String s = a.getDebugMessage();
-        android.util.Log.d("GooglePlay Billing Service", "onPurchasesUpdated: $responseCode $debugMessage");
-        if (i != 0) {
-            com.soomla.store.StoreController.getInstance().onPurchaseStateChange("", "", "");
-            StringBuilder a1 = new StringBuilder();
-            a1.append("onActivityResult payment attempt fail! Response code: ");
-            a1.append(i);
-            a1.append(" msg:");
-            a1.append(s);
-            android.util.Log.e("onActivityResult", a1.toString());
+        int code = result.getResponseCode();
+        String debugMsg = result.getDebugMessage();
+        Log.d(TAG, "onPurchasesUpdated: $responseCode $debugMessage");
+        if (code != 0) {
+            //com.soomla.store.StoreController.getInstance().onPurchaseStateChange("", "", "");
+            android.util.Log.e("onActivityResult", "onActivityResult payment attempt fail! Response code: " +
+                    code +
+                    " msg:" +
+                    debugMsg);
             return;
         }
-        Object a2 = a0.iterator();
-        while(((java.util.Iterator)a2).hasNext()) {
-            com.android.billingclient.api.Purchase a3 = (com.android.billingclient.api.Purchase)((java.util.Iterator)a2).next();
-            String s0 = a3.getPurchaseToken();
-            String s1 = a3.getOriginalJson();
-            String s2 = a3.getSignature();
-            String s3 = a3.getSku();
-            com.android.billingclient.api.ConsumeParams a4 = com.android.billingclient.api.ConsumeParams.newBuilder().setPurchaseToken(s0).build();
-            sg.gumi.util.GooglePlayBilling$2 a5 = new sg.gumi.util.GooglePlayBilling$2(this, s1, s2, s3);
-            this.billingClient.consumeAsync(a4, (com.android.billingclient.api.ConsumeResponseListener)(Object)a5);
+
+        for (Object p: purchases)
+        {
+            Purchase purchase = (Purchase)p;
+            String token = purchase.getPurchaseToken();
+            String json = purchase.getOriginalJson();
+            String sig = purchase.getSignature();
+            String sku = "";
+            /* update for newer billing api */
+            if (purchase.getSkus().size() > 0)
+                sku = purchase.getSkus().get(0);
+
+            ConsumeParams params = ConsumeParams.newBuilder().setPurchaseToken(token).build();
+            this.billingClient.consumeAsync(params, new ConsumeTask(this, json, sig, sku));
         }
     }
     

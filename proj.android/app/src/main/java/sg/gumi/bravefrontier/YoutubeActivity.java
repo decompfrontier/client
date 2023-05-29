@@ -35,11 +35,11 @@ public class YoutubeActivity extends YouTubeFailureRecoveryActivity {
         }
 
         public void onSeekTo(int i) {
-            String s = sg.gumi.bravefrontier.YoutubeActivity.access$400(this.activity, i);
+            String s = sg.gumi.bravefrontier.YoutubeActivity.formatActivityTime(this.activity, i);
             sg.gumi.bravefrontier.YoutubeActivity a = this.activity;
             Object[] a0 = new Object[2];
             a0[0] = s;
-            a0[1] = sg.gumi.bravefrontier.YoutubeActivity.access$400(a, sg.gumi.bravefrontier.YoutubeActivity.getPlayer(a).getDurationMillis());
+            a0[1] = sg.gumi.bravefrontier.YoutubeActivity.formatActivityTime(a, sg.gumi.bravefrontier.YoutubeActivity.getPlayer(a).getDurationMillis());
             android.util.Log.v("YoutubeActivity", String.format("\tSEEKTO: (%s/%s)", a0));
         }
 
@@ -126,8 +126,8 @@ public class YoutubeActivity extends YouTubeFailureRecoveryActivity {
         return player;
     }
     
-    static String access$400(YoutubeActivity activity, int i) {
-        return activity.formatTime(i);
+    static String formatActivityTime(YoutubeActivity activity, int ms) {
+        return activity.formatTime(ms);
     }
     
     static String getPlayerState() {
@@ -140,7 +140,7 @@ public class YoutubeActivity extends YouTubeFailureRecoveryActivity {
     }
     
     private String formatTime(int ms) {
-        String hoursStr = null;
+        String hoursStr;
         int seconds = ms / 1000;
         int minutes = seconds / 60;
         int hours = minutes / 60;

@@ -1,39 +1,115 @@
 package sg.gumi.bravefrontier;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import org.cocos2dx.lib.Cocos2dxHelper;
+
+import java.math.BigDecimal;
+import java.util.Currency;
+import java.util.List;
+
 public class Facebook {
-    private static com.facebook.CallbackManager callbackManager;
-    private static sg.gumi.bravefrontier.BraveFrontier mActivity;
-    private static com.facebook.login.LoginManager mLoginManager;
+
+    final static public class FacebookNativeCallback implements Runnable {
+        final public static int GET_FRIEND_LIST_FAIL = 4;
+        final public static int GET_FRIEND_LIST_PERMISSION = 7;
+        final public static int GET_FRIEND_LIST_RETRY = 8;
+        final public static int GET_FRIEND_LIST_SUCCESS = 3;
+        final public static int INVITE_FRIEND_FAIL = 6;
+        final public static int INVITE_FRIEND_SUCCESS = 5;
+        final public static int LOGIN_FAIL = 2;
+        final public static int LOGIN_SUCCESS = 1;
+        final int callback;
+        final Object param;
+
+        public FacebookNativeCallback(int i) {
+            this.callback = i;
+            this.param = null;
+        }
+
+        public FacebookNativeCallback(int status, Object param) {
+            this.callback = status;
+            this.param = param;
+        }
+
+        public void run() {
+            if (!Cocos2dxHelper.isNativeLibraryLoaded()) {
+                return;
+            }
+            if (callback == LOGIN_SUCCESS) {
+                Facebook.onLoginSuccess();
+            } else if (callback == LOGIN_FAIL) {
+                Facebook.onLoginFail((param == null) ? "" : param.toString());
+            }
+        }
+
+        public void startCall() {
+            BraveFrontier.getActivity().getGLView().queueEvent(this);
+        }
+    }
+
+    static class RegisterCallback implements FacebookCallback {
+        final Facebook fb;
+
+        RegisterCallback(Facebook fb) {
+            super();
+            this.fb = fb;
+        }
+
+        public void onCancel() {
+            new FacebookNativeCallback(2, "Canceled").startCall();
+        }
+
+        public void onError(FacebookException ex) {
+            new FacebookNativeCallback(2, ex.toString()).startCall();
+        }
+
+        public void onSuccess(LoginResult res) {
+            new FacebookNativeCallback(1).startCall();
+        }
+
+        public void onSuccess(Object res) {
+            onSuccess((LoginResult)res);
+        }
+    }
+
+    private static CallbackManager callbackManager;
+    private static BraveFrontier mActivity;
+    private static LoginManager mLoginManager;
     private static int offset;
-    public static sg.gumi.bravefrontier.Facebook sFacebook;
-    private com.facebook.appevents.AppEventsLogger appEventsLogger;
-    private android.os.Bundle feedParams;
+    public static Facebook sFacebook;
+    private AppEventsLogger appEventsLogger;
+    private Bundle feedParams;
     private java.util.HashMap[] m_openGraphObjectsArr;
-    
-    static {
-    }
-    
-    public Facebook(sg.gumi.bravefrontier.BraveFrontier a) {
-        this.feedParams = null;
+
+    public Facebook(BraveFrontier activity) {
+        feedParams = null;
         sFacebook = this;
-        mActivity = a;
-        this.appEventsLogger = com.facebook.appevents.AppEventsLogger.newLogger((android.content.Context)a, ((android.app.Activity)a).getResources().getString(2131558540));
-        mLoginManager = com.facebook.login.LoginManager.getInstance();
-        com.facebook.CallbackManager a0 = com.facebook.CallbackManager$Factory.create();
-        callbackManager = a0;
-        mLoginManager.registerCallback(a0, (com.facebook.FacebookCallback)(Object)new sg.gumi.bravefrontier.Facebook$1(this));
+        mActivity = activity;
+        appEventsLogger = AppEventsLogger.newLogger(activity, activity.getResources().getString(2131558540));
+        mLoginManager = LoginManager.getInstance();
+        callbackManager = CallbackManager.Factory.create();
+        mLoginManager.registerCallback(callbackManager, new RegisterCallback(this));
     }
     
-    public static boolean callbackmanagerOnActivityResult(int i, int i0, android.content.Intent a) {
-        return callbackManager.onActivityResult(i, i0, a);
+    public static boolean callbackmanagerOnActivityResult(int requestCode, int resultCode, Intent data) {
+        return callbackManager.onActivityResult(requestCode, resultCode, data);
     }
     
-    public static boolean checkForPermission(java.util.List a) {
+    public static boolean checkForPermission(List<String> a) {
         return false;
     }
     
     public static String getAccessToken() {
-        com.facebook.AccessToken a = com.facebook.AccessToken.getCurrentAccessToken();
+        AccessToken a = AccessToken.getCurrentAccessToken();
         if (a == null) {
             return "";
         }
@@ -45,7 +121,7 @@ public class Facebook {
     }
     
     public static String getUserId() {
-        com.facebook.AccessToken a = com.facebook.AccessToken.getCurrentAccessToken();
+        AccessToken a = AccessToken.getCurrentAccessToken();
         if (a == null) {
             return "";
         }
@@ -53,28 +129,28 @@ public class Facebook {
     }
     
     public static boolean isLoggedIn() {
-        if (com.facebook.AccessToken.getCurrentAccessToken() == null) {
+        if (AccessToken.getCurrentAccessToken() == null) {
             return false;
         }
         return true;
     }
     
     public static void login() {
-        mLoginManager.logInWithReadPermissions((android.app.Activity)mActivity, (java.util.Collection)null);
+        mLoginManager.logInWithReadPermissions(mActivity, null);
     }
     
     public static void logout() {
-        android.util.Log.d("ALEX_TEST", "FB LOG OUT");
+        Log.d("ALEX_TEST", "FB LOG OUT");
         mLoginManager.logOut();
     }
     
-    native public static void onError(String arg);
+    native public static void onError(String error);
     
     
     native public static void onFacebookOperationCancelledException();
     
     
-    native public static void onLoginFail(String arg);
+    native public static void onLoginFail(String error);
     
     
     native public static void onLoginSuccess();
@@ -83,9 +159,9 @@ public class Facebook {
     native public static void onUserLogin();
     
     
-    final public static void trackPurchase(float f, String s) {
+    public static void trackPurchase(float price, String countryCode) {
         try {
-            sFacebook.appEventsLogger.logPurchase(java.math.BigDecimal.valueOf((double)f), java.util.Currency.getInstance(s));
+            sFacebook.appEventsLogger.logPurchase(BigDecimal.valueOf(price), Currency.getInstance(countryCode));
         } catch(Throwable ignoredException) {
         }
     }

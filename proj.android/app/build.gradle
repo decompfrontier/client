@@ -42,4 +42,6 @@ dependencies {
     implementation "androidx.multidex:multidex:2.0.1"
     implementation files('libs/httpclientandroidlib-1.1.2.jar')
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
+    implementation 'com.pusher:pusher-java-client:2.4.4'
+    implementation "com.google.android.gms:play-services-games:+"
 }

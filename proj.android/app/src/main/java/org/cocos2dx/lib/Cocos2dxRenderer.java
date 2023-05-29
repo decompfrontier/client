@@ -54,6 +54,11 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
 	// Getter & Setter
 	// ===========================================================
 
+	// __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
+	public static Cocos2dxRenderer createDisabledRenderer() {
+		return new DisabledRenderer();
+	}
+
 	public static void setAnimationInterval(final double pAnimationInterval) {
 		Cocos2dxRenderer.sAnimationInterval = (long) (pAnimationInterval * Cocos2dxRenderer.NANOSECONDSPERSECOND);
 	}

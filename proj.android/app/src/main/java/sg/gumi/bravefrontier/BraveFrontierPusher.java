@@ -1,24 +1,116 @@
 package sg.gumi.bravefrontier;
 
+import com.pusher.client.Authorizer;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.PresenceChannel;
+import com.pusher.client.channel.PresenceChannelEventListener;
+import com.pusher.client.channel.PusherEvent;
+import com.pusher.client.channel.User;
+import com.pusher.client.connection.ConnectionEventListener;
+import com.pusher.client.connection.ConnectionState;
+import com.pusher.client.connection.ConnectionStateChange;
+import com.pusher.client.util.HttpAuthorizer;
+
+import java.util.HashMap;
+import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class BraveFrontierPusher {
+
+
+    static class PresenceTask implements PresenceChannelEventListener {
+
+        public void onAuthenticationFailure(String message, Exception e) {
+            System.out.println(String.format("PUSHER_FAIL: %s %s", message, e.getMessage()));
+        }
+
+        public void onEvent(final PusherEvent event) {
+            // code updated for newer SDK
+            System.out.println(String.format("Pusher onEvent %s", event.getEventName()));
+            System.out.println(event.getData());
+            BraveFrontierPusher.responsePusher(event.getData());
+        }
+
+        public void onSubscriptionSucceeded(String channelName) {
+        }
+
+        public void onUsersInformationReceived(String channelName, Set<User> users) {
+
+            for (User u: users)
+            {
+                userSubscribed(channelName, u);
+            }
+        }
+
+        public void userSubscribed(String channelName, User user) {
+            System.out.println("pusher userSubscribed");
+            System.out.println(user.toString());
+            String json = "{\"user_id\":\"" +
+                    user.getId() +
+                    "\",\"user_info\":" +
+                    user.getInfo() +
+                    "}";
+            BraveFrontierPusher.responsePusherMemberAdded(json);
+        }
+
+        public void userUnsubscribed(String channelName, User user) {
+            System.out.println("pusher userUnsubscribed");
+            System.out.println(user.toString());
+            String json = "{\"user_id\":\"" +
+                    user.getId() +
+                    "\"}";
+            BraveFrontierPusher.responsePusherMemberRemoved(json);
+        }
+    }
+
+    static class ConnectTask implements ConnectionEventListener {
+
+        static class ConnectSchedule implements Runnable {
+            final ConnectTask connectObj;
+
+            ConnectSchedule(ConnectTask connect) {
+                super();
+                this.connectObj = connect;
+            }
+
+            public void run() {
+                BraveFrontierPusher.getPusher().connect();
+            }
+        }
+
+        public void onConnectionStateChange(ConnectionStateChange state) {
+            System.out.println("BraveFrontierPusher: " +
+                    String.format("Connection state changed from [%s] to [%s]", state.getPreviousState(), state.getCurrentState()));
+            if (state.getCurrentState() == ConnectionState.DISCONNECTED) {
+                BraveFrontierPusher.getConnectionAttemptWorker().schedule(new ConnectSchedule(this), 5L, TimeUnit.SECONDS);
+            }
+        }
+
+        public void onError(String message, String code, Exception ex) {
+        }
+    }
+
     final private static String API_KEY = "e772684d55b1f7b80fab";
-    private static com.pusher.client.Authorizer authorizer;
-    private static com.pusher.client.channel.PresenceChannel channel;
-    final private static java.util.concurrent.ScheduledExecutorService connectionAttemptsWorker;
-    private static com.pusher.client.Pusher pusher;
+    private static Authorizer authorizer;
+    private static PresenceChannel channel;
+    final private static ScheduledExecutorService connectionAttemptsWorker;
+    private static Pusher pusher;
     
     static {
-        connectionAttemptsWorker = java.util.concurrent.Executors.newSingleThreadScheduledExecutor();
+        connectionAttemptsWorker = Executors.newSingleThreadScheduledExecutor();
     }
     
     public BraveFrontierPusher() {
     }
     
-    static com.pusher.client.Pusher access$000() {
+    static Pusher getPusher() {
         return pusher;
     }
     
-    static java.util.concurrent.ScheduledExecutorService access$100() {
+    static ScheduledExecutorService getConnectionAttemptWorker() {
         return connectionAttemptsWorker;
     }
     
@@ -30,24 +122,22 @@ public class BraveFrontierPusher {
         pusher.disconnect();
     }
     
-    public static void initialize(String s, String s0, String s1, String s2, String s3) {
-        com.pusher.client.util.HttpAuthorizer a = new com.pusher.client.util.HttpAuthorizer(s);
-        java.util.HashMap a0 = new java.util.HashMap();
-        a0.put((Object)"auth_key", (Object)s0);
-        a0.put((Object)"user_id", (Object)s1);
-        a0.put((Object)"user_name", (Object)s2);
-        a.setQueryStringParameters(a0);
-        com.pusher.client.PusherOptions a1 = new com.pusher.client.PusherOptions();
-        a1.setAuthorizer((com.pusher.client.Authorizer)(Object)a);
-        com.pusher.client.Pusher a2 = new com.pusher.client.Pusher(s3, a1);
-        pusher = a2;
-        a2.getConnection().bind(com.pusher.client.connection.ConnectionState.ALL, (com.pusher.client.connection.ConnectionEventListener)(Object)new sg.gumi.bravefrontier.BraveFrontierPusher$1());
+    public static void initialize(String endPoint, String authKey, String userId, String userName, String apiKey) {
+        HttpAuthorizer auth = new HttpAuthorizer(endPoint);
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("auth_key", authKey);
+        headers.put("user_id", userId);
+        headers.put("user_name", userName);
+        auth.setHeaders(headers);
+        PusherOptions options = new PusherOptions();
+        options.setAuthorizer(auth);
+        pusher = new Pusher(apiKey, options);
+        pusher.getConnection().bind(ConnectionState.ALL, new ConnectTask());
         pusher.connect();
     }
     
     public static boolean isConnected() {
-        com.pusher.client.Pusher a = pusher;
-        if (a != null && a.getConnection().getState() == com.pusher.client.connection.ConnectionState.CONNECTED) {
+        if (pusher != null && pusher.getConnection().getState() == ConnectionState.CONNECTED) {
             return true;
         }
         return false;
@@ -58,48 +148,38 @@ public class BraveFrontierPusher {
         if (channel == null) {
             return false;
         }
-        java.io.PrintStream a = System.out;
-        StringBuilder a0 = new StringBuilder();
-        a0.append("Pusher isSubscribed channel: ");
-        a0.append(((Object)channel).toString());
-        a.println(a0.toString());
-        return ((com.pusher.client.channel.Channel)(Object)channel).isSubscribed();
+        System.out.println("Pusher isSubscribed channel: " + channel);
+        return channel.isSubscribed();
     }
     
-    native public static void responsePusher(String arg);
+    native public static void responsePusher(String data);
     
     
-    native public static void responsePusherMemberAdded(String arg);
+    native public static void responsePusherMemberAdded(String json);
     
     
-    native public static void responsePusherMemberRemoved(String arg);
+    native public static void responsePusherMemberRemoved(String json);
     
     
-    public static void subscribePresence(String s, String s0) {
+    public static void subscribePresence(String channelName, String eventName) {
         try {
-            com.pusher.client.Pusher a = pusher;
-            sg.gumi.bravefrontier.BraveFrontierPusher$2 a0 = new sg.gumi.bravefrontier.BraveFrontierPusher$2();
-            String[] a1 = new String[1];
-            a1[0] = s0;
-            channel = a.subscribePresence(s, (com.pusher.client.channel.PresenceChannelEventListener)(Object)a0, a1);
-        } catch(Exception a2) {
-            System.out.println(a2.toString());
+            String[] eventNames = new String[1];
+            eventNames[0] = eventName;
+            channel = pusher.subscribePresence(channelName, new PresenceTask(), eventNames);
+        } catch(Exception ex) {
+            System.out.println(ex);
         }
     }
     
-    public static void trigger(String s, String s0, String s1) {
-        ((com.pusher.client.channel.PrivateChannel)(Object)channel).trigger(s0, s1);
+    public static void trigger(String channelName, String eventName, String data) {
+        channel.trigger(eventName, data);
     }
     
     public static void unsubscribeAll() {
         System.out.println("Pusher unsubscribeAll");
         if (channel != null) {
-            java.io.PrintStream a = System.out;
-            StringBuilder a0 = new StringBuilder();
-            a0.append("Pusher unsubscribeAll channel: ");
-            a0.append(((Object)channel).toString());
-            a.println(a0.toString());
-            pusher.unsubscribe(((com.pusher.client.channel.Channel)(Object)channel).getName());
+            System.out.println("Pusher unsubscribeAll channel: " + channel);
+            pusher.unsubscribe(channel.getName());
             channel = null;
         }
     }

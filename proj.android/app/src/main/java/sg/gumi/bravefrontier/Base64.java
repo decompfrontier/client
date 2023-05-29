@@ -446,8 +446,8 @@ public class Base64 {
         }
     }
     
-    final public static byte[] encodeToByte(byte[] a, boolean b) {
-        int i = (a == null) ? 0 : a.length;
+    final public static byte[] encodeToByte(byte[] data, boolean b) {
+        int i = (data == null) ? 0 : data.length;
         if (i == 0) {
             return new byte[0];
         }
@@ -461,9 +461,9 @@ public class Base64 {
         int i6 = 0;
         while(i5 < i0) {
             int i7 = i5 + 1;
-            int i8 = a[i5];
+            int i8 = data[i5];
             int i9 = i7 + 1;
-            int i10 = (i8 & 255) << 16 | ((int)a[i7] & 255) << 8 | (int)a[i9] & 255;
+            int i10 = (i8 & 255) << 16 | ((int)data[i7] & 255) << 8 | (int)data[i9] & 255;
             int i11 = i4 + 1;
             char[] a1 = CA;
             a0[i4] = (byte)(int)(byte)(int)(byte)(int)a1[i10 >>> 18 & 63];
@@ -487,7 +487,7 @@ public class Base64 {
         }
         int i15 = i - i0;
         if (i15 > 0) {
-            int i16 = ((int)a[i0] & 255) << 10 | ((i15 != 2) ? 0 : ((int)a[i1] & 255) << 2);
+            int i16 = ((int)data[i0] & 255) << 10 | ((i15 != 2) ? 0 : ((int)data[i1] & 255) << 2);
             char[] a2 = CA;
             a0[i3 - 4] = (byte)(int)(byte)(int)(byte)(int)a2[i16 >> 12];
             a0[i3 - 3] = (byte)(int)(byte)(int)(byte)(int)a2[i16 >>> 6 & 63];
@@ -497,8 +497,8 @@ public class Base64 {
         return a0;
     }
     
-    final public static char[] encodeToChar(byte[] a, boolean b) {
-        int i = (a == null) ? 0 : a.length;
+    final public static char[] encodeToChar(byte[] data, boolean b) {
+        int i = (data == null) ? 0 : data.length;
         if (i == 0) {
             return new char[0];
         }
@@ -512,9 +512,9 @@ public class Base64 {
         int i6 = 0;
         while(i5 < i0) {
             int i7 = i5 + 1;
-            int i8 = a[i5];
+            int i8 = data[i5];
             int i9 = i7 + 1;
-            int i10 = (i8 & 255) << 16 | ((int)a[i7] & 255) << 8 | (int)a[i9] & 255;
+            int i10 = (i8 & 255) << 16 | ((int)data[i7] & 255) << 8 | (int)data[i9] & 255;
             int i11 = i4 + 1;
             char[] a1 = CA;
             a0[i4] = (char)(int)(char)(int)a1[i10 >>> 18 & 63];
@@ -538,7 +538,7 @@ public class Base64 {
         }
         int i15 = i - i0;
         if (i15 > 0) {
-            int i16 = ((int)a[i0] & 255) << 10 | ((i15 != 2) ? 0 : ((int)a[i1] & 255) << 2);
+            int i16 = ((int)data[i0] & 255) << 10 | ((i15 != 2) ? 0 : ((int)data[i1] & 255) << 2);
             char[] a2 = CA;
             a0[i3 - 4] = (char)(int)(char)(int)a2[i16 >> 12];
             a0[i3 - 3] = (char)(int)(char)(int)a2[i16 >>> 6 & 63];
@@ -548,7 +548,7 @@ public class Base64 {
         return a0;
     }
     
-    final public static String encodeToString(byte[] a, boolean b) {
-        return new String(Base64.encodeToChar(a, b));
+    final public static String encodeToString(byte[] data, boolean b) {
+        return new String(Base64.encodeToChar(data, b));
     }
 }

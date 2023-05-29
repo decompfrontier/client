@@ -23,6 +23,8 @@ THE SOFTWARE.
  ****************************************************************************/
 package org.cocos2dx.lib;
 
+import android.content.Context;
+import android.util.Log;
 import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
 
 import android.app.Activity;
@@ -42,7 +44,13 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	
+
+	// __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
+	private static Context sContext = null;
+
+	// __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
+	private Cocos2dxRenderer mCustomRenderer = null;
+
 	private Cocos2dxGLSurfaceView mGLSurefaceView;
 	private Cocos2dxHandler mHandler;
 
@@ -53,7 +61,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		sContext = this; // __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
 		this.init();
 
 		Cocos2dxHelper.init(this, this);
@@ -145,13 +153,36 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         // ...add to FrameLayout
         framelayout.addView(mGLSurefaceView);
 
+		// __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
+		if (org.cocos2dx.lib.Cocos2dxHelper.isNativeLibraryLoaded()) {
+			if (this.mCustomRenderer == null) {
+				Log.e(TAG, "Setting default cocos2dxRenderer");
+				mGLSurefaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
+			} else {
+				Log.e(TAG, "Setting custom cocos2dxRenderer");
+				mGLSurefaceView.setCocos2dxRenderer(mCustomRenderer);
+			}
+		} else {
+			mGLSurefaceView.setCocos2dxRenderer(Cocos2dxRenderer.createDisabledRenderer());
+		}
+
         mGLSurefaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
         mGLSurefaceView.setCocos2dxEditText(edittext);
 
         // Set framelayout as the content view
 		setContentView(framelayout);
     }
-    
+
+	// __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
+	public static Context getContext() {
+		return sContext;
+	}
+
+	// __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
+	public void setCustomCocos2dxRenderer(Cocos2dxRenderer renderer) {
+		mCustomRenderer = renderer;
+	}
+
     public Cocos2dxGLSurfaceView onCreateGLSurfaceView() {
     	return new Cocos2dxGLSurfaceView(this);
     }
