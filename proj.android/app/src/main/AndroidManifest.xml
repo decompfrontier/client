@@ -37,7 +37,7 @@
             android:supportsRtl="true">
 
         <activity
-                android:exported="false"
+                android:exported="true"
                 android:configChanges="orientation"
                 android:name="sg.gumi.bravefrontier.BraveFrontier"
                 android:screenOrientation="portrait"
@@ -59,6 +59,7 @@
                 <data android:host="bravefrontier" android:scheme="gumiasia"/>
             </intent-filter>
         </activity>
+        <!-- (old api?)
         <service
                 android:exported="false"
                 android:name="sg.gumi.bravefrontier.account.AuthenticationService">
@@ -66,7 +67,7 @@
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
             <meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator"/>
-        </service>
+        </service>-->
 
         <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/app_googlegamesvc_id"/>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
