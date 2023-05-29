@@ -26,8 +26,4 @@ Dependencies removed:
 - Vungle
 - Soomla
 
-Some functions are not correctly accurate, the reason of that is because
-Krakatau doesn't support synced objects, see [this issue](https://github.com/Storyyeller/Krakatau/issues/152) for more information.
-Such code has to be investigated and fixed properly (TODO: INACCURATE or TODO: MISSING)
-
 The code is also missing polishing as we cannot decompile and resolve enumerators or similar data.

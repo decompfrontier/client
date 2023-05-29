@@ -90,7 +90,7 @@ public class GCMIntentService /*extends GCMBaseIntentService*/ {
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
                     builder.setContentText(message);
                     builder.setContentTitle(appName);
-                    builder.setSmallIcon((Build.VERSION.SDK_INT < 11) ? 17301659 : 2131427328);
+                    builder.setSmallIcon((Build.VERSION.SDK_INT < 11) ? 17301659 : R.mipmap.ic_launcher);
                     builder.setAutoCancel(true);
                     builder.setContentIntent(pendingIntent);
                     builder.setWhen(System.currentTimeMillis());
@@ -117,7 +117,7 @@ public class GCMIntentService /*extends GCMBaseIntentService*/ {
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default_channel_id");
                     builder.setContentTitle(appName);
                     builder.setContentText(message);
-                    builder.setSmallIcon(2131427328);
+                    builder.setSmallIcon(R.mipmap.ic_launcher);
                     builder.setAutoCancel(true);
                     builder.setContentIntent(pendingIntent);
                     builder.setLights(-397242, 2000, 1000);

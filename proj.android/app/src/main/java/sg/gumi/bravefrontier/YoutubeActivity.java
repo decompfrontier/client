@@ -156,13 +156,13 @@ public class YoutubeActivity extends YouTubeFailureRecoveryActivity {
     }
     
     protected YouTubePlayer.Provider getYouTubePlayerProvider() {
-        return findViewById(2131165408);
+        return findViewById(R.id.youtube_view);
     }
     
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(2131361849);
-        ((YouTubePlayerView)findViewById(2131165408)).initialize(DeveloperKey.DEVELOPER_KEY, this);
+        setContentView(R.layout.youtubeview);
+        ((YouTubePlayerView)findViewById(R.id.youtube_view)).initialize(DeveloperKey.DEVELOPER_KEY, this);
         playerStateChangeListener = new MyPlayerStateChangeListener(this);
         playbackEventListener = new MyPlaybackEventListener(this);
     }

@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.VideoView;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import sg.gumi.bravefrontier.BraveFrontierJNI;
+import sg.gumi.bravefrontier.R;
 
 public class BFVideoView extends VideoView {
     private static BFVideoView instance;
@@ -29,8 +30,8 @@ public class BFVideoView extends VideoView {
     
     public static void clearInstance() {
         if (instance != null) {
-            FrameLayout frameLayout = instance.mActivity.findViewById(16908290);
-            View view = instance.mActivity.findViewById(2131165318);
+            FrameLayout frameLayout = instance.mActivity.findViewById(R.id.content);
+            View view = instance.mActivity.findViewById(R.id.layout_videoscreen);
             frameLayout.requestFocus();
             frameLayout.setFocusableInTouchMode(true);
             frameLayout.removeView(view);
@@ -42,9 +43,9 @@ public class BFVideoView extends VideoView {
     
     public static BFVideoView getInstance(Cocos2dxActivity activity) {
         if (instance == null) {
-            View view = LayoutInflater.from(activity).inflate(2131361847, null);
-            ((FrameLayout)activity.findViewById(16908290)).addView(view);
-            BFVideoView videoView = view.findViewById(2131165402);
+            View view = LayoutInflater.from(activity).inflate(R.layout.video_activity, null);
+            ((FrameLayout)activity.findViewById(R.id.content)).addView(view);
+            BFVideoView videoView = view.findViewById(R.id.video_view);
             instance = videoView;
             videoView.Initialize(activity);
         }

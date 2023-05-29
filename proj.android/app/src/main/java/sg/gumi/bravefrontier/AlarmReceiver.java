@@ -32,7 +32,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             String appName = (applicationInfo == null) ? "Puzzle Trooper" : (String)pm.getApplicationLabel(applicationInfo);
             NotificationManager notificationMngr = (NotificationManager)ctx.getSystemService(Context.NOTIFICATION_SERVICE);
             if (VERSION.SDK_INT < 26) {
-                Notification notif = new BigTextStyle(new Builder(ctx).setContentText(notification).setContentTitle(appName).setSmallIcon(2131099786).setAutoCancel(true).setContentIntent(pendingIntent).setWhen(System.currentTimeMillis())).bigText(notification).build();
+                Notification notif = new BigTextStyle(new Builder(ctx).setContentText(notification).setContentTitle(appName).setSmallIcon(R.drawable.ic_stat_notify_icon).setAutoCancel(true).setContentIntent(pendingIntent).setWhen(System.currentTimeMillis())).bigText(notification).build();
                 int i = notif.defaults | 1;
                 notif.defaults = i | 2;
                 notif.ledARGB = -397242;
@@ -51,7 +51,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 builder.setContentTitle(appName);
                 builder.setContentText(notification);
                 builder.setDefaults(3);
-                builder.setSmallIcon(2131099786);
+                builder.setSmallIcon(R.drawable.ic_stat_notify_icon);
                 builder.setAutoCancel(true);
                 builder.setContentIntent(pendingIntent);
                 builder.setLights(-397242, 300, 3000);

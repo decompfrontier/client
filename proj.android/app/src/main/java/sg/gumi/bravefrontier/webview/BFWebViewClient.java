@@ -15,7 +15,7 @@ public class BFWebViewClient extends android.webkit.WebViewClient {
         final BFWebViewClient client;
         final WebView webView;
 
-        OnPageFinished(sg.gumi.bravefrontier.webview.BFWebViewClient client, WebView webView) {
+        OnPageFinished(BFWebViewClient client, WebView webView) {
             super();
             this.client = client;
             this.webView = webView;

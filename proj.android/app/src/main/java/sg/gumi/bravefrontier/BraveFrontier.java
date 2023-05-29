@@ -278,7 +278,7 @@ public class BraveFrontier extends BaseGameActivity {
     
     public static String getAppName() {
         try {
-            return act.getResources().getString(2131558429);
+            return act.getResources().getString(R.string.app_name);
         } catch(Resources.NotFoundException ex) {
             ex.printStackTrace();
             return "Brave Frontier";
@@ -287,7 +287,7 @@ public class BraveFrontier extends BaseGameActivity {
     
     public static String getBuildNo() {
         try {
-            return act.getResources().getString(2131558431);
+            return act.getResources().getString(R.string.build);
         } catch(Resources.NotFoundException ex) {
             ex.printStackTrace();
             return "";
