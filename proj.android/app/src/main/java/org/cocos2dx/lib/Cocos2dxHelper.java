@@ -48,6 +48,9 @@ public class Cocos2dxHelper {
 	private static boolean sAccelerometerEnabled;
 	private static String sPackageName;
 
+	// THIS CODE IS __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
+	private static boolean sNativeLibraryLoaded = true;
+
 	private static Cocos2dxHelperListener sCocos2dxHelperListener;
 
 	// ===========================================================
@@ -60,8 +63,11 @@ public class Cocos2dxHelper {
 		Cocos2dxHelper.sCocos2dxHelperListener = pCocos2dxHelperListener;
 
 		Cocos2dxHelper.sPackageName = applicationInfo.packageName;
-		Cocos2dxHelper.nativeSetApkPath(applicationInfo.sourceDir);
-		Cocos2dxHelper.nativeSetExternalAssetPath(Cocos2dxHelper.getAbsolutePathOnExternalStorage(applicationInfo, "assets/"));
+
+		if (sNativeLibraryLoaded) { // THIS CODE IS __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
+			Cocos2dxHelper.nativeSetApkPath(applicationInfo.sourceDir);
+			Cocos2dxHelper.nativeSetExternalAssetPath(Cocos2dxHelper.getAbsolutePathOnExternalStorage(applicationInfo, "assets/"));
+		}
 
 		Cocos2dxHelper.sCocos2dxAccelerometer = new Cocos2dxAccelerometer(pContext);
 		Cocos2dxHelper.sCocos2dMusic = new Cocos2dxMusic(pContext);
@@ -140,6 +146,25 @@ public class Cocos2dxHelper {
 
 	public static boolean isBackgroundMusicPlaying() {
 		return Cocos2dxHelper.sCocos2dMusic.isBackgroundMusicPlaying();
+	}
+
+	// THIS CODE IS __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
+	public static void setNativeLibraryLoaded(boolean loaded) {
+		sNativeLibraryLoaded = loaded;
+	}
+
+	/**
+	 * Checks if the game library was loaded
+	 * @return true if the native library was loaded, otherwise false
+	 * @note THIS CODE IS __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
+	 */
+	public static boolean isNativeLibraryLoaded() {
+		return sNativeLibraryLoaded;
+	}
+
+	// THIS CODE IS __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
+	public static void checkNativeSetApkPathMethod() {
+		Cocos2dxHelper.nativeSetApkPath("");
 	}
 
 	public static float getBackgroundMusicVolume() {

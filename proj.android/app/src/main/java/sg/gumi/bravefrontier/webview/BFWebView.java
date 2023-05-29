@@ -1,456 +1,489 @@
 package sg.gumi.bravefrontier.webview;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebView;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import org.cocos2dx.lib.Cocos2dxActivity;
+import sg.gumi.bravefrontier.BraveFrontier;
+import sg.gumi.bravefrontier.BraveFrontierJNI;
+import sg.gumi.util.BFConfig;
+
+import java.util.HashMap;
+
 import static android.os.Build.*;
 
 final public class BFWebView implements View.OnTouchListener, View.OnClickListener {
     final private static String CACHE_DATABASE_FILE = "webviewCache.db";
     final private static String DATABASE_FILE = "webview.db";
-    private static sg.gumi.bravefrontier.webview.BFWebView instance;
+    private static BFWebView instance;
     private static Boolean usableWebViewDatabase;
-    private android.widget.ImageButton browserButton;
-    private org.cocos2dx.lib.Cocos2dxActivity cocos2dxActivity;
-    private sg.gumi.bravefrontier.webview.BFYoutubeJsInterface jsInterface;
+    private ImageButton browserButton;
+    private Cocos2dxActivity cocos2dxActivity;
+    private BFYoutubeJsInterface jsInterface;
     private float mDownX;
     private int phoneHeight;
     private int phoneWidth;
     private boolean visible;
-    private android.webkit.WebView webView;
-    private android.widget.RelativeLayout webViewContainer;
-    
-    static {
+    private WebView webView;
+    private RelativeLayout webViewContainer;
+
+    static class UnkClass {
     }
+
+
+    final static class BFWebViewTask implements Runnable {
+        final static int TASK_TYPE_CLOSE_BROWSER_BUTTON = 103;
+        final static int TASK_TYPE_CLOSE_WEBVIEW_STEP_1 = 3;
+        final static int TASK_TYPE_CLOSE_WEBVIEW_STEP_2 = 4;
+        final static int TASK_TYPE_PLAY_YOUTUBE_VIDEO = 5;
+        final static int TASK_TYPE_SET_BROWSER_BUTTON_VISIBILITY = 102;
+        final static int TASK_TYPE_SET_WEBVIEW_VISIBILITY = 2;
+        final static int TASK_TYPE_SHOW_BROWSER_BUTTON = 101;
+        final static int TASK_TYPE_SHOW_WEBVIEW = 1;
+        Object param;
+        int taskType;
+        final BFWebView webView;
+
+        private BFWebViewTask(BFWebView webView) {
+            super();
+            this.webView = webView;
+            this.param = null;
+        }
+
+        BFWebViewTask(BFWebView webView, UnkClass param) {
+            this(webView);
+        }
+
+        public void run() {
+            if (taskType == TASK_TYPE_SHOW_WEBVIEW) {
+                BFWebView.showWebViewTask(webView, param);
+            } else if (taskType == TASK_TYPE_SET_WEBVIEW_VISIBILITY) {
+                BFWebView.setWebViewVisibilityTask(webView, param);
+            } else if (taskType == TASK_TYPE_CLOSE_WEBVIEW_STEP_1) {
+                BFWebView.closeWebViewTaskStep1(webView);
+            } else if (taskType == TASK_TYPE_CLOSE_WEBVIEW_STEP_2) {
+                BFWebView.closeWebViewTaskStep2(webView);
+            } else if (taskType == TASK_TYPE_PLAY_YOUTUBE_VIDEO) {
+                BFWebView.playYoutubeVideo(webView, param);
+            } else {
+                switch(taskType) {
+                    case TASK_TYPE_CLOSE_BROWSER_BUTTON: {
+                        BFWebView.closeBrowserButtonTask(webView);
+                        break;
+                    }
+                    case TASK_TYPE_SET_BROWSER_BUTTON_VISIBILITY: {
+                        BFWebView.setBrowserButtonVisibilityTask(webView, param);
+                        break;
+                    }
+                    case TASK_TYPE_SHOW_BROWSER_BUTTON: {
+                        BFWebView.showBrowserButtonTask(webView, param);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     
     private BFWebView() {
-        this.cocos2dxActivity = null;
-        this.webView = null;
-        this.browserButton = null;
-        this.webViewContainer = null;
-        this.phoneWidth = 0;
-        this.phoneHeight = 0;
-        this.mDownX = 0.0f;
-        this.visible = false;
-        this.jsInterface = null;
+        cocos2dxActivity = null;
+        webView = null;
+        browserButton = null;
+        webViewContainer = null;
+        phoneWidth = 0;
+        phoneHeight = 0;
+        mDownX = 0.0f;
+        visible = false;
+        jsInterface = null;
     }
     
-    static void access$100(sg.gumi.bravefrontier.webview.BFWebView a, Object a0) {
-        a.showWebViewTask(a0);
+    static void showWebViewTask(BFWebView webView, Object param) {
+        webView.showWebViewTask(param);
     }
     
-    static void access$200(sg.gumi.bravefrontier.webview.BFWebView a, Object a0) {
-        a.setWebViewVisibilityTask(a0);
+    static void setWebViewVisibilityTask(BFWebView webView, Object param) {
+        webView.setWebViewVisibilityTask(param);
     }
     
-    static void access$300(sg.gumi.bravefrontier.webview.BFWebView a) {
-        a.closeWebViewTaskStep1();
+    static void closeWebViewTaskStep1(BFWebView webView) {
+        webView.closeWebViewTaskStep1();
     }
     
-    static void access$400(sg.gumi.bravefrontier.webview.BFWebView a) {
-        a.closeWebViewTaskStep2();
+    static void closeWebViewTaskStep2(BFWebView webView) {
+        webView.closeWebViewTaskStep2();
     }
     
-    static void access$500(sg.gumi.bravefrontier.webview.BFWebView a, Object a0) {
-        a.playYoutubeVideoTask(a0);
+    static void playYoutubeVideo(BFWebView webView, Object param) {
+        webView.playYoutubeVideoTask(param);
     }
     
-    static void access$600(sg.gumi.bravefrontier.webview.BFWebView a, Object a0) {
-        a.showBrowserButtonTask(a0);
+    static void showBrowserButtonTask(BFWebView webView, Object param) {
+        webView.showBrowserButtonTask(param);
     }
     
-    static void access$700(sg.gumi.bravefrontier.webview.BFWebView a, Object a0) {
-        a.setBrowserButtonVisibilityTask(a0);
+    static void setBrowserButtonVisibilityTask(BFWebView webView, Object param) {
+        webView.setBrowserButtonVisibilityTask(param);
     }
     
-    static void access$800(sg.gumi.bravefrontier.webview.BFWebView a) {
-        a.closeBrowserButtonTask();
+    static void closeBrowserButtonTask(BFWebView webView) {
+        webView.closeBrowserButtonTask();
     }
     
-    public static boolean canLaunchUrl(String s) {
-        android.content.Intent a = new android.content.Intent("android.intent.action.VIEW");
-        a.setData(android.net.Uri.parse(s));
-        return sg.gumi.bravefrontier.BraveFrontier.getAppContext().getPackageManager().resolveActivity(a, 65536) != null;
+    public static boolean canLaunchUrl(String url) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.setData(Uri.parse(url));
+        return BraveFrontier.getAppContext().getPackageManager().resolveActivity(intent, 65536) != null;
     }
     
     private void closeBrowserButtonTask() {
-        android.widget.ImageButton a = this.browserButton;
-        if (a != null) {
-            a.setVisibility(8);
-            this.browserButton.setLayoutParams((android.view.ViewGroup$LayoutParams)sg.gumi.bravefrontier.webview.BFWebView.createHiddenLayoutParams());
+        if (browserButton != null) {
+            browserButton.setVisibility(View.GONE);
+            browserButton.setLayoutParams(BFWebView.createHiddenLayoutParams());
         }
     }
     
     public static void closeWebView() {
-        sg.gumi.bravefrontier.webview.BFWebView.getInstance().closeWebViewHelper();
+        BFWebView.getInstance().closeWebViewHelper();
     }
     
     private void closeWebViewHelper() {
-        if (this.webView == null) {
-            sg.gumi.bravefrontier.webview.BFWebView$BFWebViewTask a = new sg.gumi.bravefrontier.webview.BFWebView$BFWebViewTask(this, (sg.gumi.bravefrontier.webview.BFWebView$1)null);
-            a.taskType = 103;
-            ((android.app.Activity)this.cocos2dxActivity).runOnUiThread((Runnable)(Object)a);
+        if (webView == null) {
+            BFWebViewTask webView = new BFWebViewTask(this, null);
+            webView.taskType = 103;
+            cocos2dxActivity.runOnUiThread(webView);
         } else {
-            sg.gumi.bravefrontier.webview.BFWebView$BFWebViewTask a0 = new sg.gumi.bravefrontier.webview.BFWebView$BFWebViewTask(this, (sg.gumi.bravefrontier.webview.BFWebView$1)null);
-            a0.taskType = 3;
-            ((android.app.Activity)this.cocos2dxActivity).runOnUiThread((Runnable)(Object)a0);
-            sg.gumi.bravefrontier.webview.BFWebView$BFWebViewTask a1 = new sg.gumi.bravefrontier.webview.BFWebView$BFWebViewTask(this, (sg.gumi.bravefrontier.webview.BFWebView$1)null);
-            a1.taskType = 4;
-            ((android.app.Activity)this.cocos2dxActivity).runOnUiThread((Runnable)(Object)a1);
+            BFWebViewTask viewTask1 = new BFWebViewTask(this, null);
+            viewTask1.taskType = 3;
+            cocos2dxActivity.runOnUiThread(viewTask1);
+            BFWebViewTask viewTask = new BFWebViewTask(this, null);
+            viewTask.taskType = 4;
+            cocos2dxActivity.runOnUiThread(viewTask);
         }
     }
     
     private void closeWebViewTaskStep1() {
-        this.webView.clearMatches();
-        this.webView.clearFormData();
-        this.webView.clearAnimation();
-        this.webView.clearDisappearingChildren();
-        this.webView.clearFocus();
-        this.webView.clearHistory();
-        this.webView.loadUrl("about:blank");
+        webView.clearMatches();
+        webView.clearFormData();
+        webView.clearAnimation();
+        webView.clearDisappearingChildren();
+        webView.clearFocus();
+        webView.clearHistory();
+        webView.loadUrl("about:blank");
     }
     
     private void closeWebViewTaskStep2() {
-        this.webView.setLayoutParams((android.view.ViewGroup$LayoutParams)sg.gumi.bravefrontier.webview.BFWebView.createHiddenLayoutParams());
+        webView.setLayoutParams(BFWebView.createHiddenLayoutParams());
     }
     
-    private static android.widget.RelativeLayout$LayoutParams createHiddenLayoutParams() {
-        android.widget.RelativeLayout$LayoutParams a = new android.widget.RelativeLayout$LayoutParams(0, 0);
-        a.alignWithParent = true;
-        a.addRule(9);
-        a.addRule(10);
-        a.leftMargin = 0;
-        a.topMargin = 0;
-        return a;
+    private static RelativeLayout.LayoutParams createHiddenLayoutParams() {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(0, 0);
+        params.alignWithParent = true;
+        params.addRule(9);
+        params.addRule(10);
+        params.leftMargin = 0;
+        params.topMargin = 0;
+        return params;
     }
     
-    private void createWebViewContainer(android.view.View a) {
-        android.widget.RelativeLayout a0 = this.webViewContainer;
-        if (a0 != null) {
-            ((android.widget.FrameLayout)(Object)a0.getParent()).removeView((android.view.View)this.webViewContainer);
-            ((android.widget.FrameLayout)((android.app.Activity)this.cocos2dxActivity).findViewById(16908290)).addView((android.view.View)this.webViewContainer);
+    private void createWebViewContainer(View view) {
+        if (webViewContainer != null) {
+            ((FrameLayout)webViewContainer.getParent()).removeView(webViewContainer);
+            ((FrameLayout)cocos2dxActivity.findViewById(16908290)).addView(webViewContainer);
         } else {
-            android.widget.RelativeLayout a1 = new android.widget.RelativeLayout((android.content.Context)this.cocos2dxActivity);
-            this.webViewContainer = a1;
-            a1.setBackgroundColor(0);
-            this.webViewContainer.addView(a);
-            this.webViewContainer.setLayoutParams((android.view.ViewGroup$LayoutParams)new android.widget.FrameLayout$LayoutParams(-1, -1));
-            ((android.widget.FrameLayout)((android.app.Activity)this.cocos2dxActivity).findViewById(16908290)).addView((android.view.View)this.webViewContainer);
+            webViewContainer = new RelativeLayout(cocos2dxActivity);
+            webViewContainer.setBackgroundColor(0);
+            webViewContainer.addView(view);
+            webViewContainer.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+            ((android.widget.FrameLayout)(cocos2dxActivity.findViewById(16908290))).addView(webViewContainer);
         }
     }
     
-    public static sg.gumi.bravefrontier.webview.BFWebView getInstance() {
+    public static BFWebView getInstance() {
         if (instance == null) {
-            instance = new sg.gumi.bravefrontier.webview.BFWebView();
+            instance = new BFWebView();
         }
         return instance;
     }
     
-    public static void initialize(org.cocos2dx.lib.Cocos2dxActivity a) {
-        sg.gumi.bravefrontier.webview.BFWebView.getInstance().initializeHelper(a);
+    public static void initialize(Cocos2dxActivity activity) {
+        BFWebView.getInstance().initializeHelper(activity);
     }
     
-    private void initializeHelper(org.cocos2dx.lib.Cocos2dxActivity a) {
-        this.cocos2dxActivity = a;
-        if (!sg.gumi.bravefrontier.webview.BFWebView.isUsableWebViewDatabase((android.content.Context)a)) {
+    private void initializeHelper(Cocos2dxActivity activity) {
+        cocos2dxActivity = activity;
+        if (!BFWebView.isUsableWebViewDatabase(activity)) {
             return;
         }
-        sg.gumi.bravefrontier.webview.BFWebView.tryWebViewClearCache((android.content.Context)a);
-        label0: {
-            try {
-                android.util.DisplayMetrics a0 = sg.gumi.bravefrontier.BraveFrontier.getAppContext().getResources().getDisplayMetrics();
-                this.phoneWidth = a0.widthPixels;
-                this.phoneHeight = a0.heightPixels;
-                if (this.webView == null) {
-                    this.webView = new android.webkit.WebView((android.content.Context)a);
-                }
-                this.webView.setLayoutParams((android.view.ViewGroup$LayoutParams)sg.gumi.bravefrontier.webview.BFWebView.createHiddenLayoutParams());
-                this.webView.getSettings().setJavaScriptEnabled(true);
-                this.webView.requestFocus(130);
-                this.webView.getSettings().setNeedInitialFocus(false);
-                if (android.os.Build$VERSION.SDK_INT > 15) {
-                    this.webView.clearCache(true);
-                }
-                this.webView.setWebViewClient((android.webkit.WebViewClient)new sg.gumi.bravefrontier.webview.BFWebViewClient());
-                if (sg.gumi.util.BFConfig.PLATFORM == sg.gumi.util.BFConfig.PLATFORM_AMAZON) {
-                    sg.gumi.bravefrontier.webview.BFYoutubeJsInterface a1 = new sg.gumi.bravefrontier.webview.BFYoutubeJsInterface();
-                    this.jsInterface = a1;
-                    a1.setAsJsInterface(this.webView);
-                }
-                this.webView.getSettings().setUseWideViewPort(false);
-                this.webView.setHorizontalScrollBarEnabled(false);
-                this.webView.setOnTouchListener((android.view.View$OnTouchListener)(Object)this);
-                this.createWebViewContainer((android.view.View)this.webView);
-            } catch(Throwable ignoredException) {
-                break label0;
+        BFWebView.tryWebViewClearCache(activity);
+        try {
+            DisplayMetrics metrics = BraveFrontier.getAppContext().getResources().getDisplayMetrics();
+            phoneWidth = metrics.widthPixels;
+            phoneHeight = metrics.heightPixels;
+            if (webView == null) {
+                webView = new WebView(activity);
             }
-            return;
+            webView.setLayoutParams(BFWebView.createHiddenLayoutParams());
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.requestFocus(130);
+            webView.getSettings().setNeedInitialFocus(false);
+            if (Build.VERSION.SDK_INT > 15) {
+                webView.clearCache(true);
+            }
+            webView.setWebViewClient(new BFWebViewClient());
+            if (BFConfig.PLATFORM == BFConfig.PLATFORM_AMAZON) {
+                jsInterface = new BFYoutubeJsInterface();
+                jsInterface.setAsJsInterface(webView);
+            }
+            webView.getSettings().setUseWideViewPort(false);
+            webView.setHorizontalScrollBarEnabled(false);
+            webView.setOnTouchListener(this);
+            createWebViewContainer(webView);
+        } catch(Throwable ignoredException) {
+            webView = null;
         }
-        this.webView = null;
     }
     
-    public static boolean isUsableWebViewDatabase(android.content.Context a) {
+    public static boolean isUsableWebViewDatabase(Context context) {
         if (usableWebViewDatabase == null) {
-            int i = android.os.Build$VERSION.SDK_INT;
-            if (i >= 15) {
-                if (i != 15) {
+            if (Build.VERSION.SDK_INT >= 15) {
+                if (Build.VERSION.SDK_INT != 15) {
                     usableWebViewDatabase = Boolean.TRUE;
                 } else {
                     usableWebViewDatabase = Boolean.FALSE;
                 }
             } else {
-                boolean b = false;
-                boolean b0 = sg.gumi.bravefrontier.webview.BFWebView.tryCreateWebViewDatabase(a, "webview.db");
-                boolean b1 = sg.gumi.bravefrontier.webview.BFWebView.tryCreateWebViewDatabase(a, "webviewCache.db");
-                label2: {
-                    label0: {
-                        label1: {
-                            if (!b0) {
-                                break label1;
-                            }
-                            if (b1) {
-                                break label0;
-                            }
-                        }
-                        b = false;
-                        break label2;
-                    }
-                    b = true;
+                if (!BFWebView.tryCreateWebViewDatabase(context, DATABASE_FILE)) {
+                    usableWebViewDatabase = false;
+                    return usableWebViewDatabase;
                 }
-                usableWebViewDatabase = Boolean.valueOf(b);
+                if (BFWebView.tryCreateWebViewDatabase(context, CACHE_DATABASE_FILE)) {
+                    usableWebViewDatabase = true;
+                    return usableWebViewDatabase;
+                }
+
+                usableWebViewDatabase = false;
             }
         }
-        return usableWebViewDatabase.booleanValue();
+        return usableWebViewDatabase;
     }
     
     public static boolean isWebViewAvailable() {
-        return sg.gumi.bravefrontier.webview.BFWebView.getInstance().webView != null;
+        return BFWebView.getInstance().webView != null;
     }
     
     public static boolean isWebViewVisible() {
-        return sg.gumi.bravefrontier.webview.BFWebView.getInstance().visible;
+        return BFWebView.getInstance().visible;
     }
     
     public static boolean launchNewApplication(String url) {
-        label0: {
-            try {
-                android.content.Intent a = new android.content.Intent("android.intent.action.VIEW");
-                a.setData(android.net.Uri.parse(url));
-                if (sg.gumi.bravefrontier.BraveFrontier.getAppContext().getPackageManager().resolveActivity(a, 65536) == null) {
-                    break label0;
-                }
-                ((android.app.Activity)sg.gumi.bravefrontier.webview.BFWebView.getInstance().cocos2dxActivity).startActivity(a);
-            } catch(Throwable ignoredException) {
+        try {
+            Intent intent = new Intent("android.intent.action.VIEW");
+            intent.setData(Uri.parse(url));
+            if (BraveFrontier.getAppContext().getPackageManager().resolveActivity(intent, 65536) == null) {
                 return false;
             }
-            return true;
+            BFWebView.getInstance().cocos2dxActivity.startActivity(intent);
+        } catch(Throwable ignoredException) {
+            return false;
         }
-        return false;
+        return true;
     }
     
     public static void launchNewBrowser(String url) {
         try {
-            android.content.Intent a = new android.content.Intent("android.intent.action.VIEW");
-            a.setData(android.net.Uri.parse(url));
-            ((android.app.Activity)sg.gumi.bravefrontier.webview.BFWebView.getInstance().cocos2dxActivity).startActivity(a);
-        } catch(Throwable a0) {
-            a0.printStackTrace();
+            Intent intent = new Intent("android.intent.action.VIEW");
+            intent.setData(Uri.parse(url));
+            BFWebView.getInstance().cocos2dxActivity.startActivity(intent);
+        } catch(Throwable ex) {
+            ex.printStackTrace();
         }
     }
     
     public static void playYoutubeVideo(String url) {
-        sg.gumi.bravefrontier.webview.BFWebView.getInstance().playYoutubeVideoHelper(url);
+        BFWebView.getInstance().playYoutubeVideoHelper(url);
     }
     
-    private void playYoutubeVideoHelper(String s) {
-        StringBuilder a = new StringBuilder();
-        a.append("play youtube video: ");
-        a.append(s);
-        android.util.Log.d("BFWebView", a.toString());
-        double d = (double)this.phoneWidth;
-        Double.isNaN(d);
-        float f = (float)(d / 320.0);
-        double d0 = (double)this.phoneHeight;
-        Double.isNaN(d0);
-        float f0 = Math.min(f, (float)(d0 / 480.0));
-        int i = this.phoneWidth;
-        int i0 = (int)(((float)i - 320f * f0) / 2f);
-        int i1 = this.phoneHeight;
-        int i2 = (int)(((float)i1 - f0 * 480f) / 2f);
-        this.visible = true;
-        sg.gumi.bravefrontier.webview.BFWebView$BFWebViewTask a0 = new sg.gumi.bravefrontier.webview.BFWebView$BFWebViewTask(this, (sg.gumi.bravefrontier.webview.BFWebView$1)null);
-        Object[] a1 = new Object[5];
-        a1[0] = s;
-        a1[1] = Integer.valueOf(i0);
-        a1[2] = Integer.valueOf(i2);
-        a1[3] = Integer.valueOf(i - i0 * 2);
-        a1[4] = Integer.valueOf(i1 - i2 * 2);
-        a0.param = a1;
-        a0.taskType = 5;
-        ((android.app.Activity)this.cocos2dxActivity).runOnUiThread((Runnable)(Object)a0);
+    private void playYoutubeVideoHelper(String url) {
+        Log.d("BFWebView", "play youtube video: " + url);
+        float calcW = (float)(phoneWidth / 320.0);
+        float calcH = Math.min(calcW, (float)(phoneHeight / 480.0));
+        int viewWidth = (int)(((float)phoneWidth - 320f * calcH) / 2f);
+        int viewHeight = (int)(((float)phoneHeight - calcH * 480f) / 2f);
+
+        visible = true;
+        BFWebViewTask webViewTask = new BFWebViewTask(this, null);
+        Object[] params = new Object[5];
+        params[0] = url;
+        params[1] = viewWidth;
+        params[2] = viewHeight;
+        params[3] = phoneWidth - viewWidth * 2;
+        params[4] = phoneHeight - viewHeight * 2;
+        webViewTask.param = params;
+        webViewTask.taskType = 5;
+        cocos2dxActivity.runOnUiThread(webViewTask);
     }
     
-    private void playYoutubeVideoTask(Object a) {
-        if (this.webView == null) {
-            sg.gumi.bravefrontier.BraveFrontierJNI.videoSkippedCallback();
+    private void playYoutubeVideoTask(Object param) {
+        if (webView == null) {
+            BraveFrontierJNI.videoSkippedCallback();
             return;
         }
-        if (!sg.gumi.bravefrontier.BraveFrontierJNI.existsBundleFile("YT_Player_Android.html")) {
-            sg.gumi.bravefrontier.BraveFrontierJNI.videoSkippedCallback();
+        if (!BraveFrontierJNI.existsBundleFile("YT_Player_Android.html")) {
+            BraveFrontierJNI.videoSkippedCallback();
             return;
         }
-        Object[] a0 = (Object[])a;
-        sg.gumi.bravefrontier.webview.BFYoutubeJsInterface a1 = this.jsInterface;
-        if (a1 != null) {
-            a1.initializeYoutubeVideo((String)a0[0]);
+        Object[] paramConv = (Object[])param;
+        if (jsInterface != null) {
+            jsInterface.initializeYoutubeVideo((String)paramConv[0]);
         }
-        this.webView.loadUrl("file:///android_asset/YT_Player_Android.html");
-        this.webView.setBackgroundColor(-16777216);
-        android.widget.RelativeLayout$LayoutParams a2 = new android.widget.RelativeLayout$LayoutParams(((Integer)a0[3]).intValue(), ((Integer)a0[4]).intValue());
-        a2.alignWithParent = true;
-        a2.addRule(9);
-        a2.addRule(10);
-        a2.leftMargin = ((Integer)a0[1]).intValue();
-        a2.topMargin = ((Integer)a0[2]).intValue();
-        this.webView.setLayoutParams((android.view.ViewGroup$LayoutParams)a2);
-        this.webView.setInitialScale((int)((float)this.phoneWidth / 320f * 100f));
-        this.webView.setVisibility(0);
-        this.webView.requestFocus();
+        webView.loadUrl("file:///android_asset/YT_Player_Android.html");
+        webView.setBackgroundColor(-16777216);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int)paramConv[3], (int)paramConv[4]);
+        layoutParams.alignWithParent = true;
+        layoutParams.addRule(9);
+        layoutParams.addRule(10);
+        layoutParams.leftMargin = (int)paramConv[1];
+        layoutParams.topMargin = (int)paramConv[2];
+        webView.setLayoutParams(layoutParams);
+        webView.setInitialScale((int)((float)this.phoneWidth / 320f * 100f));
+        webView.setVisibility(View.VISIBLE);
+        webView.requestFocus();
     }
     
-    private void setBrowserButtonVisibilityTask(Object a) {
-        boolean b = a == Boolean.TRUE;
-        android.widget.FrameLayout a0 = (android.widget.FrameLayout)((android.app.Activity)this.cocos2dxActivity).findViewById(16908290);
-        if (!b) {
-            a0.requestFocus();
-            a0.setFocusableInTouchMode(true);
+    private void setBrowserButtonVisibilityTask(Object param) {
+        boolean isVisible = param == Boolean.TRUE;
+
+        FrameLayout frameLayout = cocos2dxActivity.findViewById(16908290);
+        if (!isVisible) {
+            frameLayout.requestFocus();
+            frameLayout.setFocusableInTouchMode(true);
         }
-        this.visible = b;
-        android.widget.ImageButton a1 = this.browserButton;
-        if (a1 != null) {
-            a1.setVisibility(b ? 0 : 8);
-            if (!b) {
-                a0.requestFocus();
-                a0.setFocusableInTouchMode(true);
-                this.browserButton.setLayoutParams((android.view.ViewGroup$LayoutParams)sg.gumi.bravefrontier.webview.BFWebView.createHiddenLayoutParams());
+        visible = isVisible;
+        ImageButton imgButton = this.browserButton;
+        if (imgButton != null) {
+            imgButton.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+            if (!isVisible) {
+                frameLayout.requestFocus();
+                frameLayout.setFocusableInTouchMode(true);
+                browserButton.setLayoutParams(BFWebView.createHiddenLayoutParams());
             }
         }
     }
     
-    private void setWebViewVisibilityTask(Object a) {
-        boolean b = a == Boolean.TRUE;
-        android.widget.FrameLayout a0 = (android.widget.FrameLayout)((android.app.Activity)this.cocos2dxActivity).findViewById(16908290);
-        if (!b) {
-            a0.requestFocus();
-            a0.setFocusableInTouchMode(true);
+    private void setWebViewVisibilityTask(Object param) {
+        boolean visible = param == Boolean.TRUE;
+        FrameLayout frameLayout = this.cocos2dxActivity.findViewById(16908290);
+        if (!visible) {
+            frameLayout.requestFocus();
+            frameLayout.setFocusableInTouchMode(true);
         }
-        this.visible = b;
-        this.webView.setVisibility(b ? 0 : 8);
-        if (!b) {
-            a0.requestFocus();
-            a0.setFocusableInTouchMode(true);
-            this.webView.setLayoutParams((android.view.ViewGroup$LayoutParams)sg.gumi.bravefrontier.webview.BFWebView.createHiddenLayoutParams());
+        visible = visible;
+        webView.setVisibility(visible ? View.VISIBLE : View.GONE);
+        if (!visible) {
+            frameLayout.requestFocus();
+            frameLayout.setFocusableInTouchMode(true);
+            webView.setLayoutParams(BFWebView.createHiddenLayoutParams());
         }
     }
     
     public static void setWebViewVisible(boolean visible) {
-        sg.gumi.bravefrontier.webview.BFWebView.getInstance().setWebViewVisibleHelper(visible);
+        BFWebView.getInstance().setWebViewVisibleHelper(visible);
     }
     
     private void setWebViewVisibleHelper(boolean b) {
-        sg.gumi.bravefrontier.webview.BFWebView$BFWebViewTask a = new sg.gumi.bravefrontier.webview.BFWebView$BFWebViewTask(this, (sg.gumi.bravefrontier.webview.BFWebView$1)null);
-        a.param = Boolean.valueOf(b);
-        a.taskType = 2;
-        if (this.webView == null) {
-            a.taskType = 102;
+        BFWebViewTask viewTask = new BFWebViewTask(this, null);
+        viewTask.param = b;
+        viewTask.taskType = 2;
+        if (webView == null) {
+            viewTask.taskType = 102;
         }
-        ((android.app.Activity)this.cocos2dxActivity).runOnUiThread((Runnable)(Object)a);
+        cocos2dxActivity.runOnUiThread(viewTask);
     }
     
-    private void showBrowserButtonTask(Object a) {
-        Object[] a0 = (Object[])a;
-        if (this.browserButton == null) {
+    private void showBrowserButtonTask(Object param) {
+        Object[] paramList = (Object[])param;
+        if (browserButton == null) {
             try {
-                android.content.Intent a1 = new android.content.Intent("android.intent.action.VIEW");
-                a1.setData(android.net.Uri.parse((String)a0[0]));
-                android.content.pm.PackageManager a2 = sg.gumi.bravefrontier.BraveFrontier.getAppContext().getPackageManager();
-                android.content.pm.ResolveInfo a3 = a2.resolveActivity(a1, 65536);
-                if (a3 != null) {
-                    android.graphics.drawable.Drawable a4 = a3.loadIcon(a2);
-                    if (a4 != null) {
-                        android.widget.ImageButton a5 = new android.widget.ImageButton((android.content.Context)this.cocos2dxActivity);
-                        this.browserButton = a5;
-                        a5.setImageDrawable(a4);
+                Intent intent = new Intent("android.intent.action.VIEW");
+                intent.setData(Uri.parse((String)paramList[0]));
+                PackageManager pm = BraveFrontier.getAppContext().getPackageManager();
+                ResolveInfo resolveInfo = pm.resolveActivity(intent, 65536);
+                if (resolveInfo != null) {
+                    Drawable icon = resolveInfo.loadIcon(pm);
+                    if (icon != null) {
+                        browserButton = new ImageButton(cocos2dxActivity);
+                        browserButton.setImageDrawable(icon);
                     }
                 }
             } catch(Throwable ignoredException) {
             }
-            if (this.browserButton == null) {
-                android.widget.ImageButton a6 = new android.widget.ImageButton((android.content.Context)this.cocos2dxActivity);
-                this.browserButton = a6;
-                a6.setImageResource(17301585);
+            if (browserButton == null) {
+                browserButton = new ImageButton(cocos2dxActivity);
+                browserButton.setImageResource(17301585);
             }
-            this.browserButton.setLayoutParams((android.view.ViewGroup$LayoutParams)sg.gumi.bravefrontier.webview.BFWebView.createHiddenLayoutParams());
-            this.createWebViewContainer((android.view.View)this.browserButton);
+            browserButton.setLayoutParams(BFWebView.createHiddenLayoutParams());
+            createWebViewContainer(browserButton);
         }
-        if (this.browserButton != null) {
-            android.widget.RelativeLayout$LayoutParams a7 = new android.widget.RelativeLayout$LayoutParams(-2, -2);
-            a7.alignWithParent = true;
-            a7.addRule(13);
-            this.browserButton.setLayoutParams((android.view.ViewGroup$LayoutParams)a7);
-            String s = (String)a0[0];
-            label0: {
-                label1: {
-                    if (s == null) {
-                        break label1;
-                    }
-                    if (!s.isEmpty()) {
-                        break label0;
-                    }
-                }
-                s = "about:blank";
+        if (browserButton != null) {
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(-2, -2);
+            layoutParams.alignWithParent = true;
+            layoutParams.addRule(13);
+            browserButton.setLayoutParams(layoutParams);
+            String page = (String)paramList[0];
+            if (page == null) {
+                page = "about:blank";
             }
-            this.browserButton.setTag((Object)s);
-            this.browserButton.setOnClickListener((android.view.View$OnClickListener)(Object)this);
-            this.browserButton.setVisibility(0);
+            if (page.isEmpty()) {
+                page = "about:blank";
+            }
+            browserButton.setTag(page);
+            browserButton.setOnClickListener(this);
+            browserButton.setVisibility(View.VISIBLE);
         }
     }
     
-    public static void showWebView(String s, float f, float f0, float f1, float f2) {
-        sg.gumi.bravefrontier.webview.BFWebView.getInstance().showWebViewHelper(s, f, f0, f1, f2);
+    public static void showWebView(String url, float f, float f0, float f1, float f2) {
+        BFWebView.getInstance().showWebViewHelper(url, f, f0, f1, f2);
     }
     
-    private void showWebViewHelper(String s, float f, float f0, float f1, float f2) {
-        StringBuilder a = new StringBuilder();
-        a.append("Showing webview: ");
-        a.append(s);
-        Log.d("BFWebView", a.toString());
-        double d = (double)this.phoneWidth;
-        Double.isNaN(d);
-        float f3 = (float)(d / 320.0);
-        double d0 = (double)this.phoneHeight;
-        Double.isNaN(d0);
-        float f4 = Math.min(f3, (float)(d0 / 480.0));
-        int i = (int)(((float)this.phoneWidth - 320f * f4) / 2f);
-        int i0 = (int)(((float)this.phoneHeight - 480f * f4) / 2f);
-        float f5 = (float)(int)(f * f4);
+    private void showWebViewHelper(String url, float f, float f0, float f1, float f2) {
+        Log.d("BFWebView", "Showing webview: " + url);
+        float calcW = (float)(phoneWidth / 320.0);
+        float calcH = Math.min(calcW, (float)(phoneHeight / 480.0));
+        int i = (int)(((float)this.phoneWidth - 320f * calcH) / 2f);
+        int i0 = (int)(((float)this.phoneHeight - 480f * calcH) / 2f);
+        float topLeft = (float)(int)(f * calcH);
         if (VERSION.SDK_INT < 19) {
-            f5 = f5 + (float)i;
+            topLeft = topLeft + (float)i;
         }
-        float f6 = (float)(int)(f1 * f4);
-        float f7 = (float)(int)(f0 * f4);
+        float f6 = (float)(int)(f1 * calcH);
+        float topRight = (float)(int)(f0 * calcH);
         if (VERSION.SDK_INT < 19) {
-            f7 = f7 + (float)i0;
+            topRight = topRight + (float)i0;
         }
-        float f8 = (float)(int)(f2 * f4);
+        float f8 = (float)(int)(f2 * calcH);
         this.visible = true;
-        sg.gumi.bravefrontier.webview.BFWebView$BFWebViewTask a0 = new sg.gumi.bravefrontier.webview.BFWebView$BFWebViewTask(this, (sg.gumi.bravefrontier.webview.BFWebView$1)null);
-        Object[] a1 = new Object[5];
-        a1[0] = s;
-        a1[1] = Integer.valueOf((int)f5);
-        a1[2] = Integer.valueOf((int)f7);
-        a1[3] = Integer.valueOf((int)f6);
-        a1[4] = Integer.valueOf((int)f8);
-        a0.param = a1;
+        BFWebViewTask a0 = new BFWebViewTask(this, null);
+        Object[] params = new Object[5];
+        params[0] = url;
+        params[1] = (int)topLeft;
+        params[2] = (int)topRight;
+        params[3] = (int) f6;
+        params[4] = (int) f8;
+        a0.param = params;
         a0.taskType = 1;
         if (this.webView == null) {
             a0.taskType = 101;
@@ -458,133 +491,100 @@ final public class BFWebView implements View.OnTouchListener, View.OnClickListen
         cocos2dxActivity.runOnUiThread((Runnable)(Object)a0);
     }
     
-    private void showWebViewTask(Object a) {
-        Object[] a0 = (Object[])a;
-        java.util.HashMap a1 = new java.util.HashMap();
-        ((java.util.Map)(Object)a1).put((Object)"X-Device-Platform", (Object)"Android");
-        this.webView.loadUrl((String)a0[0], (java.util.Map)(Object)a1);
-        this.webView.setBackgroundColor(-16777216);
-        android.widget.RelativeLayout$LayoutParams a2 = new android.widget.RelativeLayout$LayoutParams(((Integer)a0[3]).intValue(), ((Integer)a0[4]).intValue());
-        a2.alignWithParent = true;
-        a2.addRule(9);
-        a2.addRule(10);
-        a2.leftMargin = ((Integer)a0[1]).intValue();
-        a2.topMargin = ((Integer)a0[2]).intValue();
-        this.webView.setLayoutParams((android.view.ViewGroup$LayoutParams)a2);
+    private void showWebViewTask(Object param) {
+        Object[] params = (Object[])param;
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("X-Device-Platform", "Android");
+        webView.loadUrl((String)params[0], headers);
+        webView.setBackgroundColor(-16777216);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int)params[3], (int)params[4]);
+        layoutParams.alignWithParent = true;
+        layoutParams.addRule(9);
+        layoutParams.addRule(10);
+        layoutParams.leftMargin = (int)params[1];
+        layoutParams.topMargin = (int)params[2];
+        this.webView.setLayoutParams(layoutParams);
         this.webView.setInitialScale((int)((float)this.phoneWidth / 320f * 100f));
-        this.webView.setVisibility(0);
+        this.webView.setVisibility(View.VISIBLE);
     }
     
-    private static boolean tryCreateWebViewDatabase(android.content.Context a, String s) {
-        android.database.sqlite.SQLiteDatabase a0 = null;
+    private static boolean tryCreateWebViewDatabase(Context context, String fileName) {
+        SQLiteDatabase db = null;
         try {
-            a0 = a.openOrCreateDatabase(s, 0, (android.database.sqlite.SQLiteDatabase$CursorFactory)null);
+            db = context.openOrCreateDatabase(fileName, 0, null);
         } catch(Throwable ignoredException) {
-            a0 = null;
-        }
-        if (a0 == null) {
             try {
-                a.deleteDatabase(s);
+                context.deleteDatabase(fileName);
             } catch(Throwable ignoredException0) {
             }
             try {
-                a.deleteFile(s);
+                context.deleteFile(fileName);
             } catch(Throwable ignoredException1) {
             }
             try {
-                a0 = a.openOrCreateDatabase(s, 0, (android.database.sqlite.SQLiteDatabase$CursorFactory)null);
+                db = context.openOrCreateDatabase(fileName, 0, null);
             } catch(Throwable ignoredException2) {
             }
         }
-        label0: if (a0 != null) {
+
+        if (db != null) {
             try {
-                a0.close();
+                db.close();
             } catch(Throwable ignoredException3) {
-                break label0;
+                return false;
             }
-            return true;
         }
-        return false;
+        return true;
     }
     
-    private static void tryWebViewClearCache(android.content.Context a) {
-        label0: if (android.os.Build$VERSION.SDK_INT <= 15) {
+    private static void tryWebViewClearCache(Context context) {
+        if (Build.VERSION.SDK_INT <= 15) {
+            SQLiteDatabase database = null;
             try {
-                android.database.sqlite.SQLiteDatabase a0 = null;
-                label2: {
-                    label1: {
-                        label3: {
-                            try {
-                                a0 = a.openOrCreateDatabase("webviewCache.db", 0, (android.database.sqlite.SQLiteDatabase$CursorFactory)null);
-                                break label3;
-                            } catch(Throwable ignoredException) {
-                            }
-                            a0 = null;
-                            break label1;
-                        }
-                        if (a0 == null) {
-                            break label2;
-                        }
-                        try {
-                            a0.delete("cache", (String)null, (String[])null);
-                        } catch(Throwable ignoredException0) {
-                            break label1;
-                        }
-                        break label2;
-                    }
-                    if (a0 == null) {
-                        break label0;
-                    }
-                    a0.close();
-                    break label0;
+                database = context.openOrCreateDatabase(CACHE_DATABASE_FILE, 0, null);
+                database.delete("cache", null, null);
+                database.close();
+            } catch(Throwable ignoredException) {
+                if (database != null) {
+                    database.close();
                 }
-                if (a0 != null) {
-                    a0.close();
-                }
-            } catch(Throwable ignoredException1) {
             }
         }
     }
     
-    public void onClick(android.view.View a) {
-        android.widget.ImageButton a0 = this.browserButton;
-        if (a0 == a) {
-            sg.gumi.bravefrontier.webview.BFWebView.launchNewBrowser((String)a0.getTag());
+    public void onClick(View view) {
+        if (browserButton == view) {
+            BFWebView.launchNewBrowser((String)browserButton.getTag());
         }
     }
     
-    public boolean onTouch(android.view.View a, android.view.MotionEvent a0) {
-        int i = a0.getAction();
-        label1: if (i == 0) {
-            if (!a.hasFocus()) {
-                a.requestFocus();
+    public boolean onTouch(View view, MotionEvent action) {
+        if (action.getAction() == 0) {
+            if (!view.hasFocus()) {
+                view.requestFocus();
             }
-            this.mDownX = a0.getX();
+            mDownX = action.getX();
         } else {
-            label0: {
-                if (i == 1) {
-                    break label0;
-                }
-                if (i == 2) {
-                    break label0;
-                }
-                if (i == 3) {
-                    break label0;
-                }
-                break label1;
+            if (action.getAction() != 1) {
+                return false;
             }
-            if (!a.hasFocus()) {
-                a.requestFocus();
+            if (action.getAction() != 2) {
+                return false;
             }
-            a0.setLocation(this.mDownX, a0.getY());
+            if (action.getAction() != 3) {
+                return false;
+            }
+            if (!view.hasFocus()) {
+                view.requestFocus();
+            }
+            action.setLocation(mDownX, action.getY());
         }
         return false;
     }
     
     public void stopYoutubeVideo() {
-        sg.gumi.bravefrontier.webview.BFYoutubeJsInterface a = this.jsInterface;
-        if (a != null) {
-            a.stopYoutubeVideo();
+        if (jsInterface != null) {
+            jsInterface.stopYoutubeVideo();
         }
     }
 }

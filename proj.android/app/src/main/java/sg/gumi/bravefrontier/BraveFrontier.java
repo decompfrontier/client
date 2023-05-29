@@ -1,25 +1,179 @@
 package sg.gumi.bravefrontier;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.os.*;
+import android.provider.Settings;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import org.cocos2dx.lib.Cocos2dxHelper;
+import org.cocos2dx.lib.Cocos2dxActivity;
+import org.json.JSONObject;
+import sg.gumi.bravefrontier.video.BFVideoView;
+import sg.gumi.bravefrontier.webview.BFWebView;
+import sg.gumi.util.AppSession;
+import sg.gumi.util.BFUncaughtExceptionHandler;
+
+import java.util.*;
+
+import static sg.gumi.util.BFConfig.*;
+//import com.tapjoy.TJConnectListener;
+//import com.tapjoy.Tapjoy;
+//import com.appsflyer.AppsFlyerLib;
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
+//import com.soomla.store.StoreController;
+//import com.google.ads.conversiontracking.AdWordsConversionReporter;
+
 public class BraveFrontier extends BaseGameActivity {
     final public static String FIVEROCKS_APP_KEY = "UqfUMS53gACQAACCHQAABgEC4ueo1H0hmTfztQ3Byo7QZsTHevDXgt9Tjf0y";
     final public static String FLURRY_ID = "989N9DD6NYP8GZTJ53K2";
-    private static sg.gumi.bravefrontier.BraveFrontier act;
-    private static android.content.Context context;
+    private static BraveFrontier act;
+    private static Context context;
     private static String deviceAdvertisingID = "";
-    private static sg.gumi.bravefrontier.Facebook facebook;
+    private static Facebook facebook;
     public static boolean fiverocksInitialized = false;
     public static boolean isInitialized = false;
-    private static android.telephony.PhoneStateListener phoneStateListener;
+    private static PhoneStateListener phoneStateListener;
     private float m_LastStoredEffectsVolume;
     private float m_LastStoredMusicVolume;
     private boolean m_isFromStateIdle;
-    public android.os.Bundle savedInstanceState;
-    
-    static {
-        try {
-            com.tapjoy.Tapjoy.loadSharedLibrary();
-        } catch(Throwable ignoredException) {
+    public Bundle savedInstanceState;
+
+
+    static class BFPhoneStateListener extends PhoneStateListener {
+        final BraveFrontier app;
+
+        class ResultTask extends TimerTask {
+            final BFPhoneStateListener task;
+
+            ResultTask(BFPhoneStateListener task) {
+                super();
+                this.task = task;
+
+            }
+
+            public void run() {
+                Cocos2dxHelper.setBackgroundMusicVolume(BraveFrontier.getLastStoredMusicVolume(task.app));
+                Cocos2dxHelper.setEffectsVolume(BraveFrontier.getLastStoredEffectsVolume(task.app));
+            }
         }
+
+
+        BFPhoneStateListener(BraveFrontier app) {
+            super();
+            this.app = app;
+        }
+
+        public void onCallStateChanged(int state, String phoneNumber) {
+            if (state != 0) {
+                if (state != 1) {
+                    BraveFrontier.setLastStoredMusicVolume(app, Cocos2dxHelper.getBackgroundMusicVolume());
+                    BraveFrontier.setLastStoredEffectsVolume(app, Cocos2dxHelper.getEffectsVolume());
+                    Cocos2dxHelper.setBackgroundMusicVolume(0.0f);
+                    Cocos2dxHelper.setEffectsVolume(0.0f);
+                    BraveFrontier.setFromStateIdle(app, false);
+                } else {
+                    BraveFrontier.setFromStateIdle(app, false);
+                }
+            } else {
+                if (!BraveFrontier.isFromStateIdle(this.app)) {
+                    new Timer().schedule(new ResultTask(this), 300L);
+                }
+                BraveFrontier.setFromStateIdle(this.app, true);
+            }
+            super.onCallStateChanged(state, phoneNumber);
+        }
+    }
+
+    static class SignInTask implements Runnable {
+
+        public void run() {
+            BraveFrontier.instance().beginUserInitiatedSignIn();
+        }
+    }
+
+    static class SetDeviceAdIdTask implements Runnable {
+        final BraveFrontier app;
+
+        SetDeviceAdIdTask(BraveFrontier app) {
+            super();
+            this.app = app;
+        }
+
+        public void run() {
+            String androidId = Settings.Secure.getString(app.getContentResolver(), "android_id");
+            try {
+                BraveFrontier.setDeviceAdvertisementId(AdvertisingIdClient.getAdvertisingIdInfo((app).getApplicationContext()).getId());
+            } catch(Exception ignoredException) {
+                BraveFrontier.setDeviceAdvertisementId(androidId);
+            }
+        }
+    }
+
+
+    static class TapJoyConnectListener /*implements TJConnectListener*/ {
+        final BraveFrontier app;
+
+        TapJoyConnectListener(BraveFrontier app) {
+            super();
+            this.app = app;
+        }
+
+        public void onConnectFailure() {
+            BraveFrontier.fiverocksInitialized = false;
+            Log.d("TAPJOY_DEBUG", "onConnectFailure");
+        }
+
+        public void onConnectSuccess() {
+            Log.d("TAPJOY_DEBUG", "onConnectSuccess");
+            BraveFrontier.fiverocksInitialized = true;
+        }
+    }
+
+    static class InitStoreAssets implements Runnable {
+
+        public void run() {
+            /*try {
+                StoreController.getInstance().initialize(new BraveFrontierStoreAssets(), BraveFrontier.instance(), new Handler());
+            } catch(Exception ignoredException) {
+            }*/
+        }
+    }
+
+    static class ClickOpenSettings implements DialogInterface.OnClickListener {
+        final BraveFrontier app;
+
+        ClickOpenSettings(BraveFrontier activity) {
+            super();
+            this.app = activity;
+        }
+
+        public void onClick(DialogInterface dialog, int result) {
+            if (result == -2) {
+                try {
+                    this.app.startActivity(new Intent("android.settings.APPLICATION_SETTINGS"));
+                } catch(Throwable ignoredException) {
+                }
+            }
+            BraveFrontierJNI.appExit();
+        }
+    }
+
+    static {
+        /*try {
+            Tapjoy.loadSharedLibrary();
+        } catch(Throwable ignoredException) {
+        }*/
         try {
             System.loadLibrary("game");
             org.cocos2dx.lib.Cocos2dxHelper.checkNativeSetApkPathMethod();
@@ -38,76 +192,72 @@ public class BraveFrontier extends BaseGameActivity {
     
     public static void GPGSSignIn() {
         android.util.Log.e("BraveFrontier", "Start Sign In");
-        if (((sg.gumi.bravefrontier.BaseGameActivity)act).getGameService().getSignInCancellations() <= 0) {
-            ((android.app.Activity)act).runOnUiThread((Runnable)(Object)new sg.gumi.bravefrontier.BraveFrontier$6());
+        if (act.getGameService().getSignInCancellations() <= 0) {
+            act.runOnUiThread(new SignInTask());
         }
     }
     
     public static void GPGSSignOut() {
-        ((sg.gumi.bravefrontier.BaseGameActivity)act).signOut();
+        act.signOut();
     }
     
-    static String access$002(String s) {
-        deviceAdvertisingID = s;
-        return s;
+    static void setDeviceAdvertisementId(String deviceAdvertisingId) {
+        deviceAdvertisingID = deviceAdvertisingId;
     }
     
-    static boolean access$100(sg.gumi.bravefrontier.BraveFrontier a) {
-        return a.m_isFromStateIdle;
+    static boolean isFromStateIdle(BraveFrontier activity) {
+        return activity.m_isFromStateIdle;
     }
     
-    static boolean access$102(sg.gumi.bravefrontier.BraveFrontier a, boolean b) {
-        a.m_isFromStateIdle = b;
-        return b;
+    static void setFromStateIdle(BraveFrontier activity, boolean fromstateIdle) {
+        activity.m_isFromStateIdle = fromstateIdle;
     }
     
-    static float access$200(sg.gumi.bravefrontier.BraveFrontier a) {
-        return a.m_LastStoredMusicVolume;
+    static float getLastStoredMusicVolume(BraveFrontier activity) {
+        return activity.m_LastStoredMusicVolume;
     }
     
-    static float access$202(sg.gumi.bravefrontier.BraveFrontier a, float f) {
-        a.m_LastStoredMusicVolume = f;
-        return f;
+    static void setLastStoredMusicVolume(BraveFrontier activity, float lastStoredMusicVolume) {
+        activity.m_LastStoredMusicVolume = lastStoredMusicVolume;
     }
     
-    static float access$300(sg.gumi.bravefrontier.BraveFrontier a) {
-        return a.m_LastStoredEffectsVolume;
+    static float getLastStoredEffectsVolume(BraveFrontier activity) {
+        return activity.m_LastStoredEffectsVolume;
     }
     
-    static float access$302(sg.gumi.bravefrontier.BraveFrontier a, float f) {
-        a.m_LastStoredEffectsVolume = f;
-        return f;
+    static void setLastStoredEffectsVolume(BraveFrontier activity, float lastStoredEffectsVolume) {
+        activity.m_LastStoredEffectsVolume = lastStoredEffectsVolume;
     }
     
-    static sg.gumi.bravefrontier.BraveFrontier access$400() {
+    static BraveFrontier instance() {
         return act;
     }
     
     public static void appsflyerStartTracking() {
-        com.appsflyer.AppsFlyerLib.getInstance().start((android.content.Context)act);
+        //AppsFlyerLib.getInstance().start(act);
     }
     
     private void checkLoadedLibraries() {
-        if (!org.cocos2dx.lib.Cocos2dxHelper.isNativeLibraryLoaded()) {
-            sg.gumi.bravefrontier.BraveFrontier$4 a = new sg.gumi.bravefrontier.BraveFrontier$4(this);
-            new android.app.AlertDialog$Builder((android.content.Context)this).setTitle((CharSequence)(Object)"Install Error").setMessage((CharSequence)(Object)"Install failed because there isn't enough free space on device internal (non-SD Card) memory. Free up some space and reinstall again.").setPositiveButton((CharSequence)(Object)"Exit", (android.content.DialogInterface$OnClickListener)(Object)a).setNegativeButton((CharSequence)(Object)"Free Space", (android.content.DialogInterface$OnClickListener)(Object)a).create().show();
+        if (!Cocos2dxHelper.isNativeLibraryLoaded()) {
+            ClickOpenSettings btn = new ClickOpenSettings(this);
+            new AlertDialog.Builder(this).setTitle("Install Error").setMessage("Install failed because there isn't enough free space on device internal (non-SD Card) memory. Free up some space and reinstall again.").setPositiveButton("Exit", btn).setNegativeButton("Free Space", btn).create().show();
         }
     }
     
-    public static void crashlyticsCustomLog(String s) {
-        com.google.firebase.crashlytics.FirebaseCrashlytics.getInstance().log(s);
+    public static void crashlyticsCustomLog(String msg) {
+        //FirebaseCrashlytics.getInstance().log(msg);
     }
     
     public static void crashlyticsForceCrash() {
         throw new RuntimeException("Testing crashlytics force crashing...");
     }
     
-    public static void crashlyticsSetUserIdentifier(String s) {
-        com.google.firebase.crashlytics.FirebaseCrashlytics.getInstance().setUserId(s);
+    public static void crashlyticsSetUserIdentifier(String userId) {
+        //FirebaseCrashlytics.getInstance().setUserId(userId);
     }
     
-    public static void crashlyticsSetUserName(String s) {
-        com.google.firebase.crashlytics.FirebaseCrashlytics.getInstance().setCustomKey("UserName", s);
+    public static void crashlyticsSetUserName(String userName) {
+        //FirebaseCrashlytics.getInstance().setCustomKey("UserName", userName);
     }
     
     public static BraveFrontier getActivity() {
@@ -119,7 +269,7 @@ public class BraveFrontier extends BaseGameActivity {
     }
     
     public static String getAndroidId() {
-        return android.provider.Settings$Secure.getString(((android.app.Activity)act).getContentResolver(), "android_id");
+        return Settings.Secure.getString(act.getContentResolver(), "android_id");
     }
     
     public static android.content.Context getAppContext() {
@@ -128,35 +278,33 @@ public class BraveFrontier extends BaseGameActivity {
     
     public static String getAppName() {
         try {
-            return ((android.app.Activity)act).getResources().getString(2131558429);
-        } catch(android.content.res.Resources$NotFoundException a) {
-            a.printStackTrace();
+            return act.getResources().getString(2131558429);
+        } catch(Resources.NotFoundException ex) {
+            ex.printStackTrace();
             return "Brave Frontier";
         }
     }
     
     public static String getBuildNo() {
         try {
-            return ((android.app.Activity)act).getResources().getString(2131558431);
-        } catch(android.content.res.Resources$NotFoundException a) {
-            a.printStackTrace();
+            return act.getResources().getString(2131558431);
+        } catch(Resources.NotFoundException ex) {
+            ex.printStackTrace();
             return "";
         }
     }
     
     public static String getBundleName() {
-        return ((android.app.Activity)act).getPackageName();
+        return act.getPackageName();
     }
     
     public static String getBundleVersion() {
-        android.content.pm.PackageInfo a = null;
         try {
-            a = ((android.app.Activity)act).getPackageManager().getPackageInfo(((android.app.Activity)act).getPackageName(), 0);
-        } catch(android.content.pm.PackageManager$NameNotFoundException a0) {
-            a0.printStackTrace();
-            a = null;
+            return act.getPackageManager().getPackageInfo(act.getPackageName(), 0).versionName;
+        } catch(Resources.NotFoundException | PackageManager.NameNotFoundException ex) {
+            ex.printStackTrace();
+            return "";
         }
-        return a.versionName;
     }
     
     public static String getDeviceAdvertisingID() {
@@ -172,113 +320,98 @@ public class BraveFrontier extends BaseGameActivity {
     }
     
     public static String getDeviceUUID() {
-        String s = null;
-        android.telephony.TelephonyManager a = (android.telephony.TelephonyManager)((android.app.Activity)act).getBaseContext().getSystemService("phone");
-        if (android.os.Build$VERSION.SDK_INT < 26) {
-            StringBuilder a0 = new StringBuilder();
-            a0.append("");
-            a0.append(a.getDeviceId());
-            s = a0.toString();
+        String devUuid = null;
+        TelephonyManager telephonyManager = (TelephonyManager)(act.getBaseContext().getSystemService(Context.TELEPHONY_SERVICE));
+        if (Build.VERSION.SDK_INT < 26) {
+            devUuid = telephonyManager.getDeviceId();
         } else {
-            StringBuilder a1 = new StringBuilder();
-            a1.append("");
-            a1.append(a.getImei());
-            String s0 = a1.toString();
-            StringBuilder a2 = new StringBuilder();
-            a2.append("");
-            a2.append(a.getMeid());
-            s = a2.toString();
-            if (!s0.isEmpty()) {
-                s = s0;
+            String imei = telephonyManager.getImei();
+            devUuid = telephonyManager.getMeid();
+            if (!imei.isEmpty()) {
+                devUuid = imei;
             }
         }
-        StringBuilder a3 = new StringBuilder();
-        a3.append("");
-        a3.append(a.getSimSerialNumber());
-        String s1 = a3.toString();
-        StringBuilder a4 = new StringBuilder();
-        a4.append("");
-        a4.append(android.provider.Settings$Secure.getString(((android.app.Activity)act).getContentResolver(), "android_id"));
-        return new java.util.UUID((long)a4.toString().hashCode(), (long)s.hashCode() << 32 | (long)s1.hashCode()).toString();
+        String simSerialNumber = telephonyManager.getSimSerialNumber();
+        StringBuilder uuid = new StringBuilder();
+        uuid.append("");
+        uuid.append(Settings.Secure.getString(act.getContentResolver(), "android_id"));
+        return new UUID(uuid.toString().hashCode(), (long)devUuid.hashCode() << 32 | (long)simSerialNumber.hashCode()).toString();
     }
     
     public static long getExternalStorageSpace() {
-        long j = 0L;
-        long j0 = 0L;
-        android.os.StatFs a = new android.os.StatFs(android.os.Environment.getExternalStorageDirectory().getPath());
-        if (android.os.Build$VERSION.SDK_INT < 18) {
-            j = (long)a.getAvailableBlocks();
-            j0 = (long)a.getBlockSize();
+        long availableBlocks;
+        long blockSize;
+        StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        if (Build.VERSION.SDK_INT < 18) {
+            availableBlocks = statFs.getAvailableBlocks();
+            blockSize = statFs.getBlockSize();
         } else {
-            j = a.getAvailableBlocksLong();
-            j0 = a.getBlockSizeLong();
+            availableBlocks = statFs.getAvailableBlocksLong();
+            blockSize = statFs.getBlockSizeLong();
         }
-        return j * j0;
+        return availableBlocks * blockSize;
     }
     
     public static String getLegacyDeviceUUID() {
-        String s = null;
         try {
-            android.content.SharedPreferences a = sg.gumi.bravefrontier.BraveFrontier.getAppContext().getSharedPreferences("DEVUUID", 0);
-            String s0 = a.getString("DEVUUID", "");
-            if (s0.equals((Object)"")) {
-                s0 = java.util.UUID.randomUUID().toString();
-                android.content.SharedPreferences$Editor a0 = a.edit();
-                a0.putString("DEVUUID", s0);
-                a0.commit();
+            SharedPreferences preferences = BraveFrontier.getAppContext().getSharedPreferences("DEVUUID", 0);
+            String devuuid = preferences.getString("DEVUUID", "");
+            if (devuuid.equals("")) {
+                devuuid = UUID.randomUUID().toString();
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("DEVUUID", devuuid);
+                editor.commit();
             }
-            s = s0.toString();
-        } catch(Exception a1) {
-            a1.printStackTrace();
-            return " ";
+            return devuuid.toString();
+        } catch(Exception ex) {
+            ex.printStackTrace();
+
         }
-        return s;
+        return " ";
     }
     
     public static String getOSVersion() {
-        return android.os.Build$VERSION.RELEASE;
+        return Build.VERSION.RELEASE;
     }
     
     public static String[] getPermissions() {
-        String[] a = new String[4];
-        a[0] = "android.permission.READ_PHONE_STATE";
-        a[1] = "android.permission.INTERNET";
-        a[2] = "android.permission.ACCESS_WIFI_STATE";
-        a[3] = "android.permission.ACCESS_NETWORK_STATE";
-        return a;
+        String[] permissions = new String[4];
+        permissions[0] = "android.permission.READ_PHONE_STATE";
+        permissions[1] = "android.permission.INTERNET";
+        permissions[2] = "android.permission.ACCESS_WIFI_STATE";
+        permissions[3] = "android.permission.ACCESS_NETWORK_STATE";
+        return permissions;
     }
     
     public static void goToAppSettings() {
-        android.content.Intent a = new android.content.Intent();
-        a.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-        a.setData(android.net.Uri.fromParts("package", ((android.app.Activity)act).getPackageName(), (String)null));
-        ((android.app.Activity)sg.gumi.bravefrontier.BraveFrontier.getActivity()).startActivity(a);
+        Intent intent = new Intent();
+        intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+        intent.setData(Uri.fromParts("package", act.getPackageName(), null));
+        BraveFrontier.getActivity().startActivity(intent);
     }
     
-    public static void googleAnalyticsSendScreenView(String s) {
-        ((sg.gumi.bravefrontier.BaseGameActivity)act).getGameService().googleAnalyticsSendScreenView(s);
+    public static void googleAnalyticsSendScreenView(String screenName) {
+        act.getGameService().googleAnalyticsSendScreenView(screenName);
     }
     
-    public static void googleAnalyticsSetUserID(String s) {
-        ((sg.gumi.bravefrontier.BaseGameActivity)act).getGameService().googleAnalyticsSetUserID(s);
+    public static void googleAnalyticsSetUserID(String userId) {
+        act.getGameService().googleAnalyticsSetUserID(userId);
     }
     
-    public static void googleAnalyticsTrackEvent(String s, String s0, String s1, long j) {
-        ((sg.gumi.bravefrontier.BaseGameActivity)act).getGameService().googleAnalyticsTrackEvent(s, s0, s1, j);
+    public static void googleAnalyticsTrackEvent(String category, String action, String label, long value) {
+        act.getGameService().googleAnalyticsTrackEvent(category, action, label, value);
     }
     
-    public static void googleAnalyticsTrackPurchase(String s, String s0, String s1, String s2, double d, long j, String s3) {
-        ((sg.gumi.bravefrontier.BaseGameActivity)act).getGameService().googleAnalyticsTrackPurchase(s, s0, s1, s2, d, j, s3);
+    public static void googleAnalyticsTrackPurchase(String transactionId, String name, String id, String category, double price, long quantity, String cu) {
+        act.getGameService().googleAnalyticsTrackPurchase(transactionId, name, id, category, price, quantity, cu);
     }
     
     public static boolean hasPermissions() {
-        String[] a = sg.gumi.bravefrontier.BraveFrontier.getPermissions();
-        if (android.os.Build$VERSION.SDK_INT >= 23 && context != null && a != null) {
-            int i = a.length;
-            int i0 = 0;
-            for(; i0 < i; i0 = i0 + 1) {
-                String s = a[i0];
-                if (androidx.core.content.ContextCompat.checkSelfPermission(org.cocos2dx.lib.Cocos2dxActivity.getContext(), s) != 0) {
+        String[] permissions = BraveFrontier.getPermissions();
+        if (Build.VERSION.SDK_INT >= 23 && context != null && permissions != null) {
+            for(int i = 0; i < permissions.length; i = i + 1) {
+                String s = permissions[i];
+                if (ContextCompat.checkSelfPermission(Cocos2dxActivity.getContext(), s) != 0) {
                     return false;
                 }
             }
@@ -287,30 +420,19 @@ public class BraveFrontier extends BaseGameActivity {
     }
     
     public static void initializeStore() {
-        sg.gumi.util.BFConfig$Platform a = sg.gumi.util.BFConfig.PLATFORM;
-        sg.gumi.util.BFConfig$Platform a0 = sg.gumi.util.BFConfig.PLATFORM_GOOGLE;
-        label0: {
-            label1: {
-                if (a == a0) {
-                    break label1;
-                }
-                if (sg.gumi.util.BFConfig.PLATFORM != sg.gumi.util.BFConfig.PLATFORM_AMAZON) {
-                    break label0;
-                }
-            }
-            ((android.app.Activity)act).runOnUiThread((Runnable)(Object)new sg.gumi.bravefrontier.BraveFrontier$5());
+        if (PLATFORM == PLATFORM_AMAZON || PLATFORM == PLATFORM_GOOGLE) {
+            act.runOnUiThread(new InitStoreAssets());
         }
     }
+
     
     public static boolean isBundleExist() {
-        boolean b = false;
         try {
-            ((android.app.Activity)act).getPackageManager().getPackageInfo(((android.app.Activity)act).getPackageName(), 0);
-            b = true;
-        } catch(android.content.pm.PackageManager$NameNotFoundException ignoredException) {
-            b = false;
+            act.getPackageManager().getPackageInfo(act.getPackageName(), 0);
+            return true;
+        } catch(PackageManager.NameNotFoundException ignoredException) {
         }
-        return b;
+        return false;
     }
     
     public static boolean isFiverocksInitialized() {
@@ -318,14 +440,14 @@ public class BraveFrontier extends BaseGameActivity {
     }
     
     public static boolean isLoadingComplete() {
-        if (!android.os.Debug.isDebuggerConnected()) {
+        if (!Debug.isDebuggerConnected()) {
             return true;
         }
         return false;
     }
     
     public static boolean isSignedInToGPGS() {
-        return ((sg.gumi.bravefrontier.BaseGameActivity)act).isSignedIn();
+        return act.isSignedIn();
     }
     
     native public static void onGPGSSignInFailed();
@@ -337,102 +459,93 @@ public class BraveFrontier extends BaseGameActivity {
     native public static void onGPGSSignOutSucceeded();
     
     
-    public static void openURL(String s) {
-        android.content.Intent a = new android.content.Intent("android.intent.action.VIEW");
-        a.setData(android.net.Uri.parse(s));
-        ((android.app.Activity)act).startActivity(a);
+    public static void openURL(String url) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.setData(Uri.parse(url));
+        act.startActivity(intent);
     }
     
     public static void requestPermissions() {
-        if (!sg.gumi.bravefrontier.BraveFrontier.hasPermissions()) {
-            androidx.core.app.ActivityCompat.requestPermissions((android.app.Activity)sg.gumi.bravefrontier.BraveFrontier.getActivity(), sg.gumi.bravefrontier.BraveFrontier.getPermissions(), 1);
+        if (!BraveFrontier.hasPermissions()) {
+            ActivityCompat.requestPermissions(BraveFrontier.getActivity(), BraveFrontier.getPermissions(), 1);
         }
     }
     
     public static void resetGPGSAchievements() {
     }
     
-    public static void setAppsFlyeruserId(String s) {
+    public static void setAppsFlyeruserId(String userId) {
         try {
-            if (sg.gumi.bravefrontier.AFApplication.isAppsflyerSDKInitialised()) {
-                com.appsflyer.AppsFlyerLib.getInstance().setCustomerUserId(s);
+            if (AFApplication.isAppsflyerSDKInitialised()) {
+                //AppsFlyerLib.getInstance().setCustomerUserId(userId);
             }
         } catch(Throwable ignoredException) {
         }
     }
     
-    public static void setRemoteNotificationsEnable(boolean b) {
-        sg.gumi.bravefrontier.NotificationService.getInstance().setRemoteNotificationsEnable(act, b);
+    public static void setRemoteNotificationsEnable(boolean enable) {
+        NotificationService.getInstance().setRemoteNotificationsEnable(act, enable);
     }
     
     public static boolean shouldShowRequestPermissionRationale() {
-        String[] a = sg.gumi.bravefrontier.BraveFrontier.getPermissions();
-        int i = 0;
-        while(true) {
-            boolean b = false;
-            if (i >= a.length) {
-                b = false;
-            } else {
-                if (!androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale((android.app.Activity)sg.gumi.bravefrontier.BraveFrontier.getActivity(), a[i])) {
-                    i = i + 1;
-                    continue;
-                }
-                b = true;
+        String[] permissions = BraveFrontier.getPermissions();
+
+        for (int i = 0; i < permissions.length; i++) {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(BraveFrontier.getActivity(), permissions[i])) {
+                continue;
             }
-            return b;
+
+            return true;
         }
+
+        return false;
     }
     
     public static void showAchievements() {
-        sg.gumi.bravefrontier.GameService a = ((sg.gumi.bravefrontier.BaseGameActivity)act).getGameService();
-        if (a != null) {
-            if (a.isSignedIn()) {
-                a.showAchievements();
+        GameService gs = act.getGameService();
+        if (gs != null) {
+            if (gs.isSignedIn()) {
+                gs.showAchievements();
             } else {
-                a.beginUserInitiatedSignIn();
+                gs.beginUserInitiatedSignIn();
             }
         }
     }
     
-    public static void trackEvent2(byte[] a, byte[] a0) {
-        String s = (a == null) ? null : new String(a);
-        if (a0 != null) {
-            String s0 = new String(a0);
-        }
+    public static void trackEvent2(byte[] keyBytes, byte[] unk) {
+        String key = (keyBytes == null) ? null : new String(keyBytes);
+
         if (act != null) {
             try {
-                if (!((android.app.Activity)act).isFinishing() && s != null && sg.gumi.bravefrontier.AFApplication.isAppsflyerSDKInitialised()) {
-                    java.util.HashMap a1 = new java.util.HashMap();
-                    a1.put((Object)s, (Object)"0");
-                    com.appsflyer.AppsFlyerLib.getInstance().logEvent(((android.app.Activity)act).getApplicationContext(), s, (java.util.Map)(Object)a1);
+                if (!(act.isFinishing() && key != null && AFApplication.isAppsflyerSDKInitialised())) {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put(key, "0");
+                    //AppsFlyerLib.getInstance().logEvent(act.getApplicationContext(), key, map);
                 }
             } catch(Throwable ignoredException) {
             }
         }
     }
     
-    public static void trackPurchase(float f, String s) {
+    public static void trackPurchase(float price, String countryValueName) {
         if (act != null) {
             try {
-                if (!((android.app.Activity)act).isFinishing()) {
-                    label0: {
-                        label1: {
-                            if (s == null) {
-                                break label1;
-                            }
-                            if (s.isEmpty()) {
-                                break label1;
-                            }
-                            if (!s.equalsIgnoreCase("USD")) {
-                                break label0;
-                            }
-                        }
-                        com.google.ads.conversiontracking.AdWordsConversionReporter.reportWithConversionId(((android.app.Activity)act).getApplicationContext(), "963467556", "NxvHCJXllFYQpLK1ywM", String.valueOf(f), true);
+                if (!act.isFinishing()) {
+
+                    /*if (countryValueName == null) {
+                        AdWordsConversionReporter.reportWithConversionId(act.getApplicationContext(), "963467556", "NxvHCJXllFYQpLK1ywM", String.valueOf(price), true);
                     }
-                    if (sg.gumi.bravefrontier.AFApplication.isAppsflyerSDKInitialised()) {
-                        java.util.HashMap a = new java.util.HashMap();
-                        a.put((Object)"af_revenue", (Object)Float.valueOf(f));
-                        com.appsflyer.AppsFlyerLib.getInstance().logEvent(((android.app.Activity)act).getApplicationContext(), "af_purchase", (java.util.Map)(Object)a);
+                    if (countryValueName.isEmpty()) {
+                        AdWordsConversionReporter.reportWithConversionId(act.getApplicationContext(), "963467556", "NxvHCJXllFYQpLK1ywM", String.valueOf(price), true);
+                    }
+                    if (countryValueName.equalsIgnoreCase("USD")) {
+                        AdWordsConversionReporter.reportWithConversionId(act.getApplicationContext(), "963467556", "NxvHCJXllFYQpLK1ywM", String.valueOf(price), true);
+                    }*/
+
+                    if (AFApplication.isAppsflyerSDKInitialised()) {
+                        HashMap<String, Float> map = new HashMap<>();
+                        map.put("af_revenue", price);
+                        //AppsFlyerLib.getInstance().logEvent(act.getApplicationContext(), "af_purchase", map);
                     }
                 }
             } catch(Throwable ignoredException) {
@@ -440,227 +553,202 @@ public class BraveFrontier extends BaseGameActivity {
         }
     }
     
-    public static void unlockGPGSAchievement(String s) {
-        ((sg.gumi.bravefrontier.BaseGameActivity)act).getGameService().unlockAchievement(s);
+    public static void unlockGPGSAchievement(String id) {
+        act.getGameService().unlockAchievement(id);
     }
     
-    public static void updateGPGSLeaderboard(int i, String s) {
-        ((sg.gumi.bravefrontier.BaseGameActivity)act).getGameService().updateLeaderboard(i, s);
+    public static void updateGPGSLeaderboard(int value, String name) {
+        act.getGameService().updateLeaderboard(value, name);
     }
     
     public void onAccelerationChanged(float f, float f0, float f1) {
     }
     
-    public void onActivityResult(int requestCode, int resultCode, android.content.Intent intent) {
-        android.util.Log.i("onActivityResult", "Recieved activity result");
-        label2: {
-            String s = null;
-            label3: {
-                label4: {
-                    if (resultCode == 0) {
-                        break label4;
-                    }
-                    if (intent != null) {
-                        break label3;
-                    }
-                }
-                try {
-                    ((sg.gumi.bravefrontier.BaseGameActivity)this).onActivityResult(requestCode, resultCode, intent);
-                    sg.gumi.bravefrontier.Facebook.callbackmanagerOnActivityResult(requestCode, resultCode, intent);
-                    break label2;
-                } catch(Throwable ignoredException) {
-                    break label2;
-                }
-            }
-            label0: {
-                label1: {
-                    if (requestCode != 1001) {
-                        break label1;
-                    }
-                    if (sg.gumi.util.BFConfig.PLATFORM != sg.gumi.util.BFConfig.PLATFORM_AMAZON) {
-                        break label0;
-                    }
-                }
-                ((sg.gumi.bravefrontier.BaseGameActivity)this).onActivityResult(requestCode, resultCode, intent);
-                sg.gumi.bravefrontier.Facebook.callbackmanagerOnActivityResult(requestCode, resultCode, intent);
-                break label2;
-            }
-            if (resultCode != -1) {
-                if (sg.gumi.util.BFConfig.PLATFORM == sg.gumi.util.BFConfig.PLATFORM_GOOGLE) {
-                    com.soomla.store.StoreController.getInstance().onPurchaseStateChange("", "", "");
-                }
-                int i1 = intent.getIntExtra("RESPONSE_CODE", 0);
-                StringBuilder a0 = new StringBuilder();
-                a0.append("onActivityResult payment attempt fail! Response code: ");
-                a0.append(i1);
-                android.util.Log.e("onActivityResult", a0.toString());
-                return;
-            }
-            int i2 = intent.getIntExtra("RESPONSE_CODE", 0);
-            if (sg.gumi.util.BFConfig.PLATFORM == sg.gumi.util.BFConfig.PLATFORM_GOOGLE && i2 > 0) {
-                com.soomla.store.StoreController.getInstance().onPurchaseStateChange("", "", "");
-                return;
-            }
-            String s0 = intent.getStringExtra("INAPP_PURCHASE_DATA");
-            String s1 = intent.getStringExtra("INAPP_DATA_SIGNATURE");
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Log.i("onActivityResult", "Recieved activity result");
+
+
+        if (resultCode == 0) {
             try {
-                s = new org.json.JSONObject(s0).getString("productId");
-            } catch(Throwable a1) {
-                a1.printStackTrace();
-                s = null;
+                onActivityResult(requestCode, resultCode, intent);
+                Facebook.callbackmanagerOnActivityResult(requestCode, resultCode, intent);
+            } catch(Throwable ignoredException) {
             }
-            if (sg.gumi.util.BFConfig.PLATFORM == sg.gumi.util.BFConfig.PLATFORM_GOOGLE) {
-                com.soomla.store.StoreController.getInstance().onPurchaseStateChange(s0, s1, s);
+            return;
+        }
+
+        if (intent != null) {
+            if (requestCode != 1001) {
+                onActivityResult(requestCode, resultCode, intent);
+                Facebook.callbackmanagerOnActivityResult(requestCode, resultCode, intent);
+                return;
             }
+
+            if (PLATFORM != PLATFORM_AMAZON) {
+                if (resultCode != -1) {
+                    if (PLATFORM == PLATFORM_GOOGLE) {
+                        //StoreController.getInstance().onPurchaseStateChange("", "", "");
+                    }
+                    int responseCode = intent.getIntExtra("RESPONSE_CODE", 0);
+                    Log.e("onActivityResult", "onActivityResult payment attempt fail! Response code: " +
+                            responseCode);
+                    return;
+                }
+                int responseCode = intent.getIntExtra("RESPONSE_CODE", 0);
+                if (PLATFORM == PLATFORM_GOOGLE && responseCode > 0) {
+                    //StoreController.getInstance().onPurchaseStateChange("", "", "");
+                    return;
+                }
+                String iapData = intent.getStringExtra("INAPP_PURCHASE_DATA");
+                String iapSig = intent.getStringExtra("INAPP_DATA_SIGNATURE");
+                String purchase = null;
+                try {
+                    purchase = new JSONObject(iapData).getString("productId");
+                } catch(Throwable ex) {
+                    ex.printStackTrace();
+                }
+                if (PLATFORM == PLATFORM_GOOGLE) {
+                    //StoreController.getInstance().onPurchaseStateChange(iapData, iapSig, purchase);
+                }
+            }
+
+            onActivityResult(requestCode, resultCode, intent);
+            Facebook.callbackmanagerOnActivityResult(requestCode, resultCode, intent);
         }
     }
     
     public void onBackPressed() {
-        if (org.cocos2dx.lib.Cocos2dxHelper.isNativeLibraryLoaded()) {
-            sg.gumi.bravefrontier.BraveFrontierJNI.backButtonCallback();
+        if (Cocos2dxHelper.isNativeLibraryLoaded()) {
+            BraveFrontierJNI.backButtonCallback();
         }
     }
     
-    protected void onCreate(android.os.Bundle bundle) {
-        ((sg.gumi.bravefrontier.BaseGameActivity)this).onCreate(bundle);
-        com.google.firebase.crashlytics.FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
-        this.checkLoadedLibraries();
-        context = ((android.app.Activity)this).getApplicationContext();
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        //FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
+        checkLoadedLibraries();
+        context = getApplicationContext();
         act = this;
-        this.savedInstanceState = bundle;
-        if (sg.gumi.util.BFConfig.PLATFORM == sg.gumi.util.BFConfig.PLATFORM_GOOGLE) {
+        savedInstanceState = bundle;
+        if (PLATFORM == PLATFORM_GOOGLE) {
             try {
-                com.google.ads.conversiontracking.AdWordsConversionReporter.reportWithConversionId(((android.app.Activity)this).getApplicationContext(), "963467556", "n0JXCNWzn1gQpLK1ywM", "0.00", true);
+                //AdWordsConversionReporter.reportWithConversionId(getApplicationContext(), "963467556", "n0JXCNWzn1gQpLK1ywM", "0.00", true);
             } catch(Throwable ignoredException) {
             }
         }
-        new Thread((Runnable)(Object)new sg.gumi.bravefrontier.BraveFrontier$1(this)).start();
-        if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof sg.gumi.util.BFUncaughtExceptionHandler)) {
-            Thread.setDefaultUncaughtExceptionHandler((Thread$UncaughtExceptionHandler)(Object)new sg.gumi.util.BFUncaughtExceptionHandler());
+        new Thread(new SetDeviceAdIdTask(this)).start();
+        if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof BFUncaughtExceptionHandler)) {
+            Thread.setDefaultUncaughtExceptionHandler(new BFUncaughtExceptionHandler());
         }
-        if (sg.gumi.bravefrontier.AFApplication.isAppsflyerSDKInitialised() && act != null) {
-            StringBuilder a0 = new StringBuilder();
-            a0.append("Custom_Event_Arch_");
-            a0.append(sg.gumi.bravefrontier.BraveFrontier.getDeviceArchitecture());
-            String s = new String(a0.toString());
-            java.util.HashMap a1 = new java.util.HashMap();
-            a1.put((Object)s, (Object)sg.gumi.bravefrontier.BraveFrontier.getDeviceArchitecture());
-            com.appsflyer.AppsFlyerLib.getInstance().logEvent(((android.app.Activity)act).getApplicationContext(), s, (java.util.Map)(Object)a1);
+        if (AFApplication.isAppsflyerSDKInitialised() && act != null) {
+            String key = "Custom_Event_Arch_" +
+                    BraveFrontier.getDeviceArchitecture();
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put(key, BraveFrontier.getDeviceArchitecture());
+            //AppsFlyerLib.getInstance().logEvent(act.getApplicationContext(), key, map);
         }
-        boolean b = fiverocksInitialized;
-        label1: {
-            label0: if (b) {
-                android.util.Log.d("TAPJOY_DEBUG", "tapjoy is already initliaized");
-                break label1;
-            } else {
-                try {
-                    java.util.Hashtable a2 = new java.util.Hashtable();
-                    a2.put((Object)"TJC_OPTION_ENABLE_LOGGING", (Object)"false");
-                    com.tapjoy.Tapjoy.connect((android.content.Context)this, "UqfUMS53gACQAACCHQAABgEC4ueo1H0hmTfztQ3Byo7QZsTHevDXgt9Tjf0y", a2, (com.tapjoy.TJConnectListener)(Object)new sg.gumi.bravefrontier.BraveFrontier$2(this));
-                    com.tapjoy.Tapjoy.setAppDataVersion(sg.gumi.bravefrontier.BraveFrontier.getBundleVersion());
-                    com.tapjoy.Tapjoy.setGcmSender("821991734423");
-                    com.tapjoy.Tapjoy.setGLSurfaceView((android.opengl.GLSurfaceView)((org.cocos2dx.lib.Cocos2dxActivity)this).getGLView());
-                } catch(Throwable ignoredException0) {
-                    break label0;
-                }
-                break label1;
-            }
-            fiverocksInitialized = false;
-        }
-        if (sg.gumi.util.BFConfig.PLATFORM == sg.gumi.util.BFConfig.PLATFORM_GOOGLE) {
+
+        if (fiverocksInitialized) {
+            android.util.Log.d("TAPJOY_DEBUG", "tapjoy is already initliaized");
+        } else {
             try {
-                ((sg.gumi.bravefrontier.BaseGameActivity)this).getGameService().initGoogleAnalytics((android.app.Activity)this);
+                Hashtable<String, String> tbl = new Hashtable<>();
+                tbl.put("TJC_OPTION_ENABLE_LOGGING", "false");
+                /*Tapjoy.connect(this, FIVEROCKS_APP_KEY, tbl, new TapJoyConnectListener(this));
+                Tapjoy.setAppDataVersion(BraveFrontier.getBundleVersion());
+                Tapjoy.setGcmSender(NotificationService.GCM_SENDER_ID);
+                Tapjoy.setGLSurfaceView(this.getGLView());*/
+            } catch(Throwable ignoredException0) {
+                fiverocksInitialized = false;
+            }
+        }
+
+        if (PLATFORM == PLATFORM_GOOGLE) {
+            try {
+                getGameService().initGoogleAnalytics(this);
             } catch(Throwable ignoredException1) {
             }
         }
-        ((android.app.Activity)this).setVolumeControlStream(3);
-        android.util.Log.e("Brave Frontier", "Creating app");
+        setVolumeControlStream(3);
+        Log.e("Brave Frontier", "Creating app");
         if (isInitialized) {
-            sg.gumi.bravefrontier.video.BFVideoView.clearInstance();
+            BFVideoView.clearInstance();
         }
-        sg.gumi.bravefrontier.NotificationService.getInstance().onCreate(this);
-        sg.gumi.bravefrontier.BraveFrontierJNI.initialize((org.cocos2dx.lib.Cocos2dxActivity)this);
-        sg.gumi.bravefrontier.webview.BFWebView.initialize((org.cocos2dx.lib.Cocos2dxActivity)this);
-        sg.gumi.bravefrontier.video.BFVideoView.getInstance((org.cocos2dx.lib.Cocos2dxActivity)this);
-        if (sg.gumi.util.BFConfig.PLATFORM != sg.gumi.util.BFConfig.PLATFORM_AMAZON) {
-            sg.gumi.util.BFConfig$Platform dummy = sg.gumi.util.BFConfig.PLATFORM;
-            sg.gumi.util.BFConfig$Platform dummy0 = sg.gumi.util.BFConfig.PLATFORM_SAMSUNG;
-        }
-        ((android.app.Activity)this).getWindow().setSoftInputMode(3);
-        facebook = new sg.gumi.bravefrontier.Facebook(act);
+        NotificationService.getInstance().onCreate(this);
+        BraveFrontierJNI.initialize(this);
+        BFWebView.initialize(this);
+        BFVideoView.getInstance(this);
+
+        getWindow().setSoftInputMode(3);
+        facebook = new Facebook(act);
         isInitialized = true;
-        phoneStateListener = new sg.gumi.bravefrontier.BraveFrontier$3(this);
-        android.telephony.TelephonyManager a3 = (android.telephony.TelephonyManager)((android.app.Activity)act).getBaseContext().getSystemService("phone");
-        if (a3 != null) {
-            a3.listen(phoneStateListener, 32);
+        phoneStateListener = new BFPhoneStateListener(this);
+        TelephonyManager telephonyManager = (TelephonyManager)act.getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager != null) {
+            telephonyManager.listen(phoneStateListener, 32);
         }
-        sg.gumi.bravefrontier.RVHandler.getInstance();
-        sg.gumi.bravefrontier.RVHandler.initialiseHandler();
-        ((sg.gumi.bravefrontier.BaseGameActivity)this).hideSystemUI();
+        RVHandler.getInstance();
+        RVHandler.initialiseHandler();
+        hideSystemUI();
     }
     
     protected void onDestroy() {
-        ((android.app.Activity)this).onDestroy();
+        super.onDestroy();
     }
     
-    protected void onNewIntent(android.content.Intent a) {
-        ((sg.gumi.bravefrontier.BaseGameActivity)this).onCreate(this.savedInstanceState);
+    protected void onNewIntent(Intent intent) {
+        onCreate(savedInstanceState);
     }
     
     public void onPause() {
-        ((sg.gumi.bravefrontier.BaseGameActivity)this).onPause();
-        if (sg.gumi.bravefrontier.video.BFVideoView.isInstance()) {
-            sg.gumi.bravefrontier.video.BFVideoView.getInstance((org.cocos2dx.lib.Cocos2dxActivity)this).onPause();
+        super.onPause();
+        if (BFVideoView.isInstance()) {
+            BFVideoView.getInstance(this).onPause();
         }
-        sg.gumi.util.AppSession.onPause(this);
-        sg.gumi.util.BFConfig$Platform dummy = sg.gumi.util.BFConfig.PLATFORM;
-        sg.gumi.util.BFConfig$Platform dummy0 = sg.gumi.util.BFConfig.PLATFORM_AMAZON;
-        sg.gumi.bravefrontier.RVHandler.getInstance();
-        sg.gumi.bravefrontier.RVHandler.onPause();
+        AppSession.onPause(this);
+        RVHandler.getInstance();
+        RVHandler.onPause();
     }
     
     public void onResume() {
-        ((sg.gumi.bravefrontier.BaseGameActivity)this).onResume();
-        ((sg.gumi.bravefrontier.BaseGameActivity)this).hideSystemUI();
-        if (sg.gumi.bravefrontier.video.BFVideoView.isInstance()) {
-            sg.gumi.bravefrontier.video.BFVideoView.getInstance((org.cocos2dx.lib.Cocos2dxActivity)this).onResume();
+        super.onResume();
+        hideSystemUI();
+        if (BFVideoView.isInstance()) {
+            BFVideoView.getInstance(this).onResume();
         }
-        sg.gumi.util.AppSession.onResume(this, (Object)null);
-        sg.gumi.util.BFConfig$Platform dummy = sg.gumi.util.BFConfig.PLATFORM;
-        sg.gumi.util.BFConfig$Platform dummy0 = sg.gumi.util.BFConfig.PLATFORM_AMAZON;
-        sg.gumi.bravefrontier.RVHandler.getInstance();
-        sg.gumi.bravefrontier.RVHandler.onResume();
+        AppSession.onResume(this, null);
+        RVHandler.getInstance();
+        RVHandler.onResume();
     }
     
-    protected void onSaveInstanceState(android.os.Bundle a) {
+    protected void onSaveInstanceState(Bundle bundle) {
     }
     
-    public void onShake(float f) {
-        sg.gumi.bravefrontier.BraveFrontierJNI.onDeviceShake();
-        android.util.Log.v("BraveFrontier", "Shoke");
+    public void onShake(float value) {
+        BraveFrontierJNI.onDeviceShake();
+        Log.v("BraveFrontier", "Shoke");
     }
     
     protected void onStart() {
-        ((sg.gumi.bravefrontier.BaseGameActivity)this).onStart();
-        if (!org.cocos2dx.lib.Cocos2dxHelper.isNativeLibraryLoaded()) {
-            java.util.HashMap a = new java.util.HashMap(1);
-            StringBuilder a0 = new StringBuilder();
-            a0.append(android.os.Build.MODEL);
-            a0.append("-");
-            a0.append(android.os.Build$VERSION.RELEASE);
-            a.put((Object)"DEVICE_FAIL", (Object)a0.toString());
+        super.onStart();
+        /*if (!org.cocos2dx.lib.Cocos2dxHelper.isNativeLibraryLoaded()) {
+            HashMap<String, String> a = new HashMap<>(1);
+            a.put("DEVICE_FAIL", Build.MODEL +
+                    "-" +
+                    Build.VERSION.RELEASE);
         }
         if (fiverocksInitialized) {
-            com.tapjoy.Tapjoy.startSession();
-            com.tapjoy.Tapjoy.onActivityStart((android.app.Activity)this);
-        }
+            Tapjoy.startSession();
+            Tapjoy.onActivityStart(this);
+        }*/
     }
     
     protected void onStop() {
-        ((sg.gumi.bravefrontier.BaseGameActivity)this).onStop();
-        if (fiverocksInitialized) {
-            com.tapjoy.Tapjoy.endSession();
-            com.tapjoy.Tapjoy.onActivityStop((android.app.Activity)this);
-        }
+        super.onStop();
+        /*if (fiverocksInitialized) {
+            Tapjoy.endSession();
+            Tapjoy.onActivityStop(this);
+        }*/
     }
 }

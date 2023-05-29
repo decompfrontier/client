@@ -50,7 +50,7 @@ abstract public class BaseGameActivity extends Cocos2dxActivity {
         return mHelper.getScopesArray();
     }
     
-    protected sg.gumi.bravefrontier.GameService$SignInFailureReason getSignInError() {
+    protected GameService.SignInFailureReason getSignInError() {
         return mHelper.getSignInError();
     }
     

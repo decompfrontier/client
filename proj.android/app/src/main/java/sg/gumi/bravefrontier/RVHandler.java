@@ -1,21 +1,127 @@
 package sg.gumi.bravefrontier;
 
+import android.util.Log;
+
+//import com.ironsource.mediationsdk.sdk.OfferwallListener;
+//import com.ironsource.mediationsdk.sdk.RewardedVideoListener;
+//import com.ironsource.mediationsdk.model.Placement;
+//import com.ironsource.mediationsdk.logger.IronSourceError;
+//import com.ironsource.mediationsdk.IronSource;
+//import com.ironsource.mediationsdk.integration.IntegrationHelper;
+//import com.ironsource.adapters.supersonicads.SupersonicConfig;
+
 public class RVHandler {
+
+    static class RVListener /*implements RewardedVideoListener*/ {
+        //Placement mRewardPlacement;
+
+        RVListener() {
+            //mRewardPlacement = null;
+        }
+
+        /*public void onRewardedVideoAdClicked(Placement placement) {
+        }*/
+
+        public void onRewardedVideoAdClosed() {
+            Log.d("BF-RVHandler", "public void onRewardedVideoAdClosed");
+            RVHandler.adInvokeCompletedCallback();
+            //mRewardPlacement = null;
+        }
+
+        public void onRewardedVideoAdEnded() {
+        }
+
+        public void onRewardedVideoAdOpened() {
+            Log.d("BF-RVHandler", "public void onRewardedVideoAdOpened");
+        }
+
+        /*public void onRewardedVideoAdRewarded(Placement placement) {
+            placement.getRewardName();
+            placement.getRewardAmount();
+            mRewardPlacement = placement;
+            Log.d("BF-RVHandler", "public void onRewardedVideoAdRewarded");
+        }
+
+        public void onRewardedVideoAdShowFailed(IronSourceError placement) {
+            Log.d("BF-RVHandler", "public void onRewardedVideoInitFail");
+            placement.getErrorCode();
+            placement.getErrorMessage();
+            RVHandler.onRVInitFailure();
+        }*/
+
+        public void onRewardedVideoAdStarted() {
+            RVHandler.adInvokeStarted();
+        }
+
+        public void onRewardedVideoAvailabilityChanged(boolean adAvailable) {
+            if (adAvailable) {
+                Log.d("BF-RVHandler", "public void onVideoAvailabilityChanged - true");
+                RVHandler.onRVAdAvailable();
+            } else {
+                Log.d("BF-RVHandler", "public void onVideoAvailabilityChanged - false");
+                RVHandler.onRVAdNotAvailable();
+            }
+        }
+    }
+
+
+    class RVOfferWallListener /*implements OfferwallListener*/ {
+        RVOfferWallListener() {
+        }
+
+        /*public void onGetOfferwallCreditsFailed(IronSourceError error) {
+            Log.d(RVHandler.getTag(), "onGetOfferwallCreditsFailed " +
+                    error);
+        }*/
+
+        public boolean onOfferwallAdCredited(int credits, int totalCredits, boolean flag) {
+            Log.d(RVHandler.getTag(), "onOfferwallAdCredited credits:" +
+                    credits +
+                    " totalCredits:" +
+                    totalCredits +
+                    " totalCreditsFlag:" +
+                    flag);
+            Log.d("BF-RVHandler", "offerwall crediated");
+            RVHandler.offerWallInvokeCompletedCallback();
+            return true;
+        }
+
+        public void onOfferwallAvailable(boolean available) {
+            if (available) {
+                Log.d("BF-RVHandler", "offer wall add avaialable");
+                RVHandler.onOfferWalldAvailable();
+            } else {
+                Log.d("BF-RVHandler", "offer wall add not avaialable");
+                RVHandler.onOfferWalldNotAvailable();
+            }
+        }
+
+        public void onOfferwallClosed() {
+            Log.d("BF-RVHandler", "onOfferwallClosed");
+        }
+
+        public void onOfferwallOpened() {
+            Log.d("BF-RVHandler", "onOfferwallOpened");
+        }
+
+        /*public void onOfferwallShowFailed(IronSourceError err) {
+            Log.d("BF-RVHandler", "onOfferwallShowFailed " +
+                    err);
+            RVHandler.offerWallInvokeFailedCallback();
+        }*/
+    }
+
+
     private static String TAG = "OfferWall";
-    private static sg.gumi.bravefrontier.RVHandler instance;
-    final private static com.ironsource.mediationsdk.sdk.OfferwallListener mOfferWallListener;
-    final private static com.ironsource.mediationsdk.sdk.RewardedVideoListener mRewardedVideoListener;
-    
-    static {
-        mRewardedVideoListener = (com.ironsource.mediationsdk.sdk.RewardedVideoListener)(Object)new sg.gumi.bravefrontier.RVHandler$1();
-        mOfferWallListener = (com.ironsource.mediationsdk.sdk.OfferwallListener)(Object)new sg.gumi.bravefrontier.RVHandler$2();
-    }
-    
+    private static RVHandler instance;
+    /*final private static OfferwallListener mOfferWallListener = new RVOfferWallListener();
+    final private static RewardedVideoListener mRewardedVideoListener = new RVListener();*/
+
     protected RVHandler() {
-        android.util.Log.d("BF-RVHandler", "protected RVHandler");
+        Log.d("BF-RVHandler", "protected RVHandler");
     }
     
-    static String access$000() {
+    static String getTag() {
         return TAG;
     }
     
@@ -28,42 +134,44 @@ public class RVHandler {
     native public static void adInvokeStarted();
     
     
-    public static sg.gumi.bravefrontier.RVHandler getInstance() {
-        if (instance == null) {
-            instance = new sg.gumi.bravefrontier.RVHandler();
+    public static RVHandler getInstance() {
+        if (instance == null) { // singleton
+            instance = new RVHandler();
         }
         return instance;
     }
     
     public static void initialiseHandler() {
-        android.util.Log.d("BF-RVHandler", "public static void initialiseHandler");
+        Log.d("BF-RVHandler", "public static void initialiseHandler");
     }
     
     native public static void initialiseMediator();
     
     
     public static void invokeAd(String s) {
-        if (com.ironsource.mediationsdk.IronSource.isRewardedVideoAvailable()) {
-            android.util.Log.d("BF-RVHandler", "public static void invokeAd");
-            com.ironsource.mediationsdk.IronSource.showRewardedVideo(s);
-        }
+        /*if (IronSource.isRewardedVideoAvailable()) {
+            Log.d("BF-RVHandler", "public static void invokeAd");
+            IronSource.showRewardedVideo(s);
+        }*/
     }
     
     public static void invokeOfferWall(String s) {
-        if (com.ironsource.mediationsdk.IronSource.isOfferwallAvailable()) {
-            android.util.Log.d("BF-RVHandler", "public static void invokeOfferWall");
-            com.ironsource.mediationsdk.IronSource.showOfferwall(s);
+        /*if (IronSource.isOfferwallAvailable()) {
+            Log.d("BF-RVHandler", "public static void invokeOfferWall");
+            IronSource.showOfferwall(s);
         } else {
-            android.util.Log.d("BF-RVHandler", "offerwall not available");
-        }
+            Log.d("BF-RVHandler", "offerwall not available");
+        }*/
     }
     
     public static boolean isOfferWallAvailable() {
-        return com.ironsource.mediationsdk.IronSource.isOfferwallAvailable();
+        //return IronSource.isOfferwallAvailable();
+        return false;
     }
     
     public static boolean isRewardedVideoAvailable() {
-        return com.ironsource.mediationsdk.IronSource.isRewardedVideoAvailable();
+        //return IronSource.isRewardedVideoAvailable();
+        return false;
     }
     
     native public static void offerWallInvokeCompletedCallback();
@@ -79,8 +187,8 @@ public class RVHandler {
     
     
     public static void onPause() {
-        android.util.Log.d("BF-RVHandler", "public static void onPause");
-        com.ironsource.mediationsdk.IronSource.onPause((android.app.Activity)sg.gumi.bravefrontier.BraveFrontier.getActivity());
+        Log.d("BF-RVHandler", "public static void onPause");
+        //IronSource.onPause(BraveFrontier.getActivity());
     }
     
     native public static void onRVAdAvailable();
@@ -93,22 +201,20 @@ public class RVHandler {
     
     
     public static void onResume() {
-        android.util.Log.d("BF-RVHandler", "public static void onResume");
-        com.ironsource.mediationsdk.IronSource.onResume((android.app.Activity)sg.gumi.bravefrontier.BraveFrontier.getActivity());
+        Log.d("BF-RVHandler", "public static void onResume");
+        //IronSource.onResume(BraveFrontier.getActivity());
     }
     
-    public static void setUpIronSourceSDK(String s, String s0) {
-        StringBuilder a = new StringBuilder();
-        a.append("user id is and app key is");
-        a.append(s);
-        a.append(s0);
-        android.util.Log.d("BF-RVHandler", a.toString());
-        com.ironsource.mediationsdk.IronSource.setUserId(s);
-        com.ironsource.mediationsdk.IronSource.setRewardedVideoListener(mRewardedVideoListener);
-        com.ironsource.mediationsdk.IronSource.setOfferwallListener(mOfferWallListener);
-        com.ironsource.adapters.supersonicads.SupersonicConfig.getConfigObj().setClientSideCallbacks(true);
-        com.ironsource.mediationsdk.IronSource.init((android.app.Activity)sg.gumi.bravefrontier.BraveFrontier.getActivity(), s0);
-        com.ironsource.mediationsdk.integration.IntegrationHelper.validateIntegration((android.app.Activity)sg.gumi.bravefrontier.BraveFrontier.getActivity());
-        sg.gumi.bravefrontier.RVHandler.initialiseMediator();
+    public static void setUpIronSourceSDK(String userid, String appkey) {
+        Log.d("BF-RVHandler", "user id is and app key is" +
+                userid +
+                appkey);
+        /*IronSource.setUserId(userid);
+        IronSource.setRewardedVideoListener(mRewardedVideoListener);
+        IronSource.setOfferwallListener(mOfferWallListener);
+        SupersonicConfig.getConfigObj().setClientSideCallbacks(true);
+        IronSource.init(BraveFrontier.getActivity(), appkey);
+        IntegrationHelper.validateIntegration(BraveFrontier.getActivity());*/
+        RVHandler.initialiseMediator();
     }
 }

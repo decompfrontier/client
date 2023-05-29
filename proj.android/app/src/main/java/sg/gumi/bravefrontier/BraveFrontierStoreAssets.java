@@ -1,25 +1,43 @@
 package sg.gumi.bravefrontier;
 
-public class BraveFrontierStoreAssets implements com.soomla.store.IStoreAssets {
-    static java.util.ArrayList currencyPacks;
-    
-    static {
-        currencyPacks = new java.util.ArrayList();
+//import com.soomla.store.IStoreAssets;
+//import new com.soomla.store.domain.data.VirtualCurrencyPack;
+
+public class BraveFrontierStoreAssets /*implements IStoreAssets*/ {
+
+    static class AddStoreAssetTask implements Runnable {
+        final String productId;
+
+        AddStoreAssetTask(String productId) {
+            super();
+            this.productId = productId;
+        }
+
+        public void run() {
+            /*try {
+                BraveFrontierStoreAssets.currencyPacks.add(new VirtualCurrencyPack("", "", "", productId, 0.0));
+            } catch(Exception ex) {
+                ex.printStackTrace();
+            }*/
+        }
     }
-    
+
+
+    //static ArrayList<VirtualCurrencyPack> currencyPacks = new ArrayList<VirtualCurrencyPack>();
+
     public BraveFrontierStoreAssets() {
     }
     
-    public static void AddCurrencyPack(String s) {
-        ((android.app.Activity)sg.gumi.bravefrontier.BraveFrontier.getActivity()).runOnUiThread((Runnable)(Object)new sg.gumi.bravefrontier.BraveFrontierStoreAssets$1(s));
+    public static void AddCurrencyPack(String productId) {
+        BraveFrontier.getActivity().runOnUiThread(new AddStoreAssetTask(productId));
     }
     
-    public com.soomla.store.domain.data.VirtualCurrencyPack[] getVirtualCurrencyPacks() {
-        com.soomla.store.domain.data.VirtualCurrencyPack[] a = new com.soomla.store.domain.data.VirtualCurrencyPack[currencyPacks.size()];
-        int i = 0;
-        for(; i < currencyPacks.size(); i = i + 1) {
-            a[i] = (com.soomla.store.domain.data.VirtualCurrencyPack)currencyPacks.get(i);
+    /*public VirtualCurrencyPack[] getVirtualCurrencyPacks() {
+        VirtualCurrencyPack[] packs = new VirtualCurrencyPack[currencyPacks.size()];
+
+        for(int i = 0; i < currencyPacks.size(); i++) {
+            packs[i] = currencyPacks.get(i);
         }
-        return a;
-    }
+        return packs;
+    }*/
 }

@@ -70,6 +70,7 @@ class HttpConnectionMgr {
     
     public void downloadFinished(DefaultHttpClient a) {
 
+        /* TODO: NOT ACCURATE!!! */
         for (int i = 0; i < connections.size(); i++)
         {
             if (connections.get(i) == a)
@@ -78,6 +79,7 @@ class HttpConnectionMgr {
     }
     
     public void downloadStarted(DefaultHttpClient a) {
+        /* TODO: NOT ACCURATE!!! */
         for (int i = 0; i < connections.size(); i++)
         {
             if (connections.get(i) == a)
@@ -86,6 +88,7 @@ class HttpConnectionMgr {
     }
     
     public DefaultHttpClient getConnection() {
+        /* TODO: NOT ACCURATE!!! */
         for (int i = 0; i < status.size(); i++)
         {
             if (status.get(i)) {

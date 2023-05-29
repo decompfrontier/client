@@ -1,139 +1,151 @@
 package sg.gumi.bravefrontier;
 
-public class GCMIntentService extends com.google.android.gcm.GCMBaseIntentService {
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import androidx.core.app.NotificationCompat;
+//import com.google.android.gcm.GCMBaseIntentService;
+
+public class GCMIntentService /*extends GCMBaseIntentService*/ {
+
+    class RegistredEvent implements Runnable {
+        final GCMIntentService service;
+        final String deviceId;
+
+        RegistredEvent(GCMIntentService service, String deviceId) {
+            super();
+            this.service = service;
+            this.deviceId = deviceId;
+        }
+
+        public void run() {
+            try {
+                BraveFrontierJNI.nativeSetDeviceRegistrationId(deviceId);
+            } catch(Throwable ignoredException) {
+            }
+        }
+    }
+
+
     static int notifId;
     
     public GCMIntentService() {
-        String[] a = new String[1];
-        a[0] = "821991734423";
-        super(a);
+        //super(NotificationService.GCM_SENDER_ID);
     }
     
-    protected String[] getSenderIds(android.content.Context a) {
-        String[] a0 = new String[1];
-        a0[0] = "821991734423";
-        return a0;
+    protected String[] getSenderIds(Context context) {
+        String[] ret = new String[1];
+        ret[0] = NotificationService.GCM_SENDER_ID;
+        return ret;
     }
     
-    protected void onError(android.content.Context a, String s) {
-        android.util.Log.e("GCMIntentService: on register error ", s);
+    protected void onError(Context context, String error) {
+        Log.e("GCMIntentService: on register error ", error);
     }
     
-    protected void onMessage(android.content.Context a, android.content.Intent a0) {
-        android.os.Bundle a1 = a0.getExtras();
-        label1: {
-            android.content.pm.ApplicationInfo a2 = null;
-            Throwable a3 = null;
-            if (a1 == null) {
-                break label1;
-            }
-            if (android.os.Build$VERSION.SDK_INT < 14) {
-                break label1;
-            }
-            String s = a1.getString("message");
-            label2: {
-                label3: {
-                    if (s == null) {
-                        break label3;
-                    }
-                    if (!s.equals((Object)"")) {
-                        break label2;
-                    }
-                }
-                s = a1.getString("msg");
-            }
-            if (s == null) {
-                break label1;
-            }
-            if (s.equals((Object)"")) {
-                break label1;
-            }
-            android.content.Intent a4 = new android.content.Intent(a, sg.gumi.bravefrontier.BraveFrontier.class);
-            a4.setFlags(268435456);
-            android.app.PendingIntent a5 = android.app.PendingIntent.getActivity(a, 0, a4, 0);
-            android.content.pm.PackageManager a6 = ((android.app.IntentService)this).getApplicationContext().getPackageManager();
+    protected void onMessage(Context context, Intent msgIntent) {
+        Bundle extras = msgIntent.getExtras();
+        ApplicationInfo packageInfo = null;
+
+        if (extras == null) {
+            return;
+        }
+        if (Build.VERSION.SDK_INT < 14) {
+            return;
+        }
+        String message = extras.getString("message");
+        if (message == null) {
+            message = extras.getString("msg");
+        }
+        if (message.equals("")) {
+            message = extras.getString("msg");
+        }
+        if (message == null) {
+            return;
+        }
+        if (message.equals("")) {
+            return;
+        }
+        Intent newTaskIntent = new Intent(context, BraveFrontier.class);
+        newTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, newTaskIntent, 0);
+        PackageManager pm = null; /*= getApplicationContext().getPackageManager();
+        try {
+            packageInfo = pm.getApplicationInfo(getPackageName(), 0);
+        } catch(PackageManager.NameNotFoundException ignoredException) {
+            packageInfo = null;
+        }*/
+        String appName = (packageInfo == null) ? BraveFrontier.getAppName() : (String)pm.getApplicationLabel(packageInfo);
+        try {
             try {
-                a2 = a6.getApplicationInfo(((android.app.IntentService)this).getPackageName(), 0);
-            } catch(android.content.pm.PackageManager$NameNotFoundException ignoredException) {
-                a2 = null;
-            }
-            Object a7 = (a2 == null) ? sg.gumi.bravefrontier.BraveFrontier.getAppName() : a6.getApplicationLabel(a2);
-            String s0 = (String)a7;
-            label0: {
-                Exception a8 = null;
-                try {
-                    try {
-                        if (android.os.Build$VERSION.SDK_INT < 26) {
-                            androidx.core.app.NotificationCompat$Builder a9 = new androidx.core.app.NotificationCompat$Builder(a);
-                            a9.setContentText((CharSequence)(Object)s);
-                            a9.setContentTitle((CharSequence)(Object)s0);
-                            a9.setSmallIcon((android.os.Build$VERSION.SDK_INT < 11) ? 17301659 : 2131427328);
-                            a9.setAutoCancel(true);
-                            a9.setContentIntent(a5);
-                            a9.setWhen(System.currentTimeMillis());
-                            a9.setLights(-16711681, 2000, 1000);
-                            android.app.Notification a10 = a9.build();
-                            int i = a10.defaults | 1;
-                            a10.defaults = i;
-                            a10.defaults = i | 2;
-                            a10.ledARGB = -397242;
-                            a10.ledOnMS = 300;
-                            a10.ledOffMS = 3000;
-                            a10.flags = a10.flags | 1;
-                            android.app.NotificationManager a11 = (android.app.NotificationManager)a.getSystemService("notification");
-                            int i0 = notifId + 1;
-                            notifId = i0;
-                            a11.notify(i0, a10);
-                            break label1;
-                        } else {
-                            android.app.NotificationManager a12 = (android.app.NotificationManager)a.getSystemService("notification");
-                            if (a12.getNotificationChannel("default_channel_id") == null) {
-                                android.app.NotificationChannel a13 = new android.app.NotificationChannel("default_channel_id", (CharSequence)(Object)"Default Channel", 2);
-                                a13.enableLights(true);
-                                a13.setLightColor(-397242);
-                                a13.enableVibration(true);
-                                a12.createNotificationChannel(a13);
-                            }
-                            androidx.core.app.NotificationCompat$Builder a14 = new androidx.core.app.NotificationCompat$Builder(a, "default_channel_id");
-                            a14.setContentTitle((CharSequence)(Object)s0);
-                            a14.setContentText((CharSequence)(Object)s);
-                            a14.setSmallIcon(2131427328);
-                            a14.setAutoCancel(true);
-                            a14.setContentIntent(a5);
-                            a14.setLights(-397242, 2000, 1000);
-                            a14.setWhen(System.currentTimeMillis());
-                            android.app.Notification a15 = a14.build();
-                            int i1 = notifId + 1;
-                            notifId = i1;
-                            a12.notify(i1, a15);
-                            break label1;
-                        }
-                    } catch(Exception a16) {
-                        a8 = a16;
+                if (Build.VERSION.SDK_INT < 26) {
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+                    builder.setContentText(message);
+                    builder.setContentTitle(appName);
+                    builder.setSmallIcon((Build.VERSION.SDK_INT < 11) ? 17301659 : 2131427328);
+                    builder.setAutoCancel(true);
+                    builder.setContentIntent(pendingIntent);
+                    builder.setWhen(System.currentTimeMillis());
+                    builder.setLights(-16711681, 2000, 1000);
+                    android.app.Notification notification = builder.build();
+                    int i = notification.defaults | 1;
+                    notification.defaults = i | 2;
+                    notification.ledARGB = -397242;
+                    notification.ledOnMS = 300;
+                    notification.ledOffMS = 3000;
+                    notification.flags = notification.flags | 1;
+                    NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    notifId++;
+                    notificationManager.notify(notifId, notification);
+                } else {
+                    NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    if (notificationManager.getNotificationChannel("default_channel_id") == null) {
+                        NotificationChannel notification = new NotificationChannel("default_channel_id", "Default Channel", NotificationManager.IMPORTANCE_LOW);
+                        notification.enableLights(true);
+                        notification.setLightColor(-397242);
+                        notification.enableVibration(true);
+                        notificationManager.createNotificationChannel(notification);
                     }
-                } catch(Throwable a17) {
-                    a3 = a17;
-                    break label0;
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default_channel_id");
+                    builder.setContentTitle(appName);
+                    builder.setContentText(message);
+                    builder.setSmallIcon(2131427328);
+                    builder.setAutoCancel(true);
+                    builder.setContentIntent(pendingIntent);
+                    builder.setLights(-397242, 2000, 1000);
+                    builder.setWhen(System.currentTimeMillis());
+                    Notification notification = builder.build();
+                    notifId++;
+                    notificationManager.notify(notifId, notification);
                 }
-                a8.printStackTrace();
-                break label1;
+            } catch(Exception ex) {
+                ex.printStackTrace();
             }
-            a3.printStackTrace();
+        } catch(Throwable ex2) {
+            ex2.printStackTrace();
         }
     }
     
-    protected void onRegistered(android.content.Context a, String s) {
-        if (sg.gumi.bravefrontier.BraveFrontier.getAppContext() != null) {
-            ((android.opengl.GLSurfaceView)((org.cocos2dx.lib.Cocos2dxActivity)sg.gumi.bravefrontier.BraveFrontier.getActivity()).getGLView()).queueEvent((Runnable)(Object)new sg.gumi.bravefrontier.GCMIntentService$1(this, s));
-            android.util.Log.v("onRegistered", s);
+    protected void onRegistered(Context context, String deviceId) {
+        if (BraveFrontier.getAppContext() != null) {
+            BraveFrontier.getActivity().getGLView().queueEvent(new RegistredEvent(this, deviceId));
+            Log.v("onRegistered", deviceId);
             return;
         }
         try {
-            sg.gumi.bravefrontier.BraveFrontierJNI.nativeSetDeviceRegistrationId(s);
+            BraveFrontierJNI.nativeSetDeviceRegistrationId(deviceId);
         } catch(Throwable ignoredException) {
         }
     }
     
-    protected void onUnregistered(android.content.Context a, String s) {
+    protected void onUnregistered(Context context, String deviceId) {
     }
 }

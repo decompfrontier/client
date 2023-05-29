@@ -1,8 +1,202 @@
 package sg.gumi.bravefrontier;
 
-final public class GameHelper extends sg.gumi.bravefrontier.GameService implements sg.gumi.bravefrontier.GameService$GameHelperListener {
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.content.res.Resources;
+import android.os.Build;
+import android.os.Handler;
+import android.util.Log;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.*;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.tasks.OnSuccessListener;
+import org.cocos2dx.lib.Cocos2dxActivity;
+import org.cocos2dx.lib.Cocos2dxHelper;
+import java.security.MessageDigest;
+
+//import com.google.android.gms.games.multiplayer.Invitation;
+
+final public class GameHelper extends GameService implements GameService.GameHelperListener {
+
+    final public static class GooglePlaySignInFailureReason extends GameService.SignInFailureReason {
+        public GooglePlaySignInFailureReason(int errorCode) {
+            super(errorCode, -100);
+        }
+
+        public GooglePlaySignInFailureReason(int errorCode, int resultCode) {
+            super(errorCode, resultCode);
+        }
+
+        public String toString() {
+            StringBuilder ret = new StringBuilder();
+            ret.append("SignInFailureReason(serviceErrorCode:");
+            ret.append(GameHelper.errorCodeToString(getServiceErrorCode()));
+            if (this.getActivityResultCode() != -100) {
+                ret.append(",activityResultCode:").append(GameHelper.activityResponseCodeToString(getActivityResultCode())).append(")");
+            } else {
+                ret.append(")");
+            }
+
+            return ret.toString();
+        }
+    }
+
+    static class SignInFailureTask implements Runnable {
+        final GameHelper helper;
+
+        SignInFailureTask(GameHelper helper) {
+            super();
+            this.helper = helper;
+        }
+
+        public void run() {
+            helper.notifyListener(false);
+        }
+    }
+
+    static class SignOutSuccessTask implements Runnable {
+        final GameHelper helper;
+
+        SignOutSuccessTask(GameHelper helper) {
+            super();
+            this.helper = helper;
+        }
+
+        public void run() {
+            if (Cocos2dxHelper.isNativeLibraryLoaded()) {
+                BraveFrontier.onGPGSSignOutSucceeded();
+            }
+        }
+    }
+
+
+    static class SignInSucceededTask implements Runnable {
+        final GameHelper helper;
+
+        SignInSucceededTask(GameHelper helper) {
+            super();
+            this.helper = helper;
+        }
+
+        public void run() {
+            SharedPreferences preferences = BraveFrontier.getAppContext().getSharedPreferences(GOOGLE_PLAY_PREF, 0);
+            SharedPreferences.Editor editor = preferences.edit();
+            String pref = preferences.getString(GOOGLE_PLAY_ACHIEVEMENT_KEY, "");
+            if (!pref.equals("")) {
+                String[] split = pref.split(",");
+                for(int i = 0; i < split.length; i++) {
+                    BraveFrontier.unlockGPGSAchievement(split[i]);
+                }
+            }
+            editor.remove(GOOGLE_PLAY_ACHIEVEMENT_KEY);
+            editor.commit();
+            if (Cocos2dxHelper.isNativeLibraryLoaded()) {
+                BraveFrontier.onGPGSSignInSucceeded();
+            }
+        }
+    }
+
+    static class SignInFailedTask implements Runnable {
+        final GameHelper helper;
+
+        SignInFailedTask(GameHelper helper) {
+            super();
+            this.helper = helper;
+        }
+
+        public void run() {
+            if (Cocos2dxHelper.isNativeLibraryLoaded()) {
+                BraveFrontier.onGPGSSignInFailed();
+            }
+        }
+    }
+
+    final class GameHelperTask extends android.os.AsyncTask {
+        final static int TASK_TYPE_SIGN_IN_FAILED = 2;
+        final static int TASK_TYPE_SIGN_IN_SUCCEEDED = 1;
+        final static int TASK_TYPE_SIGN_OUT_SUCCEEDED = 3;
+        private int mAttempts;
+        int mTaskType;
+        final GameHelper helper;
+
+        private GameHelperTask(GameHelper helper) {
+            super();
+            this.helper = helper;
+            mAttempts = GameHelper.DEFAULT_MAX_SIGN_IN_ATTEMPTS;
+        }
+
+        GameHelperTask(GameHelper helper, GameHelper.SuccessListener successListener) {
+            this(helper);
+        }
+
+        protected Object doInBackground(Object[] params) {
+            while(true) {
+                if (!isCancelled() && mAttempts > 0) {
+                    try {
+                        Thread.sleep(100L);
+                    } catch(Throwable ignoredException) {
+                    }
+                    publishProgress(null);
+                    continue;
+                }
+                return null;
+            }
+        }
+
+        protected void onProgressUpdate(Object[] a) {
+            try {
+                if (mTaskType == TASK_TYPE_SIGN_IN_SUCCEEDED) {
+                    GameHelper.callOnSignInSucceeded(helper);
+                } else if (mTaskType == TASK_TYPE_SIGN_IN_FAILED) {
+                    GameHelper.callOnSignInFailed(helper);
+                } else if (mTaskType == TASK_TYPE_SIGN_OUT_SUCCEEDED) {
+                    GameHelper.callOnSignOutSucceeded(helper);
+                }
+                mAttempts = 0;
+                GameHelper.callEndTask(helper);
+            } catch(Throwable ignoredException) {
+                mAttempts--;
+            }
+        }
+    }
+
+    static class SuccessListener implements OnSuccessListener {
+        final GameHelper helper;
+
+        SuccessListener(GameHelper helper) {
+            super();
+            this.helper = helper;
+        }
+
+        public void onSuccess(Intent intent) {
+            helper.mActivity.startActivityForResult(intent, GameHelper.getRcAchievementUi());
+        }
+
+        public void onSuccess(Object tResult) {
+            onSuccess((Intent)tResult);
+        }
+    }
+
     final static int DEFAULT_MAX_SIGN_IN_ATTEMPTS = 3;
-    final private static String[] FALLBACK_STRINGS;
+    final private static String[] FALLBACK_STRINGS = new String[] {
+            "*Unknown error.",
+            "*Failed to sign in. Please check your network connection and try again.",
+            "*The application is incorrectly configured. Check that the package name and signing certificate match the client ID created in Developer Console. Also, if the application is not yet published, check that the account you are trying to sign in with is listed as a tester account. See logs for more information.",
+            "*License check failed.",
+    };
+
     final public static String GOOGLE_PLAY_ACHIEVEMENT_KEY = "ACH";
     final public static int GOOGLE_PLAY_ACHIEVEMENT_REQUEST_CODE = 5001;
     final public static String GOOGLE_PLAY_LEADERBOARD_KEY = "LBD";
@@ -13,111 +207,101 @@ final public class GameHelper extends sg.gumi.bravefrontier.GameService implemen
     final static int RC_RESOLVE = 9001;
     private static int RC_SIGN_IN = 10000;
     final static int RC_UNUSED = 9002;
-    final private static int[] RES_IDS;
+    final private static int[] RES_IDS = new int[] {
+            2131558548,
+            2131558547,
+            2131558545,
+            2131558546,
+    };
+
     final public static int R_APP_MISCONFIGURED = 2;
     final public static int R_LICENSE_FAILED = 3;
     final public static int R_SIGN_IN_FAILED = 1;
     final public static int R_UNKNOWN_ERROR = 0;
-    final private String GAMEHELPER_SHARED_PREFS;
-    final private String KEY_SIGN_IN_CANCELLATIONS;
-    android.content.Context mAppContext;
-    com.google.android.gms.common.api.Api$ApiOptions$NoOptions mAppStateApiOptions;
+    final private String GAMEHELPER_SHARED_PREFS = "GAMEHELPER_SHARED_PREFS";
+    final private String KEY_SIGN_IN_CANCELLATIONS = "KEY_SIGN_IN_CANCELLATIONS";
+    Context mAppContext;
+    Api.ApiOptions.NoOptions mAppStateApiOptions;
     boolean mConnectOnStart;
     private boolean mConnecting;
-    com.google.android.gms.common.ConnectionResult mConnectionResult;
+    ConnectionResult mConnectionResult;
     boolean mDebugLog;
     String mDebugTag;
     boolean mDisconnectedFromAchievementUI;
     boolean mExpectingResolution;
-    com.google.android.gms.auth.api.signin.GoogleSignInClient mGoogleSignInClient;
-    android.os.Handler mHandler;
-    com.google.android.gms.games.multiplayer.Invitation mInvitation;
-    sg.gumi.bravefrontier.GameService$GameHelperListener mListener;
+    GoogleSignInClient mGoogleSignInClient;
+    Handler mHandler;
+    //Invitation mInvitation;
+    GameService.GameHelperListener mListener;
     int mMaxAutoSignInAttempts;
-    sg.gumi.bravefrontier.GameHelper$GameHelperTask mPendingTask;
+    GameHelper.GameHelperTask mPendingTask;
     int mRequestedClients;
     private boolean mSetupDone;
     boolean mShowErrorDialogs;
     boolean mSignInCancelled;
-    sg.gumi.bravefrontier.GameService$SignInFailureReason mSignInFailureReason;
-    com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatch mTurnBasedMatch;
+
+    SignInFailureReason mSignInFailureReason;
+
     boolean mUserInitiatedSignIn;
-    
-    static {
-        String[] a = new String[4];
-        a[0] = "*Unknown error.";
-        a[1] = "*Failed to sign in. Please check your network connection and try again.";
-        a[2] = "*The application is incorrectly configured. Check that the package name and signing certificate match the client ID created in Developer Console. Also, if the application is not yet published, check that the account you are trying to sign in with is listed as a tester account. See logs for more information.";
-        a[3] = "*License check failed.";
-        FALLBACK_STRINGS = a;
-        int[] a0 = new int[4];
-        a0[0] = 2131558548;
-        a0[1] = 2131558547;
-        a0[2] = 2131558545;
-        a0[3] = 2131558546;
-        RES_IDS = a0;
-    }
-    
-    public GameHelper(android.app.Activity a) {
-        super(a);
-        this.mSetupDone = false;
-        this.mConnecting = false;
-        this.mExpectingResolution = false;
-        this.mSignInCancelled = false;
-        this.mAppContext = null;
-        this.mAppStateApiOptions = null;
-        this.mGoogleSignInClient = null;
-        this.mRequestedClients = 0;
-        this.mConnectOnStart = false;
-        this.mUserInitiatedSignIn = false;
-        this.mConnectionResult = null;
-        this.mSignInFailureReason = null;
-        this.mShowErrorDialogs = true;
-        this.mDebugLog = false;
-        this.mDebugTag = "GameHelper";
-        this.mListener = null;
-        this.mPendingTask = null;
-        this.mMaxAutoSignInAttempts = 3;
-        this.mDisconnectedFromAchievementUI = false;
-        this.GAMEHELPER_SHARED_PREFS = "GAMEHELPER_SHARED_PREFS";
-        this.KEY_SIGN_IN_CANCELLATIONS = "KEY_SIGN_IN_CANCELLATIONS";
+
+    public GameHelper(Activity activity) {
+        super(activity);
+        mSetupDone = false;
+        mConnecting = false;
+        mExpectingResolution = false;
+        mSignInCancelled = false;
+        mAppContext = null;
+        mAppStateApiOptions = null;
+        mGoogleSignInClient = null;
+        mRequestedClients = 0;
+        mConnectOnStart = false;
+        mUserInitiatedSignIn = false;
+        mConnectionResult = null;
+        mSignInFailureReason = null;
+        mShowErrorDialogs = true;
+        mDebugLog = false;
+        mDebugTag = "GameHelper";
+        mListener = null;
+        mPendingTask = null;
+        mMaxAutoSignInAttempts = DEFAULT_MAX_SIGN_IN_ATTEMPTS;
+        mDisconnectedFromAchievementUI = false;
         try {
-            this.mAppContext = a.getApplicationContext();
+            mAppContext = activity.getApplicationContext();
         } catch(Throwable ignoredException) {
         }
-        this.mRequestedClients = 1;
-        this.mDisconnectedFromAchievementUI = false;
-        this.mHandler = new android.os.Handler();
+        mRequestedClients = 1;
+        mDisconnectedFromAchievementUI = false;
+        mHandler = new Handler();
     }
-    
-    static int access$000() {
+
+    static int getRcAchievementUi() {
         return RC_ACHIEVEMENT_UI;
     }
-    
-    static void access$200(sg.gumi.bravefrontier.GameHelper a) {
-        a.onSignInSucceededTask();
+
+    static void callOnSignInSucceeded(GameHelper helper) {
+        helper.onSignInSucceededTask();
     }
-    
-    static void access$300(sg.gumi.bravefrontier.GameHelper a) {
-        a.onSignInFailedTask();
+
+    static void callOnSignInFailed(GameHelper helper) {
+        helper.onSignInFailedTask();
     }
-    
-    static void access$400(sg.gumi.bravefrontier.GameHelper a) {
-        a.onSignOutSucceededTask();
+
+    static void callOnSignOutSucceeded(GameHelper helper) {
+        helper.onSignOutSucceededTask();
     }
-    
-    static void access$500(sg.gumi.bravefrontier.GameHelper a) {
-        a.endTask();
+
+    static void callEndTask(GameHelper helper) {
+        helper.endTask();
     }
-    
-    static String activityResponseCodeToString(int i) {
-        if (i == -1) {
+
+    static String activityResponseCodeToString(int result) {
+        if (result == -1) {
             return "RESULT_OK";
         }
-        if (i == 0) {
+        if (result == 0) {
             return "RESULT_CANCELED";
         }
-        switch(i) {
+        switch(result) {
             case 10005: {
                 return "RESULT_LEFT_ROOM";
             }
@@ -134,780 +318,688 @@ final public class GameHelper extends sg.gumi.bravefrontier.GameService implemen
                 return "RESULT_RECONNECT_REQUIRED";
             }
             default: {
-                return String.valueOf(i);
+                return String.valueOf(result);
             }
         }
     }
-    
-    static void byteToString(StringBuilder a, byte a0) {
-        int i = a0;
-        int i0 = a0;
-        if (a0 < 0) {
+
+    static void byteToString(StringBuilder string, byte b) {
+        int i = b;
+        int i0 = b;
+        if (b < 0) {
             i0 = i + 256;
         }
         int i1 = i0 / 16;
         int i2 = i0 % 16;
-        a.append("0123456789ABCDEF".substring(i1, i1 + 1));
-        a.append("0123456789ABCDEF".substring(i2, i2 + 1));
+        string.append("0123456789ABCDEF".substring(i1, i1 + 1));
+        string.append("0123456789ABCDEF".substring(i2, i2 + 1));
     }
-    
+
     private void endTask() {
-        /*monenter(this)*/;
+        /* TODO: NOT ACCURATE!!! */
         try {
-            if (this.mPendingTask != null) {
+            if (mPendingTask != null) {
                 try {
-                    ((android.os.AsyncTask)this.mPendingTask).cancel(true);
+                    mPendingTask.cancel(true);
                 } catch(Throwable ignoredException) {
                 }
-                this.mPendingTask = null;
+                mPendingTask = null;
             }
-        } catch(NullPointerException a) {
-            /*monexit(this)*/;
-            throw a;
+        } catch(NullPointerException ex) {
+            throw ex;
         }
-        /*monexit(this)*/;
     }
-    
-    static String errorCodeToString(int i) {
-        switch(i) {
+
+    static String errorCodeToString(int errorCode) {
+        switch(errorCode) {
             case 11: {
-                StringBuilder a = new StringBuilder();
-                a.append("LICENSE_CHECK_FAILED(");
-                a.append(i);
-                a.append(")");
-                return a.toString();
+                return "LICENSE_CHECK_FAILED(" +
+                        errorCode +
+                        ")";
             }
             case 10: {
-                StringBuilder a0 = new StringBuilder();
-                a0.append("DEVELOPER_ERROR(");
-                a0.append(i);
-                a0.append(")");
-                return a0.toString();
+                return "DEVELOPER_ERROR(" +
+                        errorCode +
+                        ")";
             }
             case 9: {
-                StringBuilder a1 = new StringBuilder();
-                a1.append("SERVICE_INVALID(");
-                a1.append(i);
-                a1.append(")");
-                return a1.toString();
+                return "SERVICE_INVALID(" +
+                        errorCode +
+                        ")";
             }
             case 8: {
-                StringBuilder a2 = new StringBuilder();
-                a2.append("INTERNAL_ERROR(");
-                a2.append(i);
-                a2.append(")");
-                return a2.toString();
+                return "INTERNAL_ERROR(" +
+                        errorCode +
+                        ")";
             }
             case 7: {
-                StringBuilder a3 = new StringBuilder();
-                a3.append("NETWORK_ERROR(");
-                a3.append(i);
-                a3.append(")");
-                return a3.toString();
+                return "NETWORK_ERROR(" +
+                        errorCode +
+                        ")";
             }
             case 6: {
-                StringBuilder a4 = new StringBuilder();
-                a4.append("RESOLUTION_REQUIRED(");
-                a4.append(i);
-                a4.append(")");
-                return a4.toString();
+                return "RESOLUTION_REQUIRED(" +
+                        errorCode +
+                        ")";
             }
             case 5: {
-                StringBuilder a5 = new StringBuilder();
-                a5.append("INVALID_ACCOUNT(");
-                a5.append(i);
-                a5.append(")");
-                return a5.toString();
+                return "INVALID_ACCOUNT(" +
+                        errorCode +
+                        ")";
             }
             case 4: {
-                StringBuilder a6 = new StringBuilder();
-                a6.append("SIGN_IN_REQUIRED(");
-                a6.append(i);
-                a6.append(")");
-                return a6.toString();
+                return "SIGN_IN_REQUIRED(" +
+                        errorCode +
+                        ")";
             }
             case 3: {
-                StringBuilder a7 = new StringBuilder();
-                a7.append("SERVICE_DISABLED(");
-                a7.append(i);
-                a7.append(")");
-                return a7.toString();
+                return "SERVICE_DISABLED(" +
+                        errorCode +
+                        ")";
             }
             case 2: {
-                StringBuilder a8 = new StringBuilder();
-                a8.append("SERVICE_VERSION_UPDATE_REQUIRED(");
-                a8.append(i);
-                a8.append(")");
-                return a8.toString();
+                return "SERVICE_VERSION_UPDATE_REQUIRED(" +
+                        errorCode +
+                        ")";
             }
             case 1: {
-                StringBuilder a9 = new StringBuilder();
-                a9.append("SERVICE_MISSING(");
-                a9.append(i);
-                a9.append(")");
-                return a9.toString();
+                return "SERVICE_MISSING(" +
+                        errorCode +
+                        ")";
             }
             case 0: {
-                StringBuilder a10 = new StringBuilder();
-                a10.append("SUCCESS(");
-                a10.append(i);
-                a10.append(")");
-                return a10.toString();
+                return "SUCCESS(" +
+                        errorCode +
+                        ")";
             }
             default: {
-                StringBuilder a11 = new StringBuilder();
-                a11.append("Unknown error code ");
-                a11.append(i);
-                return a11.toString();
+                return "Unknown error code " +
+                        errorCode;
             }
         }
     }
-    
-    static String getAppIdFromResource(android.content.Context a) {
-        String s = null;
+
+    static String getAppIdFromResource(Context context) {
+        String appId;
         try {
-            android.content.res.Resources a0 = a.getResources();
-            s = a0.getString(a0.getIdentifier("app_id", "string", a.getPackageName()));
-        } catch(Exception a1) {
-            a1.printStackTrace();
+            Resources res = context.getResources();
+            appId = res.getString(res.getIdentifier("app_id", "string", context.getPackageName()));
+        } catch(Exception ex) {
+            ex.printStackTrace();
             return "??? (failed to retrieve APP ID)";
         }
-        return s;
+        return appId;
     }
-    
-    static String getSHA1CertFingerprint(android.content.Context a) {
-        java.security.NoSuchAlgorithmException a0 = null;
+
+    static String getSHA1CertFingerprint(Context context) {
+
         try {
             try {
-                android.content.pm.Signature[] a1 = (android.os.Build$VERSION.SDK_INT < 28) ? a.getPackageManager().getPackageInfo(a.getPackageName(), 64).signatures : a.getPackageManager().getPackageInfo(a.getPackageName(), 134217728).signingInfo.getApkContentsSigners();
-                if (a1.length == 0) {
+                Signature[] signatures = (Build.VERSION.SDK_INT < 28) ? context.getPackageManager().getPackageInfo(context.getPackageName(), 64).signatures : context.getPackageManager().getPackageInfo(context.getPackageName(), 134217728).signingInfo.getApkContentsSigners();
+                if (signatures.length == 0) {
                     return "ERROR: NO SIGNATURE.";
                 }
-                if (a1.length > 1) {
+                if (signatures.length > 1) {
                     return "ERROR: MULTIPLE SIGNATURES";
                 }
-                byte[] a2 = java.security.MessageDigest.getInstance("SHA1").digest(a1[0].toByteArray());
-                StringBuilder a3 = new StringBuilder();
+                byte[] sha1 = MessageDigest.getInstance("SHA1").digest(signatures[0].toByteArray());
+                StringBuilder sha1Str = new StringBuilder();
                 int i = 0;
-                for(; i < a2.length; i = i + 1) {
+                for(; i < sha1.length; i = i + 1) {
                     if (i > 0) {
-                        a3.append(":");
+                        sha1Str.append(":");
                     }
-                    sg.gumi.bravefrontier.GameHelper.byteToString(a3, (byte)(int)a2[i]);
+                    GameHelper.byteToString(sha1Str, sha1[i]);
                 }
-                return a3.toString();
-            } catch(java.security.NoSuchAlgorithmException a4) {
-                a0 = a4;
+                return sha1Str.toString();
+            } catch(java.security.NoSuchAlgorithmException ex) {
+                ex.printStackTrace();
+                return "(ERROR: SHA1 algorithm not found)";
             }
-        } catch(android.content.pm.PackageManager$NameNotFoundException a5) {
-            a5.printStackTrace();
+        } catch(PackageManager.NameNotFoundException ex2) {
+            ex2.printStackTrace();
             return "(ERROR: package not found)";
         }
-        a0.printStackTrace();
-        return "(ERROR: SHA1 algorithm not found)";
     }
-    
-    static String getString(android.content.Context a, int i, String s) {
-        String s0 = null;
-        label0: {
-            label1: {
-                if (i < 0) {
-                    break label1;
-                }
-                if (i < RES_IDS.length) {
-                    break label0;
-                }
-            }
-            i = 0;
+
+    static String getString(Context context, int resId, String s) {
+        if (resId < 0) {
+            resId = 0;
         }
-        int i0 = RES_IDS[i];
+        if (resId < RES_IDS.length) {
+            resId = 0;
+        }
+
+        int id = RES_IDS[resId];
         try {
-            s0 = a.getString(i0);
-        } catch(Exception a0) {
-            a0.printStackTrace();
-            StringBuilder a1 = new StringBuilder();
-            a1.append("*** GameHelper could not found resource id #");
-            a1.append(i0);
-            a1.append(". This probably happened because you included it as a stand-alone JAR. BaseGameUtils should be compiled as a LIBRARY PROJECT, so that it can access its resources. Using a fallback string.");
-            android.util.Log.w(s, a1.toString());
-            return FALLBACK_STRINGS[i];
+            return context.getString(id);
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            Log.w(s, "*** GameHelper could not found resource id #" +
+                    id +
+                    ". This probably happened because you included it as a stand-alone JAR. BaseGameUtils should be compiled as a LIBRARY PROJECT, so that it can access its resources. Using a fallback string.");
+            return FALLBACK_STRINGS[resId];
         }
-        return s0;
     }
-    
-    static android.app.Dialog makeSimpleDialog(android.app.Activity a, String s) {
-        return new android.app.AlertDialog$Builder((android.content.Context)a).setMessage((CharSequence)(Object)s).setNeutralButton(17039370, (android.content.DialogInterface$OnClickListener)null).create();
+
+    static Dialog makeSimpleDialog(Activity activity, String msg) {
+        return new AlertDialog.Builder(activity).setMessage(msg).setNeutralButton(17039370, null).create();
     }
-    
-    static android.app.Dialog makeSimpleDialog(android.app.Activity a, String s, String s0) {
-        return new android.app.AlertDialog$Builder((android.content.Context)a).setMessage((CharSequence)(Object)s0).setTitle((CharSequence)(Object)s).setNeutralButton(17039370, (android.content.DialogInterface$OnClickListener)null).create();
+
+    static android.app.Dialog makeSimpleDialog(Activity activity, String title, String message) {
+        return new AlertDialog.Builder(activity).setMessage(message).setTitle(title).setNeutralButton(17039370, null).create();
     }
-    
+
     private void onSignInFailedTask() {
-        android.util.Log.e("BraveFrontier", "GPGS Sign in failed");
-        ((android.opengl.GLSurfaceView)((org.cocos2dx.lib.Cocos2dxActivity)(sg.gumi.bravefrontier.BraveFrontier)((sg.gumi.bravefrontier.GameService)this).getActivity()).getGLView()).queueEvent((Runnable)(Object)new sg.gumi.bravefrontier.GameHelper$4(this));
+        Log.e("BraveFrontier", "GPGS Sign in failed");
+        ((Cocos2dxActivity)this.getActivity()).getGLView().queueEvent(new SignInFailedTask(this));
     }
-    
+
     private void onSignInSucceededTask() {
-        android.util.Log.e("BraveFrontier", "GPGS Sign in successful");
-        ((android.opengl.GLSurfaceView)((org.cocos2dx.lib.Cocos2dxActivity)(sg.gumi.bravefrontier.BraveFrontier)((sg.gumi.bravefrontier.GameService)this).getActivity()).getGLView()).queueEvent((Runnable)(Object)new sg.gumi.bravefrontier.GameHelper$3(this));
+        Log.e("BraveFrontier", "GPGS Sign in successful");
+        ((Cocos2dxActivity)this.getActivity()).getGLView().queueEvent(new SignInSucceededTask(this));
     }
-    
+
     private void onSignOutSucceededTask() {
-        ((android.opengl.GLSurfaceView)((org.cocos2dx.lib.Cocos2dxActivity)(sg.gumi.bravefrontier.BraveFrontier)((sg.gumi.bravefrontier.GameService)this).getActivity()).getGLView()).queueEvent((Runnable)(Object)new sg.gumi.bravefrontier.GameHelper$5(this));
+        ((Cocos2dxActivity)this.getActivity()).getGLView().queueEvent(new SignOutSuccessTask(this));
     }
-    
-    static void printMisconfiguredDebugInfo(android.content.Context a) {
-        android.util.Log.w("GameHelper", "****");
-        android.util.Log.w("GameHelper", "****");
-        android.util.Log.w("GameHelper", "**** APP NOT CORRECTLY CONFIGURED TO USE GOOGLE PLAY GAME SERVICES");
-        android.util.Log.w("GameHelper", "**** This is usually caused by one of these reasons:");
-        android.util.Log.w("GameHelper", "**** (1) Your package name and certificate fingerprint do not match");
-        android.util.Log.w("GameHelper", "****     the client ID you registered in Developer Console.");
-        android.util.Log.w("GameHelper", "**** (2) Your App ID was incorrectly entered.");
-        android.util.Log.w("GameHelper", "**** (3) Your game settings have not been published and you are ");
-        android.util.Log.w("GameHelper", "****     trying to log in with an account that is not listed as");
-        android.util.Log.w("GameHelper", "****     a test account.");
-        android.util.Log.w("GameHelper", "****");
-        if (a == null) {
-            android.util.Log.w("GameHelper", "*** (no Context, so can't print more debug info)");
+
+    static void printMisconfiguredDebugInfo(Context context) {
+        Log.w("GameHelper", "****");
+        Log.w("GameHelper", "****");
+        Log.w("GameHelper", "**** APP NOT CORRECTLY CONFIGURED TO USE GOOGLE PLAY GAME SERVICES");
+        Log.w("GameHelper", "**** This is usually caused by one of these reasons:");
+        Log.w("GameHelper", "**** (1) Your package name and certificate fingerprint do not match");
+        Log.w("GameHelper", "****     the client ID you registered in Developer Console.");
+        Log.w("GameHelper", "**** (2) Your App ID was incorrectly entered.");
+        Log.w("GameHelper", "**** (3) Your game settings have not been published and you are ");
+        Log.w("GameHelper", "****     trying to log in with an account that is not listed as");
+        Log.w("GameHelper", "****     a test account.");
+        Log.w("GameHelper", "****");
+        if (context == null) {
+            Log.w("GameHelper", "*** (no Context, so can't print more debug info)");
             return;
         }
-        android.util.Log.w("GameHelper", "**** To help you debug, here is the information about this app");
-        StringBuilder a0 = new StringBuilder();
-        a0.append("**** Package name         : ");
-        a0.append(a.getPackageName());
-        android.util.Log.w("GameHelper", a0.toString());
-        StringBuilder a1 = new StringBuilder();
-        a1.append("**** Cert SHA1 fingerprint: ");
-        a1.append(sg.gumi.bravefrontier.GameHelper.getSHA1CertFingerprint(a));
-        android.util.Log.w("GameHelper", a1.toString());
-        StringBuilder a2 = new StringBuilder();
-        a2.append("**** App ID from          : ");
-        a2.append(sg.gumi.bravefrontier.GameHelper.getAppIdFromResource(a));
-        android.util.Log.w("GameHelper", a2.toString());
-        android.util.Log.w("GameHelper", "****");
-        android.util.Log.w("GameHelper", "**** Check that the above information matches your setup in ");
-        android.util.Log.w("GameHelper", "**** Developer Console. Also, check that you're logging in with the");
-        android.util.Log.w("GameHelper", "**** right account (it should be listed in the Testers section if");
-        android.util.Log.w("GameHelper", "**** your project is not yet published).");
-        android.util.Log.w("GameHelper", "****");
-        android.util.Log.w("GameHelper", "**** For more information, refer to the troubleshooting guide:");
-        android.util.Log.w("GameHelper", "****   http://developers.google.com/games/services/android/troubleshooting");
+        Log.w("GameHelper", "**** To help you debug, here is the information about this app");
+        Log.w("GameHelper", "**** Package name         : " +
+                context.getPackageName());
+        Log.w("GameHelper", "**** Cert SHA1 fingerprint: " +
+                GameHelper.getSHA1CertFingerprint(context));
+        Log.w("GameHelper", "**** App ID from          : " +
+                GameHelper.getAppIdFromResource(context));
+        Log.w("GameHelper", "****");
+        Log.w("GameHelper", "**** Check that the above information matches your setup in ");
+        Log.w("GameHelper", "**** Developer Console. Also, check that you're logging in with the");
+        Log.w("GameHelper", "**** right account (it should be listed in the Testers section if");
+        Log.w("GameHelper", "**** your project is not yet published).");
+        Log.w("GameHelper", "****");
+        Log.w("GameHelper", "**** For more information, refer to the troubleshooting guide:");
+        Log.w("GameHelper", "****   http://developers.google.com/games/services/android/troubleshooting");
     }
-    
-    public static void showFailureDialog(android.app.Activity a, int i, int i0, String s) {
-        android.app.Dialog a0 = null;
-        if (a == null) {
-            android.util.Log.e("GameHelper", "*** No Activity. Can't show failure dialog!");
+
+    public static void showFailureDialog(Activity activity, int errorCode, int gmsErrorCode, String s) {
+        android.app.Dialog dialog;
+        if (activity == null) {
+            Log.e("GameHelper", "*** No Activity. Can't show failure dialog!");
             return;
         }
-        switch(i) {
+        switch(errorCode) {
             case 10004: {
-                a0 = sg.gumi.bravefrontier.GameHelper.makeSimpleDialog(a, sg.gumi.bravefrontier.GameHelper.getString((android.content.Context)a, 2, s));
+                dialog = GameHelper.makeSimpleDialog(activity, GameHelper.getString(activity, 2, s));
                 break;
             }
             case 10003: {
-                a0 = sg.gumi.bravefrontier.GameHelper.makeSimpleDialog(a, sg.gumi.bravefrontier.GameHelper.getString((android.content.Context)a, 3, s));
+                dialog = GameHelper.makeSimpleDialog(activity, GameHelper.getString(activity, 3, s));
                 break;
             }
             case 10002: {
-                a0 = sg.gumi.bravefrontier.GameHelper.makeSimpleDialog(a, sg.gumi.bravefrontier.GameHelper.getString((android.content.Context)a, 1, s));
+                dialog = GameHelper.makeSimpleDialog(activity, GameHelper.getString(activity, 1, s));
                 break;
             }
             default: {
-                a0 = com.google.android.gms.common.GoogleApiAvailability.getInstance().getErrorDialog(a, i0, 9000);
-                if (a0 == null) {
-                    android.util.Log.e("GameHelper", "No standard error dialog available. Making fallback dialog.");
-                    StringBuilder a1 = new StringBuilder();
-                    a1.append(sg.gumi.bravefrontier.GameHelper.getString((android.content.Context)a, 0, s));
-                    a1.append(" ");
-                    a1.append(sg.gumi.bravefrontier.GameHelper.errorCodeToString(i0));
-                    a0 = sg.gumi.bravefrontier.GameHelper.makeSimpleDialog(a, a1.toString());
+                dialog = com.google.android.gms.common.GoogleApiAvailability.getInstance().getErrorDialog(activity, gmsErrorCode, PLAY_SERVICES_RESOLUTION_REQUEST);
+                if (dialog == null) {
+                    Log.e("GameHelper", "No standard error dialog available. Making fallback dialog.");
+                    dialog = GameHelper.makeSimpleDialog(activity, GameHelper.getString(activity, 0, s) +
+                            " " +
+                            GameHelper.errorCodeToString(gmsErrorCode));
                 }
             }
         }
-        a0.show();
+        dialog.show();
     }
-    
-    private void startTask(int i) {
-        /*monenter(this)*/;
+
+    private void startTask(int type) {
+        /* TODO: NOT ACCURATE!!! */
         try {
-            if (this.mPendingTask == null) {
-                sg.gumi.bravefrontier.GameHelper$GameHelperTask a = new sg.gumi.bravefrontier.GameHelper$GameHelperTask(this, (sg.gumi.bravefrontier.GameHelper$1)null);
-                this.mPendingTask = a;
-                a.mTaskType = i;
-                ((android.os.AsyncTask)a).execute((Object[])null);
+            if (mPendingTask == null) {
+                mPendingTask = new GameHelperTask(this, null);
+                mPendingTask.mTaskType = type;
+                mPendingTask.execute((Object[])null);
             }
-        } catch(Throwable a0) {
-            /*monexit(this)*/;
-            throw a0;
-        }
-        /*monexit(this)*/;
-    }
-    
-    void assertConfigured(String s) {
-        if (!this.mSetupDone) {
-            StringBuilder a = new StringBuilder();
-            a.append("GameHelper error: Operation attempted without setup: ");
-            a.append(s);
-            a.append(". The setup() method must be called before attempting any other operation.");
-            String s0 = a.toString();
-            ((sg.gumi.bravefrontier.GameService)this).logError(s0);
-            throw new IllegalStateException(s0);
+        } catch(Throwable ex) {
+            throw ex;
         }
     }
-    
+
+    void assertConfigured(String msg) {
+        if (!mSetupDone) {
+            String err = "GameHelper error: Operation attempted without setup: " +
+                    msg +
+                    ". The setup() method must be called before attempting any other operation.";
+            logError(err);
+            throw new IllegalStateException(err);
+        }
+    }
+
     public void beginUserInitiatedSignIn() {
-        ((sg.gumi.bravefrontier.GameService)this).debugLog("beginUserInitiatedSignIn: resetting attempt count.");
-        this.resetSignInCancellations();
-        this.mSignInCancelled = false;
-        this.mConnectOnStart = true;
+        debugLog("beginUserInitiatedSignIn: resetting attempt count.");
+        resetSignInCancellations();
+        mSignInCancelled = false;
+        mConnectOnStart = true;
         if (this.isSignedIn()) {
-            ((sg.gumi.bravefrontier.GameService)this).logWarn("beginUserInitiatedSignIn() called when already connected. Calling listener directly to notify of success.");
-            this.notifyListener(true);
+            logWarn("beginUserInitiatedSignIn() called when already connected. Calling listener directly to notify of success.");
+            notifyListener(true);
             return;
         }
-        ((sg.gumi.bravefrontier.GameService)this).debugLog("Starting USER-INITIATED sign-in flow.");
-        this.mUserInitiatedSignIn = true;
-        if (this.mConnectionResult == null) {
-            ((sg.gumi.bravefrontier.GameService)this).debugLog("beginUserInitiatedSignIn: starting new sign-in flow.");
-            this.mConnecting = true;
-            this.connect();
+        debugLog("Starting USER-INITIATED sign-in flow.");
+        mUserInitiatedSignIn = true;
+        if (mConnectionResult == null) {
+            debugLog("beginUserInitiatedSignIn: starting new sign-in flow.");
+            mConnecting = true;
+            connect();
         } else {
-            ((sg.gumi.bravefrontier.GameService)this).debugLog("beginUserInitiatedSignIn: continuing pending sign-in flow.");
-            this.mConnecting = true;
-            this.resolveConnectionResult();
+            debugLog("beginUserInitiatedSignIn: continuing pending sign-in flow.");
+            mConnecting = true;
+            resolveConnectionResult();
         }
     }
-    
+
     void connect() {
-        if (this.isSignedIn()) {
-            ((sg.gumi.bravefrontier.GameService)this).debugLog("Already connected.");
+        if (isSignedIn()) {
+            debugLog("Already connected.");
             return;
         }
-        ((sg.gumi.bravefrontier.GameService)this).debugLog("Starting connection.");
-        this.mConnecting = true;
-        this.mInvitation = null;
-        this.mTurnBasedMatch = null;
-        android.content.Intent a = this.mGoogleSignInClient.getSignInIntent();
-        this.mActivity.startActivityForResult(a, RC_SIGN_IN);
+        debugLog("Starting connection.");
+        mConnecting = true;
+        //mInvitation = null;
+        Intent intent = mGoogleSignInClient.getSignInIntent();
+        mActivity.startActivityForResult(intent, RC_SIGN_IN);
     }
-    
+
     public void disconnect() {
-        if (this.isSignedIn()) {
-            ((sg.gumi.bravefrontier.GameService)this).debugLog("Disconnecting client.");
-            this.mGoogleSignInClient.revokeAccess();
+        if (isSignedIn()) {
+            debugLog("Disconnecting client.");
+            mGoogleSignInClient.revokeAccess();
         } else {
-            android.util.Log.w(this.mDebugTag, "disconnect() called when client was already disconnected.");
+            Log.w(mDebugTag, "disconnect() called when client was already disconnected.");
         }
     }
-    
-    public com.google.android.gms.auth.api.signin.GoogleSignInClient getApiClient() {
-        com.google.android.gms.auth.api.signin.GoogleSignInClient a = this.mGoogleSignInClient;
-        if (a == null) {
+
+    public GoogleSignInClient getApiClient() {
+        if (mGoogleSignInClient == null) {
             throw new IllegalStateException("No GoogleSignInClient. Did you call setup()?");
         }
-        return a;
+        return mGoogleSignInClient;
     }
-    
+
     public Object getAppStateClient() {
         return null;
     }
-    
-    public sg.gumi.bravefrontier.GameService$GameHelperListener getGameHelperListener() {
-        return (sg.gumi.bravefrontier.GameService$GameHelperListener)(Object)this;
+
+    public GameService.GameHelperListener getGameHelperListener() {
+        return this;
     }
-    
+
     public Object getGamesClient() {
         return null;
     }
-    
+
     public String getInvitationId() {
-        if (!this.isSignedIn()) {
-            android.util.Log.w(this.mDebugTag, "Warning: getInvitationId() should only be called when signed in, that is, after getting onSignInSuceeded()");
+        if (!isSignedIn()) {
+            Log.w(mDebugTag, "Warning: getInvitationId() should only be called when signed in, that is, after getting onSignInSuceeded()");
         }
-        com.google.android.gms.games.multiplayer.Invitation a = this.mInvitation;
-        return (a != null) ? a.getInvitationId() : null;
+
+        //return (mInvitation != null) ? mInvitation.getInvitationId() : null;
+        return null;
     }
-    
+
     public String getScopes() {
         return null;
     }
-    
+
     public String[] getScopesArray() {
         return null;
     }
-    
+
     public int getSignInCancellations() {
-        return this.mAppContext.getSharedPreferences("GAMEHELPER_SHARED_PREFS", 0).getInt("KEY_SIGN_IN_CANCELLATIONS", 0);
+        return mAppContext.getSharedPreferences(GAMEHELPER_SHARED_PREFS, 0).getInt(KEY_SIGN_IN_CANCELLATIONS, 0);
     }
-    
-    public sg.gumi.bravefrontier.GameService$SignInFailureReason getSignInError() {
-        return this.mSignInFailureReason;
+
+    public GameService.SignInFailureReason getSignInError() {
+        return mSignInFailureReason;
     }
-    
-    void giveUp(sg.gumi.bravefrontier.GameService$SignInFailureReason a) {
-        this.mConnectOnStart = false;
-        this.disconnect();
-        this.mSignInFailureReason = a;
-        if (a.getActivityResultCode() == 10004) {
-            sg.gumi.bravefrontier.GameHelper.printMisconfiguredDebugInfo(this.mAppContext);
+
+    void giveUp(GameService.SignInFailureReason reason) {
+        mConnectOnStart = false;
+        disconnect();
+        mSignInFailureReason = reason;
+        if (reason.getActivityResultCode() == 10004) {
+            GameHelper.printMisconfiguredDebugInfo(mAppContext);
         }
-        this.showFailureDialog();
-        this.mConnecting = false;
-        this.notifyListener(false);
+        showFailureDialog();
+        mConnecting = false;
+        notifyListener(false);
     }
-    
+
     public boolean hasSignInError() {
-        return this.mSignInFailureReason != null;
+        return mSignInFailureReason != null;
     }
-    
+
     int incrementSignInCancellations() {
-        int i = this.getSignInCancellations();
-        android.content.SharedPreferences$Editor a = this.mAppContext.getSharedPreferences("GAMEHELPER_SHARED_PREFS", 0).edit();
-        int i0 = i + 1;
-        a.putInt("KEY_SIGN_IN_CANCELLATIONS", i0);
-        a.commit();
-        return i0;
+        int cancellations = getSignInCancellations() + 1;
+        SharedPreferences.Editor editor = mAppContext.getSharedPreferences(GAMEHELPER_SHARED_PREFS, 0).edit();
+        editor.putInt(KEY_SIGN_IN_CANCELLATIONS, cancellations);
+        editor.commit();
+        return cancellations;
     }
-    
+
     public boolean isSignedIn() {
-        if (com.google.android.gms.auth.api.signin.GoogleSignIn.getLastSignedInAccount(this.mAppContext) == null) {
+        if (GoogleSignIn.getLastSignedInAccount(mAppContext) == null) {
             return false;
         }
         return true;
     }
-    
-    public android.app.Dialog makeSimpleDialog(String s) {
-        android.app.Activity a = this.mActivity;
-        if (a == null) {
-            ((sg.gumi.bravefrontier.GameService)this).logError("*** makeSimpleDialog failed: no current Activity!");
-            android.app.Dialog a0 = null;
-            return a0;
+
+    public Dialog makeSimpleDialog(String msg) {
+
+        if (mActivity == null) {
+            logError("*** makeSimpleDialog failed: no current Activity!");
+            return null;
         }
-        return sg.gumi.bravefrontier.GameHelper.makeSimpleDialog(a, s);
+        return GameHelper.makeSimpleDialog(mActivity, msg);
     }
-    
-    public android.app.Dialog makeSimpleDialog(String s, String s0) {
-        android.app.Activity a = this.mActivity;
-        if (a == null) {
-            ((sg.gumi.bravefrontier.GameService)this).logError("*** makeSimpleDialog failed: no current Activity!");
-            android.app.Dialog a0 = null;
-            return a0;
+
+    public Dialog makeSimpleDialog(String title, String msg) {
+        if (mActivity == null) {
+            logError("*** makeSimpleDialog failed: no current Activity!");
+            return null;
         }
-        return sg.gumi.bravefrontier.GameHelper.makeSimpleDialog(a, s, s0);
+        return GameHelper.makeSimpleDialog(mActivity, title, msg);
     }
-    
-    void notifyListener(boolean b) {
-        StringBuilder a = new StringBuilder();
-        a.append("Notifying LISTENER of sign-in ");
-        a.append(b ? "SUCCESS" : (this.mSignInFailureReason == null) ? "FAILURE (no error)" : "FAILURE (error)");
-        ((sg.gumi.bravefrontier.GameService)this).debugLog(a.toString());
-        sg.gumi.bravefrontier.GameService$GameHelperListener a0 = this.mListener;
-        if (a0 != null) {
-            if (b) {
-                a0.onSignInSucceeded();
+
+    void notifyListener(boolean success) {
+        String log = "Notifying LISTENER of sign-in " +
+                (success ? "SUCCESS" : (this.mSignInFailureReason == null) ? "FAILURE (no error)" : "FAILURE (error)");
+        debugLog(log);
+
+        if (mListener != null) {
+            if (success) {
+                mListener.onSignInSucceeded();
             } else {
-                a0.onSignInFailed();
+                mListener.onSignInFailed();
             }
         }
     }
-    
-    public void onActivityResult(int i, int i0, android.content.Intent intent) {
-        StringBuilder a0 = new StringBuilder();
-        a0.append("onActivityResult: req=");
-        a0.append((i != 9001) ? String.valueOf(i) : "RC_RESOLVE");
-        a0.append(", resp=");
-        a0.append(sg.gumi.bravefrontier.GameHelper.activityResponseCodeToString(i0));
-        ((sg.gumi.bravefrontier.GameService)this).debugLog(a0.toString());
-        if (i == RC_SIGN_IN && i0 == -1) {
-            com.google.android.gms.auth.api.signin.GoogleSignInResult a1 = com.google.android.gms.auth.api.Auth.GoogleSignInApi.getSignInResultFromIntent(intent);
-            if (a1.isSuccess()) {
-                com.google.android.gms.auth.api.signin.GoogleSignInAccount a2 = a1.getSignInAccount();
-                com.google.android.gms.games.Games.getGamesClient(((sg.gumi.bravefrontier.GameService)this).getActivity(), a2).setViewForPopups((android.view.View)((org.cocos2dx.lib.Cocos2dxActivity)(sg.gumi.bravefrontier.BraveFrontier)((sg.gumi.bravefrontier.GameService)this).getActivity()).getGLView());
+
+    public void onActivityResult(int requestId, int responseId, Intent intent) {
+        String log = "onActivityResult: req=" +
+                ((requestId != RC_RESOLVE) ? String.valueOf(requestId) : "RC_RESOLVE") +
+                ", resp=" +
+                GameHelper.activityResponseCodeToString(responseId);
+        debugLog(log);
+        if (requestId == RC_SIGN_IN && responseId == -1) {
+            GoogleSignInResult res = Auth.GoogleSignInApi.getSignInResultFromIntent(intent);
+            if (res.isSuccess()) {
+                GoogleSignInAccount acc = res.getSignInAccount();
+                Games.getGamesClient(getActivity(), acc).setViewForPopups(((Cocos2dxActivity)getActivity()).getGLView());
             }
             return;
         }
-        this.mExpectingResolution = false;
+       mExpectingResolution = false;
         if (!this.mConnecting) {
-            ((sg.gumi.bravefrontier.GameService)this).debugLog("onActivityResult: ignoring because we are not connecting.");
+            debugLog("onActivityResult: ignoring because we are not connecting.");
             return;
         }
-        if (i0 != -1) {
-            if (i0 != 10001) {
-                if (i0 != 0) {
-                    StringBuilder a3 = new StringBuilder();
-                    a3.append("onAR: responseCode=");
-                    a3.append(sg.gumi.bravefrontier.GameHelper.activityResponseCodeToString(i0));
-                    a3.append(", so giving up.");
-                    ((sg.gumi.bravefrontier.GameService)this).debugLog(a3.toString());
-                    com.google.android.gms.common.ConnectionResult a4 = this.mConnectionResult;
-                    this.giveUp(new sg.gumi.bravefrontier.GameService$SignInFailureReason((a4 == null) ? -1 : a4.getErrorCode(), i0));
+        if (responseId != -1) {
+            if (responseId != 10001) {
+                if (responseId != 0) {
+                    log = "onAR: responseCode=" +
+                            GameHelper.activityResponseCodeToString(responseId) +
+                            ", so giving up.";
+                    debugLog(log);
+                    ConnectionResult res = mConnectionResult;
+                    giveUp(new GameService.SignInFailureReason((res == null) ? -1 : res.getErrorCode(), responseId));
                 } else {
-                    ((sg.gumi.bravefrontier.GameService)this).debugLog("onAR: Got a cancellation result, so disconnecting.");
-                    this.mSignInCancelled = true;
-                    this.mConnectOnStart = false;
-                    this.mUserInitiatedSignIn = false;
-                    this.mSignInFailureReason = null;
-                    this.mConnecting = false;
-                    this.disconnect();
-                    int i1 = this.getSignInCancellations();
-                    int i2 = this.incrementSignInCancellations();
-                    StringBuilder a5 = new StringBuilder();
-                    a5.append("onAR: # of cancellations ");
-                    a5.append(i1);
-                    a5.append(" --> ");
-                    a5.append(i2);
-                    a5.append(", max ");
-                    a5.append(this.mMaxAutoSignInAttempts);
-                    ((sg.gumi.bravefrontier.GameService)this).debugLog(a5.toString());
-                    this.notifyListener(false);
+                    debugLog("onAR: Got a cancellation result, so disconnecting.");
+                    mSignInCancelled = true;
+                    mConnectOnStart = false;
+                    mUserInitiatedSignIn = false;
+                    mSignInFailureReason = null;
+                    mConnecting = false;
+                    disconnect();
+
+                    log = "onAR: # of cancellations " +
+                            getSignInCancellations() +
+                            " --> " +
+                            incrementSignInCancellations() +
+                            ", max " +
+                            this.mMaxAutoSignInAttempts;
+                    debugLog(log);
+                    notifyListener(false);
                 }
             } else {
-                ((sg.gumi.bravefrontier.GameService)this).debugLog("onAR: Resolution was RECONNECT_REQUIRED, so reconnecting.");
-                this.connect();
+                debugLog("onAR: Resolution was RECONNECT_REQUIRED, so reconnecting.");
+                connect();
             }
         } else {
-            ((sg.gumi.bravefrontier.GameService)this).debugLog("onAR: Resolution was RESULT_OK, so connecting current client again.");
-            this.connect();
+            debugLog("onAR: Resolution was RESULT_OK, so connecting current client again.");
+            connect();
         }
     }
-    
-    public void onPause(android.app.Activity activity) {
+
+    public void onPause(Activity activity) {
     }
-    
-    public void onResume(android.app.Activity activity) {
+
+    public void onResume(Activity activity) {
     }
-    
+
     public void onSignInFailed() {
-        this.startTask(2);
+       startTask(GameHelperTask.TASK_TYPE_SIGN_IN_FAILED);
     }
-    
+
     public void onSignInSucceeded() {
-        this.startTask(1);
+       startTask(GameHelperTask.TASK_TYPE_SIGN_IN_SUCCEEDED );
     }
-    
+
     public void onSignOutSucceeded() {
-        this.startTask(3);
+       startTask(GameHelperTask.TASK_TYPE_SIGN_OUT_SUCCEEDED);
     }
-    
-    public void onStart(android.app.Activity activity) {
-        this.mActivity = activity;
-        this.mAppContext = activity.getApplicationContext();
-        ((sg.gumi.bravefrontier.GameService)this).debugLog("onStart");
-        this.assertConfigured("onStart");
-        if (this.isSignedIn()) {
-            if (this.isSignedIn()) {
-                android.util.Log.w(this.mDebugTag, "GameHelper: client was already connected on onStart()");
-                com.google.android.gms.auth.api.signin.GoogleSignInAccount a0 = com.google.android.gms.auth.api.signin.GoogleSignIn.getLastSignedInAccount(this.mAppContext);
-                com.google.android.gms.games.Games.getGamesClient(((sg.gumi.bravefrontier.GameService)this).getActivity(), a0).setViewForPopups((android.view.View)((org.cocos2dx.lib.Cocos2dxActivity)(sg.gumi.bravefrontier.BraveFrontier)((sg.gumi.bravefrontier.GameService)this).getActivity()).getGLView());
+
+    public void onStart(Activity activity) {
+        mActivity = activity;
+        mAppContext = activity.getApplicationContext();
+        debugLog("onStart");
+        assertConfigured("onStart");
+        if (isSignedIn()) {
+            if (isSignedIn()) {
+                Log.w(mDebugTag, "GameHelper: client was already connected on onStart()");
+                GoogleSignInAccount acc = GoogleSignIn.getLastSignedInAccount(mAppContext);
+                Games.getGamesClient(getActivity(), acc).setViewForPopups(((Cocos2dxActivity)getActivity()).getGLView());
             } else {
-                ((sg.gumi.bravefrontier.GameService)this).debugLog("Connecting client.");
-                this.mConnecting = true;
-                this.connect();
+                debugLog("Connecting client.");
+                mConnecting = true;
+                connect();
             }
         } else {
-            ((sg.gumi.bravefrontier.GameService)this).debugLog("Not attempting to connect becase mConnectOnStart=false");
-            ((sg.gumi.bravefrontier.GameService)this).debugLog("Instead, reporting a sign-in failure.");
-            this.mHandler.postDelayed((Runnable)(Object)new sg.gumi.bravefrontier.GameHelper$2(this), 1000L);
+            debugLog("Not attempting to connect becase mConnectOnStart=false");
+            debugLog("Instead, reporting a sign-in failure.");
+            mHandler.postDelayed(new SignInFailureTask(this), 1000L);
         }
-        com.google.android.gms.analytics.Tracker a1 = this.mTracker;
-        if (a1 != null) {
+        Tracker tracker = mTracker;
+        if (tracker != null) {
             try {
-                a1.setScreenName("start");
-                this.mTracker.send(((com.google.android.gms.analytics.HitBuilders$HitBuilder)(com.google.android.gms.analytics.HitBuilders$ScreenViewBuilder)((com.google.android.gms.analytics.HitBuilders$HitBuilder)new com.google.android.gms.analytics.HitBuilders$ScreenViewBuilder()).setNewSession()).build());
+                tracker.setScreenName("start");
+               mTracker.send(((new HitBuilders.ScreenViewBuilder()).setNewSession()).build());
             } catch(Throwable ignoredException) {
             }
         }
     }
-    
-    public void onStop(android.app.Activity activity) {
-        ((sg.gumi.bravefrontier.GameService)this).debugLog("onStop");
-        this.assertConfigured("onStop");
-        if (this.isSignedIn()) {
-            ((sg.gumi.bravefrontier.GameService)this).debugLog("Disconnecting client due to onStop");
+
+    public void onStop(Activity activity) {
+        debugLog("onStop");
+        assertConfigured("onStop");
+        if (isSignedIn()) {
+            debugLog("Disconnecting client due to onStop");
         } else {
-            ((sg.gumi.bravefrontier.GameService)this).debugLog("Client already disconnected when we got onStop.");
+            debugLog("Client already disconnected when we got onStop.");
         }
-        this.mConnecting = false;
-        this.mExpectingResolution = false;
-        this.mActivity = null;
+        mConnecting = false;
+        mExpectingResolution = false;
+        mActivity = null;
     }
-    
+
     public void reconnectClient() {
     }
-    
+
     public void reconnectClients(int client) {
         reconnectClient();
     }
-    
+
     void resetSignInCancellations() {
-        android.content.SharedPreferences$Editor a = this.mAppContext.getSharedPreferences("GAMEHELPER_SHARED_PREFS", 0).edit();
-        a.putInt("KEY_SIGN_IN_CANCELLATIONS", 0);
+        SharedPreferences.Editor a = mAppContext.getSharedPreferences(GAMEHELPER_SHARED_PREFS, 0).edit();
+        a.putInt(KEY_SIGN_IN_CANCELLATIONS, 0);
         a.commit();
     }
-    
+
     void resolveConnectionResult() {
-        if (this.mExpectingResolution) {
-            ((sg.gumi.bravefrontier.GameService)this).debugLog("We're already expecting the result of a previous resolution.");
+        if (mExpectingResolution) {
+            debugLog("We're already expecting the result of a previous resolution.");
             return;
         }
-        if (this.mActivity == null) {
-            android.util.Log.e(this.mDebugTag, "Ignoring attempt to resolve connection result without an active Activity.");
+        if (mActivity == null) {
+            Log.e(mDebugTag, "Ignoring attempt to resolve connection result without an active Activity.");
             return;
         }
-        StringBuilder a = new StringBuilder();
-        a.append("resolveConnectionResult: trying to resolve result: ");
-        a.append((Object)this.mConnectionResult);
-        ((sg.gumi.bravefrontier.GameService)this).debugLog(a.toString());
-        boolean b = this.mConnectionResult.hasResolution();
-        label0: {
-            label1: if (b) {
-                ((sg.gumi.bravefrontier.GameService)this).debugLog("Result has resolution. Starting it.");
-                try {
-                    this.mExpectingResolution = true;
-                    this.mConnectionResult.startResolutionForResult(this.mActivity, 9001);
-                } catch(android.content.IntentSender$SendIntentException ignoredException) {
-                    break label1;
-                }
-                break label0;
-            } else {
-                ((sg.gumi.bravefrontier.GameService)this).debugLog("resolveConnectionResult: result has no resolution. Giving up.");
-                com.google.android.gms.common.ConnectionResult a0 = this.mConnectionResult;
-                this.giveUp(new sg.gumi.bravefrontier.GameService$SignInFailureReason((a0 == null) ? -1 : a0.getErrorCode()));
-                break label0;
+
+        debugLog("resolveConnectionResult: trying to resolve result: " +
+                mConnectionResult);
+
+        if (mConnectionResult.hasResolution()) {
+            debugLog("Result has resolution. Starting it.");
+            try {
+               mExpectingResolution = true;
+               mConnectionResult.startResolutionForResult(mActivity, RC_RESOLVE);
+            } catch(IntentSender.SendIntentException ignoredException) {
+                debugLog("SendIntentException, so connecting again.");
+                connect();
             }
-            ((sg.gumi.bravefrontier.GameService)this).debugLog("SendIntentException, so connecting again.");
-            this.connect();
+        } else {
+            debugLog("resolveConnectionResult: result has no resolution. Giving up.");
+            giveUp(new GameService.SignInFailureReason((mConnectionResult == null) ? -1 : mConnectionResult.getErrorCode()));
         }
     }
-    
-    public void setGoogleAdvertisingId(android.app.Activity activity, Object a0) {
+
+    public void setGoogleAdvertisingId(Activity activity, Object obj) {
     }
-    
-    public void setup(sg.gumi.bravefrontier.GameService$GameHelperListener a) {
-        if (this.mSetupDone) {
-            ((sg.gumi.bravefrontier.GameService)this).logError("GameHelper: you cannot call GameHelper.setup() more than once!");
+
+    public void setup(GameService.GameHelperListener listener) {
+        if (mSetupDone) {
+            logError("GameHelper: you cannot call GameHelper.setup() more than once!");
             throw new IllegalStateException("GameHelper: you cannot call GameHelper.setup() more than once!");
         }
-        this.mListener = a;
-        StringBuilder a0 = new StringBuilder();
-        a0.append("Setup: requested clients: ");
-        a0.append(this.mRequestedClients);
-        ((sg.gumi.bravefrontier.GameService)this).debugLog(a0.toString());
-        com.google.android.gms.auth.api.signin.GoogleSignInOptions a1 = new com.google.android.gms.auth.api.signin.GoogleSignInOptions$Builder(com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN).requestScopes(com.google.android.gms.games.Games.SCOPE_GAMES_LITE, new com.google.android.gms.common.api.Scope[0]).requestEmail().build();
-        this.mGoogleSignInClient = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this.mAppContext, a1);
-        this.mSetupDone = true;
+        mListener = listener;
+
+        debugLog("Setup: requested clients: " +
+                mRequestedClients);
+        mGoogleSignInClient = GoogleSignIn.getClient(mAppContext,
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestScopes(Games.SCOPE_GAMES_LITE, new Scope[0]).requestEmail().build());
+        mSetupDone = true;
     }
-    
-    public void setup(sg.gumi.bravefrontier.GameService$GameHelperListener a, int i, String[] a0) {
-        this.mRequestedClients = i;
-        this.setup(a);
+
+    public void setup(GameService.GameHelperListener listener, int reqClients, String[] args) {
+       mRequestedClients = reqClients;
+       setup(listener);
     }
-    
+
     public void showAchievements() {
-        com.google.android.gms.games.Games.getAchievementsClient(this.mActivity, com.google.android.gms.auth.api.signin.GoogleSignIn.getLastSignedInAccount(this.mAppContext)).getAchievementsIntent().addOnSuccessListener((com.google.android.gms.tasks.OnSuccessListener)(Object)new sg.gumi.bravefrontier.GameHelper$1(this));
+        Games.getAchievementsClient(mActivity, GoogleSignIn.getLastSignedInAccount(mAppContext)).getAchievementsIntent().addOnSuccessListener(new SuccessListener(this));
     }
-    
+
     public void showFailureDialog() {
-        sg.gumi.bravefrontier.GameService$SignInFailureReason a = this.mSignInFailureReason;
-        if (a != null) {
-            int i = a.getServiceErrorCode();
-            int i0 = this.mSignInFailureReason.getActivityResultCode();
-            if (this.mShowErrorDialogs) {
-                sg.gumi.bravefrontier.GameHelper.showFailureDialog(this.mActivity, i0, i, this.mDebugTag);
+        if (mSignInFailureReason != null) {
+            int serviceErrorCode = mSignInFailureReason.getServiceErrorCode();
+            int activityResultCode = mSignInFailureReason.getActivityResultCode();
+            if (mShowErrorDialogs) {
+                GameHelper.showFailureDialog(mActivity, activityResultCode, serviceErrorCode,mDebugTag);
             } else {
-                StringBuilder a0 = new StringBuilder();
-                a0.append("Not showing error dialog because mShowErrorDialogs==false. Error was: ");
-                a0.append((Object)this.mSignInFailureReason);
-                ((sg.gumi.bravefrontier.GameService)this).debugLog(a0.toString());
+                debugLog("Not showing error dialog because mShowErrorDialogs==false. Error was: " +
+                        mSignInFailureReason);
             }
         }
     }
-    
+
     public void signOut() {
-        if (this.isSignedIn()) {
-            this.signOutWithoutCheck();
+        if (isSignedIn()) {
+            signOutWithoutCheck();
             return;
         }
-        ((sg.gumi.bravefrontier.GameService)this).debugLog("signOut: was already disconnected, ignoring.");
+        debugLog("signOut: was already disconnected, ignoring.");
     }
-    
+
     public void signOutWithoutCheck() {
-        ((sg.gumi.bravefrontier.GameService)this).debugLog("Disconnecting client.");
-        this.mConnectOnStart = false;
-        this.mConnecting = false;
-        this.mGoogleSignInClient.signOut();
-        sg.gumi.bravefrontier.GameService$GameHelperListener a = this.mListener;
-        if (a != null) {
-            a.onSignOutSucceeded();
+        debugLog("Disconnecting client.");
+        mConnectOnStart = false;
+        mConnecting = false;
+        mGoogleSignInClient.signOut();
+        if (mListener != null) {
+            mListener.onSignOutSucceeded();
         }
     }
-    
+
     public void unlockAchievement(String id) {
-        boolean b = this.isSignedIn();
-        label0: {
-            Throwable a = null;
-            label1: if (b) {
-                try {
-                    android.content.res.Resources a0 = ((sg.gumi.bravefrontier.GameService)this).getActivity().getResources();
-                    String s0 = a0.getString(a0.getIdentifier(id, "string", ((sg.gumi.bravefrontier.GameService)this).getActivity().getPackageName()));
-                    com.google.android.gms.games.Games.getAchievementsClient(this.mActivity, com.google.android.gms.auth.api.signin.GoogleSignIn.getLastSignedInAccount(this.mAppContext)).unlock(s0);
-                    com.google.android.gms.games.Games.getAchievementsClient(this.mActivity, com.google.android.gms.auth.api.signin.GoogleSignIn.getLastSignedInAccount(this.mAppContext)).load(false);
-                } catch(Throwable a1) {
-                    a = a1;
-                    break label1;
-                }
-                break label0;
-            } else {
-                android.content.SharedPreferences a2 = sg.gumi.bravefrontier.BraveFrontier.getAppContext().getSharedPreferences("GOOGLE_PLAY", 0);
-                android.content.SharedPreferences$Editor a3 = a2.edit();
-                String s1 = a2.getString("ACH", "");
-                if (!s1.equals((Object)"")) {
-                    StringBuilder a4 = new StringBuilder();
-                    a4.append(s1);
-                    a4.append(",");
-                    a4.append(id);
-                    id = a4.toString();
-                }
-                a3.putString("ACH", id);
-                a3.commit();
-                break label0;
+        if (isSignedIn()) {
+            try {
+                Resources res = getActivity().getResources();
+                String packageName = res.getString(res.getIdentifier(id, "string", getActivity().getPackageName()));
+                Games.getAchievementsClient(mActivity, GoogleSignIn.getLastSignedInAccount(mAppContext)).unlock(packageName);
+                Games.getAchievementsClient(mActivity, GoogleSignIn.getLastSignedInAccount(mAppContext)).load(false);
+            } catch(Throwable ex) {
+                ex.printStackTrace();
             }
-            a.printStackTrace();
+        } else {
+            SharedPreferences preferences = BraveFrontier.getAppContext().getSharedPreferences(GOOGLE_PLAY_PREF, 0);
+            SharedPreferences.Editor editor = preferences.edit();
+            String achievementKey = preferences.getString(GOOGLE_PLAY_ACHIEVEMENT_KEY, "");
+            if (!achievementKey.equals("")) {
+                id = achievementKey +
+                        "," +
+                        id;
+            }
+            editor.putString(GOOGLE_PLAY_ACHIEVEMENT_KEY, id);
+            editor.commit();
         }
     }
-    
-    public void updateLeaderboard(int i, String s) {
-        boolean b = this.isSignedIn();
-        label0: {
-            Throwable a = null;
-            label1: if (b) {
-                try {
-                    android.content.res.Resources a0 = ((sg.gumi.bravefrontier.GameService)this).getActivity().getResources();
-                    String s0 = a0.getString(a0.getIdentifier(s, "string", ((sg.gumi.bravefrontier.GameService)this).getActivity().getPackageName()));
-                    StringBuilder a1 = new StringBuilder();
-                    a1.append("updateLeaderboard id: ");
-                    a1.append(s);
-                    a1.append(", leaderboardID: ");
-                    a1.append(s0);
-                    a1.append(", score: ");
-                    a1.append(i);
-                    android.util.Log.d("GameHelper", a1.toString());
-                    com.google.android.gms.games.Games.getLeaderboardsClient(this.mActivity, com.google.android.gms.auth.api.signin.GoogleSignIn.getLastSignedInAccount(this.mAppContext)).submitScore(s0, (long)i);
-                } catch(Throwable a2) {
-                    a = a2;
-                    break label1;
-                }
-                break label0;
-            } else {
-                android.content.SharedPreferences$Editor a3 = sg.gumi.bravefrontier.BraveFrontier.getAppContext().getSharedPreferences("GOOGLE_PLAY", 0).edit();
-                a3.putInt(s, i);
-                a3.commit();
-                break label0;
+
+    public void updateLeaderboard(int value, String name) {
+        if (isSignedIn()) {
+            try {
+                Resources res = getActivity().getResources();
+                String leaderBoardValue = res.getString(res.getIdentifier(name, "string", getActivity().getPackageName()));
+                Log.d("GameHelper", "updateLeaderboard id: " +
+                        name +
+                        ", leaderboardID: " +
+                        leaderBoardValue +
+                        ", score: " +
+                        value);
+                Games.getLeaderboardsClient(mActivity, GoogleSignIn.getLastSignedInAccount(mAppContext)).submitScore(leaderBoardValue, value);
+            } catch(Throwable ex) {
+                ex.printStackTrace();
             }
-            a.printStackTrace();
+        } else {
+            SharedPreferences.Editor editor = BraveFrontier.getAppContext().getSharedPreferences(GOOGLE_PLAY_PREF, 0).edit();
+            editor.putInt(name, value);
+            editor.commit();
         }
     }
 }
