@@ -433,7 +433,7 @@ final public class BFWebView implements View.OnTouchListener, View.OnClickListen
             }
             if (browserButton == null) {
                 browserButton = new ImageButton(cocos2dxActivity);
-                browserButton.setImageResource(17301585);
+                browserButton.setImageResource(android.R.drawable.ic_menu_set_as);
             }
             browserButton.setLayoutParams(BFWebView.createHiddenLayoutParams());
             createWebViewContainer(browserButton);
