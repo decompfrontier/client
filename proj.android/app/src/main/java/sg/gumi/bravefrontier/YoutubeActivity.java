@@ -1,91 +1,179 @@
 package sg.gumi.bravefrontier;
 
-public class YoutubeActivity extends sg.gumi.bravefrontier.YouTubeFailureRecoveryActivity {
+import android.os.Bundle;
+import android.util.Log;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
+
+public class YoutubeActivity extends YouTubeFailureRecoveryActivity {
+
+    final static class MyPlaybackEventListener implements YouTubePlayer.PlaybackEventListener {
+        final YoutubeActivity activity;
+
+        private MyPlaybackEventListener(sg.gumi.bravefrontier.YoutubeActivity activity) {
+            super();
+            this.activity = activity;
+        }
+
+        public void onBuffering(boolean enableBuffer) {
+            YoutubeActivity.setPlaybackState(enableBuffer ? "(BUFFERING)" : "");
+            Log.v("Youtube", YoutubeActivity.getPlaybackState());
+        }
+
+        public void onPaused() {
+            YoutubeActivity.setPlaybackState("PAUSED");
+            Log.v("Youtube", YoutubeActivity.getPlaybackState());
+            BraveFrontierJNI.videoSkippedCallback();
+            YoutubeActivity.getPlayer(activity).release();
+            YoutubeActivity.setPlayer(activity, null);
+            activity.finish();
+        }
+
+        public void onPlaying() {
+            YoutubeActivity.setPlaybackState("PLAYING");
+            Log.v("Youtube", YoutubeActivity.getPlaybackState());
+        }
+
+        public void onSeekTo(int i) {
+            String s = sg.gumi.bravefrontier.YoutubeActivity.access$400(this.activity, i);
+            sg.gumi.bravefrontier.YoutubeActivity a = this.activity;
+            Object[] a0 = new Object[2];
+            a0[0] = s;
+            a0[1] = sg.gumi.bravefrontier.YoutubeActivity.access$400(a, sg.gumi.bravefrontier.YoutubeActivity.getPlayer(a).getDurationMillis());
+            android.util.Log.v("YoutubeActivity", String.format("\tSEEKTO: (%s/%s)", a0));
+        }
+
+        public void onStopped() {
+            YoutubeActivity.setPlaybackState("STOPPED");
+            Log.v("Youtube", YoutubeActivity.getPlaybackState());
+        }
+    }
+
+    final static class MyPlayerStateChangeListener implements YouTubePlayer.PlayerStateChangeListener {
+        final YoutubeActivity activity;
+
+        private MyPlayerStateChangeListener(YoutubeActivity activity) {
+            super();
+            this.activity = activity;
+        }
+
+        public void onAdStarted() {
+            YoutubeActivity.setPlayerState("AD_STARTED");
+            Log.v("Youtube", YoutubeActivity.getPlayerState());
+        }
+
+        public void onError(YouTubePlayer.ErrorReason reason) {
+            YoutubeActivity.setPlayerState("ERROR (" +
+                    reason +
+                    ")");
+            BraveFrontierJNI.videoSkippedCallback();
+            YoutubeActivity.getPlayer(activity).release();
+            YoutubeActivity.setPlayer(activity, null);
+            activity.finish();
+            Log.v("Youtube", YoutubeActivity.getPlayerState());
+        }
+
+        public void onLoaded(String paramString) {
+            YoutubeActivity.setPlayerState(String.format("LOADED %s", paramString));
+            Log.v("Youtube", YoutubeActivity.getPlayerState());
+        }
+
+        public void onLoading() {
+            YoutubeActivity.setPlayerState("LOADING");
+            Log.v("Youtube", YoutubeActivity.getPlayerState());
+        }
+
+        public void onVideoEnded() {
+            YoutubeActivity.setPlayerState("VIDEO_ENDED");
+            Log.v("Youtube", YoutubeActivity.getPlayerState());
+            BraveFrontierJNI.videoFinishedCallback();
+            YoutubeActivity.getPlayer(activity).release();
+            YoutubeActivity.setPlayer(activity, null);
+            activity.finish();
+        }
+
+        public void onVideoStarted() {
+            YoutubeActivity.setPlayerState("VIDEO_STARTED");
+            Log.v("Youtube", YoutubeActivity.getPlayerState());
+        }
+    }
+
     public static String VIDEO_ID = "";
     private static String playbackState = "";
     private static String playerState = "";
-    private sg.gumi.bravefrontier.YoutubeActivity$MyPlaybackEventListener playbackEventListener;
-    private com.google.android.youtube.player.YouTubePlayer player;
-    private sg.gumi.bravefrontier.YoutubeActivity$MyPlayerStateChangeListener playerStateChangeListener;
-    
-    static {
-    }
-    
+    private MyPlaybackEventListener playbackEventListener;
+    private YouTubePlayer player;
+    private MyPlayerStateChangeListener playerStateChangeListener;
+
     public YoutubeActivity() {
     }
     
-    static String access$200() {
+    static String getPlaybackState() {
         return playbackState;
     }
     
-    static String access$202(String s) {
-        playbackState = s;
-        return s;
+    static String setPlaybackState(String playbackState) {
+        YoutubeActivity.playbackState = playbackState;
+        return playbackState;
     }
     
-    static com.google.android.youtube.player.YouTubePlayer access$300(sg.gumi.bravefrontier.YoutubeActivity a) {
-        return a.player;
+    static YouTubePlayer getPlayer(YoutubeActivity activity) {
+        return activity.player;
     }
     
-    static com.google.android.youtube.player.YouTubePlayer access$302(sg.gumi.bravefrontier.YoutubeActivity a, com.google.android.youtube.player.YouTubePlayer a0) {
-        a.player = a0;
-        return a0;
+    static YouTubePlayer setPlayer(YoutubeActivity activity, YouTubePlayer player) {
+        activity.player = player;
+        return player;
     }
     
-    static String access$400(sg.gumi.bravefrontier.YoutubeActivity a, int i) {
-        return a.formatTime(i);
+    static String access$400(YoutubeActivity activity, int i) {
+        return activity.formatTime(i);
     }
     
-    static String access$500() {
+    static String getPlayerState() {
         return playerState;
     }
     
-    static String access$502(String s) {
-        playerState = s;
-        return s;
+    static String setPlayerState(String playerState) {
+        YoutubeActivity.playerState = playerState;
+        return playerState;
     }
     
-    private String formatTime(int i) {
-        String s = null;
-        int i0 = i / 1000;
-        int i1 = i0 / 60;
-        int i2 = i1 / 60;
-        StringBuilder a = new StringBuilder();
-        if (i2 != 0) {
-            StringBuilder a0 = new StringBuilder();
-            a0.append(i2);
-            a0.append(":");
-            s = a0.toString();
+    private String formatTime(int ms) {
+        String hoursStr = null;
+        int seconds = ms / 1000;
+        int minutes = seconds / 60;
+        int hours = minutes / 60;
+        StringBuilder builder = new StringBuilder();
+        if (hours != 0) {
+            hoursStr = hours + ":";
         } else {
-            s = "";
+            hoursStr = "";
         }
-        a.append(s);
-        Object[] a1 = new Object[2];
-        a1[0] = Integer.valueOf(i1 % 60);
-        a1[1] = Integer.valueOf(i0 % 60);
-        a.append(String.format("%02d:%02d", a1));
-        return a.toString();
+        builder.append(hoursStr);
+        builder.append(String.format("%02d:%02d", minutes % 60, seconds % 60));
+        return builder.toString();
     }
     
-    protected com.google.android.youtube.player.YouTubePlayer$Provider getYouTubePlayerProvider() {
-        return (com.google.android.youtube.player.YouTubePlayer$Provider)(Object)(com.google.android.youtube.player.YouTubePlayerView)((android.app.Activity)this).findViewById(2131165408);
+    protected YouTubePlayer.Provider getYouTubePlayerProvider() {
+        return findViewById(2131165408);
     }
     
-    public void onCreate(android.os.Bundle a) {
-        ((com.google.android.youtube.player.YouTubeBaseActivity)this).onCreate(a);
-        ((android.app.Activity)this).setContentView(2131361849);
-        ((com.google.android.youtube.player.YouTubePlayerView)((android.app.Activity)this).findViewById(2131165408)).initialize("AIzaSyBpm9ijwTe3-T-4UsW2Z4XsuouGusEDPIE", (com.google.android.youtube.player.YouTubePlayer$OnInitializedListener)(Object)this);
-        this.playerStateChangeListener = new sg.gumi.bravefrontier.YoutubeActivity$MyPlayerStateChangeListener(this, (sg.gumi.bravefrontier.YoutubeActivity$1)null);
-        this.playbackEventListener = new sg.gumi.bravefrontier.YoutubeActivity$MyPlaybackEventListener(this, (sg.gumi.bravefrontier.YoutubeActivity$1)null);
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        setContentView(2131361849);
+        ((YouTubePlayerView)findViewById(2131165408)).initialize(DeveloperKey.DEVELOPER_KEY, this);
+        playerStateChangeListener = new MyPlayerStateChangeListener(this);
+        playbackEventListener = new MyPlaybackEventListener(this);
     }
     
-    public void onInitializationSuccess(com.google.android.youtube.player.YouTubePlayer$Provider a, com.google.android.youtube.player.YouTubePlayer a0, boolean b) {
-        this.player = a0;
-        a0.setPlayerStateChangeListener((com.google.android.youtube.player.YouTubePlayer$PlayerStateChangeListener)(Object)this.playerStateChangeListener);
-        a0.setPlaybackEventListener((com.google.android.youtube.player.YouTubePlayer$PlaybackEventListener)(Object)this.playbackEventListener);
-        a0.loadVideo(VIDEO_ID);
-        a0.setFullscreen(true);
-        a0.setShowFullscreenButton(false);
-        a0.setPlayerStyle(com.google.android.youtube.player.YouTubePlayer$PlayerStyle.MINIMAL);
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean unk) {
+        this.player = player;
+        player.setPlayerStateChangeListener(playerStateChangeListener);
+        player.setPlaybackEventListener(playbackEventListener);
+        player.loadVideo(VIDEO_ID);
+        player.setFullscreen(true);
+        player.setShowFullscreenButton(false);
+        player.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
     }
 }

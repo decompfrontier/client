@@ -1,7 +1,9 @@
 package sg.gumi.bravefrontier;
 
+import android.util.Log;
 import androidx.multidex.MultiDexApplication;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /*import com.appsflyer.AppsFlyerLib;
@@ -18,44 +20,21 @@ public class AFApplication extends MultiDexApplication {
         }
 
         public void onAppOpenAttribution(Map<String, String> map) {
-            java.util.Iterator a0 = map.keySet().iterator();
-            Object a1 = map;
-            Object a2 = a0;
-
-            while(((java.util.Iterator)a2).hasNext()) {
-                String s = (String)((java.util.Iterator)a2).next();
-                StringBuilder a3 = new StringBuilder();
-                a3.append("attribute: ");
-                a3.append(s);
-                a3.append(" = ");
-                a3.append((String)((java.util.Map)a1).get((Object)s));
-                android.util.Log.d("LOG_TAG", a3.toString());
-            }
+            map.forEach((k, v) -> Log.d("LOG_TAG", "attribute: " + k + " = " + v));
         }
 
         public void onAttributionFailure(String error) {
-            android.util.Log.d("LOG_TAG", "error onAttributionFailure : " +
+            Log.d("LOG_TAG", "error onAttributionFailure : " +
                     error);
         }
 
         public void onConversionDataFail(String error) {
-            android.util.Log.d("LOG_TAG", "error getting conversion data: " +
+            Log.d("LOG_TAG", "error getting conversion data: " +
                     error);
         }
 
-        public void onConversionDataSuccess(Map<String, String> map) {
-            java.util.Iterator a0 = map.keySet().iterator();
-            Object a1 = map;
-            Object a2 = a0;
-            while(((java.util.Iterator)a2).hasNext()) {
-                String s = (String)((java.util.Iterator)a2).next();
-                StringBuilder a3 = new StringBuilder();
-                a3.append("attribute: ");
-                a3.append(s);
-                a3.append(" = ");
-                a3.append(((java.util.Map)a1).get((Object)s));
-                android.util.Log.d("LOG_TAG", a3.toString());
-            }
+        public void onConversionDataSuccess(Map<String, String> kv) {
+            kv.forEach((k, v) -> Log.d("LOG_TAG", "attribute: " + k + " = " + v));
         }
     }
 
@@ -71,7 +50,8 @@ public class AFApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-        /*try {
+        /* we do not have appsflyer
+        try {
             AFListener listener = new AFListener(this);
             AppsFlyerLib.getInstance().init("WMa4kPf8ZdvNhcpvdpwAvE", listener, this);
             AppsFlyerLib.getInstance().setCollectIMEI(false);
@@ -79,15 +59,15 @@ public class AFApplication extends MultiDexApplication {
             appsflyerInitialized = true;
         } catch(Throwable ignoredException) {
             appsflyerInitialized = false;
-        }*/
+        }
+        */
 
-        if (appsflyerInitialized && sg.gumi.bravefrontier.BraveFrontier.getActivity() != null) {
-            String a0 = "Custom_Event_Arch_" +
+        if (appsflyerInitialized && BraveFrontier.getActivity() != null) {
+            String key = "Custom_Event_Arch_" +
                     BraveFrontier.getDeviceArchitecture();
-            String s = new String(a0);
-            java.util.HashMap a1 = new java.util.HashMap();
-            a1.put((Object)s, (Object)sg.gumi.bravefrontier.BraveFrontier.getDeviceArchitecture());
-            AppsFlyerLib.getInstance().logEvent(((android.app.Activity)sg.gumi.bravefrontier.BraveFrontier.getActivity()).getApplicationContext(), s, (java.util.Map)(Object)a1);
+            HashMap<String, String> keys = new HashMap<>();
+            keys.put(key, BraveFrontier.getDeviceArchitecture());
+            //AppsFlyerLib.getInstance().logEvent(BraveFrontier.getActivity().getApplicationContext(), key, keys);
         }
     }
 }

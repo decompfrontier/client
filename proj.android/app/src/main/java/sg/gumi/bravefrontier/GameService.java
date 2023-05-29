@@ -3,6 +3,7 @@ package sg.gumi.bravefrontier;
 import android.app.Activity;
 import static sg.gumi.util.BFConfig.*;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.util.Log;
 import com.google.android.gms.analytics.HitBuilders;
@@ -207,7 +208,7 @@ abstract public class GameService {
     }
     
     final public void showAlert(String title, String message) {
-        new android.app.AlertDialog.Builder(this.getActivity()).setTitle(title).setMessage(message).setNeutralButton(17039370, null).create().show();
+        new AlertDialog.Builder(this.getActivity()).setTitle(title).setMessage(message).setNeutralButton(17039370, null).create().show();
     }
     
     public void showPlayPhoneButton(boolean visible) {

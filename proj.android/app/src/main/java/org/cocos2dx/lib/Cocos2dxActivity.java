@@ -107,7 +107,17 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	
+
+
+	/**
+	 * Gets the OpenGL surface view
+	 * @return OpenGL view
+	 * @note THIS CODE IS __DECOMP__, IT DOES NOT EXIST IN THE NORMAL COCOS2DX!!!
+	 */
+	public Cocos2dxGLSurfaceView getGLView() {
+		return mGLSurefaceView;
+	}
+
     public void init() {
     	// Init handler
     	this.mHandler = new Cocos2dxHandler(this);

@@ -84,16 +84,16 @@ public class BFVideoView extends android.widget.VideoView {
         }
     }
     
-    public void playVideo(String s, boolean b) {
-        android.util.Log.d("Video Activity File Name", s);
+    public void playVideo(String fileName, boolean closeOnTouch) {
+        android.util.Log.d("Video Activity File Name", fileName);
         android.view.Display a = ((android.app.Activity)this.mActivity).getWindowManager().getDefaultDisplay();
         android.graphics.Point a0 = new android.graphics.Point();
         a.getSize(a0);
         int i = a0.x;
         int i0 = a0.y;
-        sg.gumi.bravefrontier.video.VideoEngine a1 = new sg.gumi.bravefrontier.video.VideoEngine(this.mActivity, this, s, i, i0);
+        sg.gumi.bravefrontier.video.VideoEngine a1 = new sg.gumi.bravefrontier.video.VideoEngine(this.mActivity, this, fileName, i, i0);
         this.mVideoEngine = a1;
-        a1.setVideoCloseOnTouch(b);
+        a1.setVideoCloseOnTouch(closeOnTouch);
         this.mVideoEngine.start();
     }
     
