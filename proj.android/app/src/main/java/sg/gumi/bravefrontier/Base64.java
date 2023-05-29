@@ -86,12 +86,12 @@ public class Base64 {
         }
     }
     
-    final public static byte[] decode(byte[] a) {
-        int i = a.length;
+    final public static byte[] decode(byte[] data) {
+        int i = data.length;
         int i0 = 0;
         int i1 = 0;
         for(; i0 < i; i0 = i0 + 1) {
-            if (IA[(int)a[i0] & 255] < 0) {
+            if (IA[(int)data[i0] & 255] < 0) {
                 i1 = i1 + 1;
             }
         }
@@ -105,8 +105,8 @@ public class Base64 {
             if (i > 1) {
                 int[] a1 = IA;
                 i = i - 1;
-                if (a1[(int)a[i] & 255] <= 0) {
-                    if ((int)a[i] != 61) {
+                if (a1[(int)data[i] & 255] <= 0) {
+                    if ((int)data[i] != 61) {
                         continue label0;
                     }
                     i3 = i3 + 1;
@@ -121,7 +121,7 @@ public class Base64 {
                 int i7 = 0;
                 int i8 = 0;
                 while(i8 < 4) {
-                    int i9 = IA[(int)a[i6] & 255];
+                    int i9 = IA[(int)data[i6] & 255];
                     if (i9 < 0) {
                         i8 = i8 + -1;
                     } else {
@@ -149,15 +149,15 @@ public class Base64 {
         }
     }
     
-    final public static byte[] decode(char[] a) {
-        int i = (a == null) ? 0 : a.length;
+    final public static byte[] decode(char[] data) {
+        int i = (data == null) ? 0 : data.length;
         if (i == 0) {
             return new byte[0];
         }
         int i0 = 0;
         int i1 = 0;
         for(; i0 < i; i0 = i0 + 1) {
-            if (IA[(int)a[i0]] < 0) {
+            if (IA[(int)data[i0]] < 0) {
                 i1 = i1 + 1;
             }
         }
@@ -171,8 +171,8 @@ public class Base64 {
             if (i > 1) {
                 int[] a1 = IA;
                 i = i - 1;
-                if (a1[(int)a[i]] <= 0) {
-                    if ((int)a[i] != 61) {
+                if (a1[(int)data[i]] <= 0) {
+                    if ((int)data[i] != 61) {
                         continue label0;
                     }
                     i3 = i3 + 1;
@@ -187,7 +187,7 @@ public class Base64 {
                 int i7 = 0;
                 int i8 = 0;
                 while(i7 < 4) {
-                    int i9 = IA[(int)a[i6]];
+                    int i9 = IA[(int)data[i6]];
                     if (i9 < 0) {
                         i7 = i7 + -1;
                     } else {
@@ -215,26 +215,26 @@ public class Base64 {
         }
     }
     
-    final public static byte[] decodeFast(String s) {
-        int i = s.length();
+    final public static byte[] decodeFast(String data) {
+        int i = data.length();
         if (i == 0) {
             return new byte[0];
         }
         int i0 = i - 1;
         int i1 = 0;
         label3: while(true) {
-            if (i1 < i0 && IA[(int)s.charAt(i1) & 255] < 0) {
+            if (i1 < i0 && IA[(int)data.charAt(i1) & 255] < 0) {
                 i1 = i1 + 1;
                 continue label3;
             }
             label2: while(true) {
-                if (i0 > 0 && IA[(int)s.charAt(i0) & 255] < 0) {
+                if (i0 > 0 && IA[(int)data.charAt(i0) & 255] < 0) {
                     i0 = i0 + -1;
                     continue label2;
                 }
-                int i2 = ((int)s.charAt(i0) != 61) ? 0 : ((int)s.charAt(i0 - 1) != 61) ? 1 : 2;
+                int i2 = ((int)data.charAt(i0) != 61) ? 0 : ((int)data.charAt(i0 - 1) != 61) ? 1 : 2;
                 int i3 = i0 - i1 + 1;
-                int i4 = (i <= 76) ? 0 : (((int)s.charAt(76) != 13) ? 0 : i3 / 78) << 1;
+                int i4 = (i <= 76) ? 0 : (((int)data.charAt(76) != 13) ? 0 : i3 / 78) << 1;
                 int i5 = ((i3 - i4) * 6 >> 3) - i2;
                 byte[] a = new byte[i5];
                 int i6 = i5 / 3;
@@ -243,16 +243,16 @@ public class Base64 {
                 while(i7 < i6 * 3) {
                     int[] a0 = IA;
                     int i9 = i1 + 1;
-                    int i10 = a0[(int)s.charAt(i1)];
+                    int i10 = a0[(int)data.charAt(i1)];
                     int[] a1 = IA;
                     int i11 = i9 + 1;
-                    int i12 = a1[(int)s.charAt(i9)];
+                    int i12 = a1[(int)data.charAt(i9)];
                     int[] a2 = IA;
                     int i13 = i11 + 1;
-                    int i14 = a2[(int)s.charAt(i11)];
+                    int i14 = a2[(int)data.charAt(i11)];
                     int[] a3 = IA;
                     i1 = i13 + 1;
-                    int i15 = i10 << 18 | i12 << 12 | i14 << 6 | a3[(int)s.charAt(i13)];
+                    int i15 = i10 << 18 | i12 << 12 | i14 << 6 | a3[(int)data.charAt(i13)];
                     int i16 = i7 + 1;
                     a[i7] = (byte)(int)(byte)(int)(byte)(i15 >> 16);
                     int i17 = i16 + 1;
@@ -280,7 +280,7 @@ public class Base64 {
                     int i18 = 0;
                     int i19 = 0;
                     for(; i1 <= i0 - i2; i1 = i1 + 1) {
-                        i18 = i18 | IA[(int)s.charAt(i1)] << 18 - i19 * 6;
+                        i18 = i18 | IA[(int)data.charAt(i1)] << 18 - i19 * 6;
                         i19 = i19 + 1;
                     }
                     int i20 = 16;
@@ -294,26 +294,26 @@ public class Base64 {
         }
     }
     
-    final public static byte[] decodeFast(byte[] a) {
-        int i = a.length;
+    final public static byte[] decodeFast(byte[] data) {
+        int i = data.length;
         if (i == 0) {
             return new byte[0];
         }
         int i0 = i - 1;
         int i1 = 0;
         label3: while(true) {
-            if (i1 < i0 && IA[(int)a[i1] & 255] < 0) {
+            if (i1 < i0 && IA[(int)data[i1] & 255] < 0) {
                 i1 = i1 + 1;
                 continue label3;
             }
             label2: while(true) {
-                if (i0 > 0 && IA[(int)a[i0] & 255] < 0) {
+                if (i0 > 0 && IA[(int)data[i0] & 255] < 0) {
                     i0 = i0 + -1;
                     continue label2;
                 }
-                int i2 = ((int)a[i0] != 61) ? 0 : ((int)a[i0 - 1] != 61) ? 1 : 2;
+                int i2 = ((int)data[i0] != 61) ? 0 : ((int)data[i0 - 1] != 61) ? 1 : 2;
                 int i3 = i0 - i1 + 1;
-                int i4 = (i <= 76) ? 0 : (((int)a[76] != 13) ? 0 : i3 / 78) << 1;
+                int i4 = (i <= 76) ? 0 : (((int)data[76] != 13) ? 0 : i3 / 78) << 1;
                 int i5 = ((i3 - i4) * 6 >> 3) - i2;
                 byte[] a0 = new byte[i5];
                 int i6 = i5 / 3;
@@ -322,13 +322,13 @@ public class Base64 {
                 while(i7 < i6 * 3) {
                     int[] a1 = IA;
                     int i9 = i1 + 1;
-                    int i10 = a1[(int)a[i1]];
+                    int i10 = a1[(int)data[i1]];
                     int i11 = i9 + 1;
-                    int i12 = a1[(int)a[i9]];
+                    int i12 = a1[(int)data[i9]];
                     int i13 = i11 + 1;
-                    int i14 = a1[(int)a[i11]];
+                    int i14 = a1[(int)data[i11]];
                     i1 = i13 + 1;
-                    int i15 = i10 << 18 | i12 << 12 | i14 << 6 | a1[(int)a[i13]];
+                    int i15 = i10 << 18 | i12 << 12 | i14 << 6 | a1[(int)data[i13]];
                     int i16 = i7 + 1;
                     a0[i7] = (byte)(int)(byte)(int)(byte)(i15 >> 16);
                     int i17 = i16 + 1;
@@ -356,7 +356,7 @@ public class Base64 {
                     int i18 = 0;
                     int i19 = 0;
                     for(; i1 <= i0 - i2; i1 = i1 + 1) {
-                        i18 = i18 | IA[(int)a[i1]] << 18 - i19 * 6;
+                        i18 = i18 | IA[(int)data[i1]] << 18 - i19 * 6;
                         i19 = i19 + 1;
                     }
                     int i20 = 16;
@@ -370,26 +370,26 @@ public class Base64 {
         }
     }
     
-    final public static byte[] decodeFast(char[] a) {
-        int i = a.length;
+    final public static byte[] decodeFast(char[] data) {
+        int i = data.length;
         if (i == 0) {
             return new byte[0];
         }
         int i0 = i - 1;
         int i1 = 0;
         label3: while(true) {
-            if (i1 < i0 && IA[(int)a[i1]] < 0) {
+            if (i1 < i0 && IA[(int)data[i1]] < 0) {
                 i1 = i1 + 1;
                 continue label3;
             }
             label2: while(true) {
-                if (i0 > 0 && IA[(int)a[i0]] < 0) {
+                if (i0 > 0 && IA[(int)data[i0]] < 0) {
                     i0 = i0 + -1;
                     continue label2;
                 }
-                int i2 = ((int)a[i0] != 61) ? 0 : ((int)a[i0 - 1] != 61) ? 1 : 2;
+                int i2 = ((int)data[i0] != 61) ? 0 : ((int)data[i0 - 1] != 61) ? 1 : 2;
                 int i3 = i0 - i1 + 1;
-                int i4 = (i <= 76) ? 0 : (((int)a[76] != 13) ? 0 : i3 / 78) << 1;
+                int i4 = (i <= 76) ? 0 : (((int)data[76] != 13) ? 0 : i3 / 78) << 1;
                 int i5 = ((i3 - i4) * 6 >> 3) - i2;
                 byte[] a0 = new byte[i5];
                 int i6 = i5 / 3;
@@ -398,13 +398,13 @@ public class Base64 {
                 while(i7 < i6 * 3) {
                     int[] a1 = IA;
                     int i9 = i1 + 1;
-                    int i10 = a1[(int)a[i1]];
+                    int i10 = a1[(int)data[i1]];
                     int i11 = i9 + 1;
-                    int i12 = a1[(int)a[i9]];
+                    int i12 = a1[(int)data[i9]];
                     int i13 = i11 + 1;
-                    int i14 = a1[(int)a[i11]];
+                    int i14 = a1[(int)data[i11]];
                     i1 = i13 + 1;
-                    int i15 = i10 << 18 | i12 << 12 | i14 << 6 | a1[(int)a[i13]];
+                    int i15 = i10 << 18 | i12 << 12 | i14 << 6 | a1[(int)data[i13]];
                     int i16 = i7 + 1;
                     a0[i7] = (byte)(int)(byte)(int)(byte)(i15 >> 16);
                     int i17 = i16 + 1;
@@ -432,7 +432,7 @@ public class Base64 {
                     int i18 = 0;
                     int i19 = 0;
                     for(; i1 <= i0 - i2; i1 = i1 + 1) {
-                        i18 = i18 | IA[(int)a[i1]] << 18 - i19 * 6;
+                        i18 = i18 | IA[(int)data[i1]] << 18 - i19 * 6;
                         i19 = i19 + 1;
                     }
                     int i20 = 16;

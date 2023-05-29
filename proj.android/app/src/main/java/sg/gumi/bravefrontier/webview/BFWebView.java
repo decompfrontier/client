@@ -1,6 +1,8 @@
 package sg.gumi.bravefrontier.webview;
 
+import android.util.Log;
 import android.view.View;
+import static android.os.Build.*;
 
 final public class BFWebView implements View.OnTouchListener, View.OnClickListener {
     final private static String CACHE_DATABASE_FILE = "webviewCache.db";
@@ -421,7 +423,7 @@ final public class BFWebView implements View.OnTouchListener, View.OnClickListen
         StringBuilder a = new StringBuilder();
         a.append("Showing webview: ");
         a.append(s);
-        android.util.Log.d("BFWebView", a.toString());
+        Log.d("BFWebView", a.toString());
         double d = (double)this.phoneWidth;
         Double.isNaN(d);
         float f3 = (float)(d / 320.0);
@@ -431,12 +433,12 @@ final public class BFWebView implements View.OnTouchListener, View.OnClickListen
         int i = (int)(((float)this.phoneWidth - 320f * f4) / 2f);
         int i0 = (int)(((float)this.phoneHeight - 480f * f4) / 2f);
         float f5 = (float)(int)(f * f4);
-        if (android.os.Build$VERSION.SDK_INT < 19) {
+        if (VERSION.SDK_INT < 19) {
             f5 = f5 + (float)i;
         }
         float f6 = (float)(int)(f1 * f4);
         float f7 = (float)(int)(f0 * f4);
-        if (android.os.Build$VERSION.SDK_INT < 19) {
+        if (VERSION.SDK_INT < 19) {
             f7 = f7 + (float)i0;
         }
         float f8 = (float)(int)(f2 * f4);
@@ -453,7 +455,7 @@ final public class BFWebView implements View.OnTouchListener, View.OnClickListen
         if (this.webView == null) {
             a0.taskType = 101;
         }
-        ((android.app.Activity)this.cocos2dxActivity).runOnUiThread((Runnable)(Object)a0);
+        cocos2dxActivity.runOnUiThread((Runnable)(Object)a0);
     }
     
     private void showWebViewTask(Object a) {

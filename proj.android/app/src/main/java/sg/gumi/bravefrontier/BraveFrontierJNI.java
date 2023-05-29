@@ -2,25 +2,36 @@ package sg.gumi.bravefrontier;
 
 import android.app.ActivityManager;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.*;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.TextView;
+import androidx.core.app.ActivityCompat;
 import org.cocos2dx.lib.Cocos2dxActivity;
+import sg.gumi.bravefrontier.video.BFVideoView;
 import sg.gumi.bravefrontier.webview.BFWebView;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
 import static sg.gumi.util.BFConfig.*;
 import static android.os.Build.*;
 
@@ -39,64 +50,178 @@ public class BraveFrontierJNI {
         }
     }
 
+    static class PlayVideoWithOptionTask implements Runnable {
+        final String fileName;
+        final boolean closeWhenTouch;
+
+        PlayVideoWithOptionTask(String fileName, boolean close) {
+            super();
+            this.fileName = fileName;
+            this.closeWhenTouch = close;
+
+        }
+
+        public void run() {
+            BFVideoView.getInstance(BraveFrontierJNI.getActivity()).playVideo(fileName, closeWhenTouch);
+        }
+    }
+
+    static class ShowRatePopupTask implements Runnable {
+
+        static class BtnClose implements DialogInterface.OnClickListener {
+            final ShowRatePopupTask popup;
+
+            BtnClose(ShowRatePopupTask popup) {
+                super();
+                this.popup = popup;
+            }
+
+            public void onClick(DialogInterface dialogInterface, int i) {
+                sg.gumi.bravefrontier.BraveFrontierJNI.nativeRateThisAppPopupCallback(1);
+            }
+        }
+
+
+
+        static class BtnOk implements DialogInterface.OnClickListener {
+            final ShowRatePopupTask popup;
+            final android.content.Context context;
+
+            BtnOk(ShowRatePopupTask popupTask, Context context) {
+                super();
+                this.popup = popupTask;
+                this.context = context;
+            }
+
+            public void onClick(android.content.DialogInterface dialogInterface, int i) {
+                String reviewUrl = null;
+                if (PLATFORM != PLATFORM_AMAZON) {
+                    if (PLATFORM != PLATFORM_SAMSUNG) {
+                        reviewUrl = "market://details?id=" +
+                                context.getPackageName();
+                    } else {
+                        reviewUrl = "samsungapps://ProductDetail/" +
+                                context.getPackageName();
+                    }
+                } else {
+                    reviewUrl = "amzn://apps/android?p=" +
+                            context.getPackageName();
+                }
+                Log.v("MARKET-URL", reviewUrl);
+                Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(reviewUrl));
+                BraveFrontierJNI.getActivity().startActivity(intent);
+                BraveFrontierJNI.nativeRateThisAppPopupCallback(0);
+            }
+        }
+
+        final String body;
+        final String btn1Text;
+        final String btn2Text;
+        final String title;
+
+        ShowRatePopupTask(String body, String title, String btn1Text, String btn2Text) {
+            super();
+            this.body = body;
+            this.title = title;
+            this.btn1Text = btn1Text;
+            this.btn2Text = btn2Text;
+        }
+
+        public void run() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(BraveFrontierJNI.getActivity());
+            TextView textView = new TextView(BraveFrontierJNI.getActivity().getApplicationContext());
+            textView.setPadding(10, 10, 10, 10);
+            textView.setGravity(17);
+            textView.setTextColor(-1);
+            textView.setTextSize(20f);
+            builder.setCustomTitle(textView);
+            if (PLATFORM != PLATFORM_AMAZON) {
+                builder.setMessage(body);
+            } else {
+                builder.setMessage(BraveFrontierJNI.replaceGooglePlayStoreName(body, "Amazon Appstore", "Amazon"));
+            }
+            textView.setText(title);
+            builder.setPositiveButton(btn1Text, new BtnOk(this, BraveFrontierJNI.getActivity().getApplicationContext()));
+            builder.setNegativeButton(btn2Text, new BtnClose(this));
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            try {
+                ((TextView)dialog.findViewById(16908299)).setGravity(17);
+            } catch(Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+
+    static class PlayVideoTask implements Runnable {
+        final String fileName;
+
+        PlayVideoTask(String fileName) {
+            super();
+            this.fileName = fileName;
+
+        }
+
+        public void run() {
+            BFVideoView.getInstance(BraveFrontierJNI.getActivity()).playVideo(fileName, false);
+        }
+    }
+
 
     static class unpackNoDlcTask implements Runnable {
 
         public void run() {
-            String s = sg.gumi.bravefrontier.BraveFrontierJNI.getWritablePath();
-            label0: {
-                java.io.InputStream a = null;
-                label2: {
-                    label1: {
-                        try {
-                            a = null;
-                            a = ((android.app.Activity)sg.gumi.bravefrontier.BraveFrontierJNI.getActivity()).getResources().getAssets().open("NoDLCRes.zip");
-                            java.util.zip.ZipInputStream a0 = new java.util.zip.ZipInputStream(a);
-                            while(true) {
-                                java.util.zip.ZipEntry a1 = a0.getNextEntry();
-                                if (a1 == null) {
-                                    break;
-                                }
-                                if (!a1.isDirectory()) {
-                                    StringBuilder a2 = new StringBuilder();
-                                    a2.append(s);
-                                    a2.append("/");
-                                    a2.append(a1.getName().replace((CharSequence)(Object)"NoDLCRes", (CharSequence)(Object)""));
-                                    java.io.FileOutputStream a3 = new java.io.FileOutputStream(a2.toString());
-                                    byte[] a4 = new byte[4096];
-                                    while(true) {
-                                        int i = a0.read(a4);
-                                        if (i <= 0) {
-                                            a0.closeEntry();
-                                            a3.close();
-                                            break;
-                                        } else {
-                                            a3.write(a4, 0, i);
-                                        }
-                                    }
-                                }
+            String basePath = BraveFrontierJNI.getWritablePath();
+            InputStream dlcResZip = null;
+
+            try {
+                dlcResZip = BraveFrontierJNI.getActivity().getResources().getAssets().open("NoDLCRes.zip");
+                ZipInputStream zipfile = new ZipInputStream(dlcResZip);
+                while (true) { // unpack all the zip file
+                    ZipEntry entry = zipfile.getNextEntry();
+                    if (entry == null) {
+                        break;
+                    }
+                    if (!entry.isDirectory()) {
+                        String writePath = basePath +
+                                "/" +
+                                entry.getName().replace("NoDLCRes", "");
+                        FileOutputStream writeFile = new FileOutputStream(writePath);
+                        byte[] dataBuffer = new byte[4096];
+                        while (true) {
+                            int i = zipfile.read(dataBuffer);
+                            if (i <= 0) {
+                                zipfile.closeEntry();
+                                writeFile.close();
+                                break;
+                            } else {
+                                writeFile.write(dataBuffer, 0, i);
                             }
-                            a0.close();
-                            sg.gumi.bravefrontier.BraveFrontierJNI.s_UnzipStatus = 0;
-                        } catch(Throwable ignoredException) {
-                            break label1;
                         }
-                        if (a == null) {
-                            break label0;
-                        }
-                        break label2;
                     }
-                    if (sg.gumi.bravefrontier.BraveFrontierJNI.s_UnzipStatus != 0) {
-                        sg.gumi.bravefrontier.BraveFrontierJNI.s_UnzipStatus = 2;
-                    }
-                    if (a == null) {
-                        break label0;
-                    }
+                }
+                zipfile.close();
+                BraveFrontierJNI.s_UnzipStatus = 0;
+            } catch (Throwable ignoredException) {
+                if (BraveFrontierJNI.s_UnzipStatus != 0) {
+                    BraveFrontierJNI.s_UnzipStatus = 2;
+                }
+                if (dlcResZip == null) {
+                    return;
                 }
                 try {
-                    a.close();
-                } catch(Throwable ignoredException0) {
+                    dlcResZip.close();
+                } catch (Throwable ignoredException0) {
                 }
+                return;
+            }
+            if (dlcResZip == null) {
+                return;
+            }
+            try {
+                dlcResZip.close();
+            } catch (Throwable ignoredException0) {
             }
         }
     }
@@ -119,6 +244,24 @@ public class BraveFrontierJNI {
         }
     }
 
+    static class PlayYoutubeVideoTask implements Runnable {
+        final String videoUrl;
+        final android.content.Context context;
+
+        PlayYoutubeVideoTask(String id, Context context) {
+            super();
+            this.videoUrl = id;
+            this.context = context;
+        }
+
+        public void run() {
+            YoutubeActivity.VIDEO_ID = this.videoUrl;
+            Intent intent = new Intent(context, YoutubeActivity.class);
+            BraveFrontierJNI.getActivity().startActivity(intent);
+        }
+    }
+
+
     final public static String PREFS_NAME_AUTH = "auth";
     final public static String PREFS_NAME_GAMEDATA = "gamedata";
     final private static String THAI_COMMON_WORDS = "(\u0e40\u0e1b\u0e47\u0e19|\u0e2d\u0e22\u0e39\u0e48|\u0e08\u0e30|\u0e43\u0e0a\u0e49|\u0e44\u0e14\u0e49|\u0e43\u0e2b\u0e49|\u0e43\u0e19|\u0e08\u0e36\u0e07|\u0e2b\u0e23\u0e37\u0e2d|\u0e41\u0e25\u0e30|\u0e01\u0e31\u0e1a|\u0e40\u0e19\u0e37\u0e48\u0e2d\u0e07|\u0e14\u0e49\u0e27\u0e22|\u0e16\u0e49\u0e32|\u0e41\u0e25\u0e49\u0e27|\u0e17\u0e31\u0e49\u0e07|\u0e40\u0e1e\u0e23\u0e32\u0e30|\u0e0b\u0e36\u0e48\u0e07|\u0e0b\u0e49\u0e33|\u0e44\u0e21\u0e48|\u0e43\u0e0a\u0e48|\u0e15\u0e49\u0e2d\u0e07|\u0e01\u0e31\u0e19|\u0e08\u0e32\u0e01|\u0e16\u0e36\u0e07|\u0e19\u0e31\u0e49\u0e19|\u0e1c\u0e39\u0e49|\u0e04\u0e27\u0e32\u0e21|\u0e2a\u0e48\u0e27\u0e19|\u0e22\u0e31\u0e07|\u0e17\u0e31\u0e48\u0e27|\u0e2d\u0e37\u0e48\u0e19|\u0e42\u0e14\u0e22|\u0e2a\u0e32\u0e21\u0e32\u0e23\u0e16|\u0e40\u0e17\u0e48\u0e32|\u0e43\u0e15\u0e49|\u0e43\u0e2a\u0e48|\u0e43\u0e14|\u0e44\u0e27\u0e49|\u0e43\u0e2b\u0e21\u0e48|\u0e43\u0e2b\u0e0d\u0e48|\u0e40\u0e25\u0e47\u0e01|\u0e43\u0e01\u0e25\u0e49|\u0e44\u0e01\u0e25|\u0e40\u0e02\u0e32|\u0e0a\u0e48\u0e27\u0e22|\u0e09\u0e1a\u0e31\u0e1a|\u0e04\u0e49\u0e19|\u0e40\u0e23\u0e47\u0e27|\u0e40\u0e02\u0e49\u0e32|\u0e40\u0e0a\u0e49\u0e32)";
@@ -133,6 +276,8 @@ public class BraveFrontierJNI {
     private static String deepLinkParam;
     private static Cocos2dxActivity mActivity;
     private static Pattern[] regexArray;
+
+    /* 0 = unzipped, 1 = zipped, 2 = error */
     static int s_UnzipStatus;
 
     static Cocos2dxActivity getActivity() {
@@ -142,18 +287,18 @@ public class BraveFrontierJNI {
     public static void appExit() {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
-    
+
     public static void appsflyerStartTracking() {
         BraveFrontier.appsflyerStartTracking();
     }
-    
+
     native public static void backButtonCallback();
-    
-    
+
+
     public static boolean canLaunchUrl(String url) {
         return BFWebView.canLaunchUrl(url);
     }
-    
+
     public static void cancelLocalNotifications() {
         Context context = mActivity.getApplicationContext();
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -165,28 +310,28 @@ public class BraveFrontierJNI {
         intent.setAction("NoLoginNotif");
         alarm.cancel(PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_ONE_SHOT));
     }
-    
+
     public static void clearApplicationData() {
         BraveFrontierJNI.deleteDir(mActivity.getBaseContext().getFilesDir());
     }
-    
+
     public static void clearDeepLinkParam() {
         deepLinkParam = null;
     }
-    
+
     public static void copyToClipboard(String stringToCopy) {
-       mActivity.runOnUiThread(new clipboardTask(stringToCopy));
+        mActivity.runOnUiThread(new clipboardTask(stringToCopy));
     }
-    
+
     public static void createLocalNotification(int seconds, String text, String action) {
-        Context context = ((android.opengl.GLSurfaceView)mActivity.getGLView()).getContext();
+        Context context = ((android.opengl.GLSurfaceView) mActivity.getGLView()).getContext();
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.SECOND, seconds);
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.putExtra("notification", text);
         intent.setAction(action);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        ((android.app.AlarmManager)context.getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+        ((android.app.AlarmManager) context.getSystemService(Context.ALARM_SERVICE)).set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
     }
 
     public static String decodeCStringForBase64(String data, String key) {
@@ -197,15 +342,15 @@ public class BraveFrontierJNI {
             Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
             aes.init(2, secKey);
             return new String(aes.doFinal(sg.gumi.bravefrontier.Base64.decode(data)));
-        } catch(Throwable ignoredException) {
+        } catch (Throwable ignoredException) {
             return "";
         }
 
     }
-    
+
     public static boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
-            for (String dd: dir.list()) {
+            for (String dd : dir.list()) {
                 if (!BraveFrontierJNI.deleteDir(new File(dir, dd))) {
                     return false;
                 }
@@ -213,79 +358,75 @@ public class BraveFrontierJNI {
         }
         return dir.delete();
     }
-    
+
     public static boolean deleteLocalFiles() {
-        for (String file: mActivity.fileList()) {
+        for (String file : mActivity.fileList()) {
             mActivity.deleteFile(file);
         }
         return true;
     }
-    
+
     public static String dictionaryWordBreak(String wordDict) {
-        label0: {
-            if (wordDict != null && wordDict.length() != 0) {
-                if (regexArray == null) {
-                    try {
-                        java.util.regex.Pattern[] a = new java.util.regex.Pattern[5];
-                        a[0] = java.util.regex.Pattern.compile(THAI_REGEX_0);
-                        a[1] = java.util.regex.Pattern.compile(THAI_REGEX_1);
-                        a[2] = java.util.regex.Pattern.compile(THAI_REGEX_2);
-                        a[3] = java.util.regex.Pattern.compile(THAI_REGEX_3);
-                        a[4] = java.util.regex.Pattern.compile(THAI_REGEX_4);
-                        regexArray = a;
-                    } catch(Throwable ignoredException) {
-                        break label0;
-                    }
-                }
-                int i = regexArray.length;
-                java.util.regex.Matcher[] a0 = new java.util.regex.Matcher[i];
-                int i0 = 0;
-                for(; i0 < i; i0 = i0 + 1) {
-                    a0[i0] = regexArray[i0].matcher((CharSequence)(Object)wordDict);
-                }
-                java.util.ArrayList a1 = new java.util.ArrayList();
-                int i1 = wordDict.length();
-                int i2 = 0;
-                int i3 = 0;
-                while(i2 < i1) {
-                    i2 = i1;
-                    int i4 = 0;
-                    for(; i4 < i; i4 = i4 + 1) {
-                        if (a0[i4].reset().find(i3)) {
-                            i2 = Math.min(i2, a0[i4].start() + 1);
-                        }
-                    }
-                    {
-                        if (i2 >= i1) {
-                            continue;
-                        }
-                        a1.add((Object)Integer.valueOf(i2));
-                        i3 = i2;
-                    }
-                }
-                if (a1.size() > 0) {
-                    StringBuilder a2 = new StringBuilder(wordDict);
-                    int i5 = a1.size() - 1;
-                    for(; i5 >= 0; i5 = i5 + -1) {
-                        a2.insert(((Integer)a1.get(i5)).intValue(), "<wb>");
-                    }
-                    wordDict = a2.toString();
+        if (wordDict != null && wordDict.length() != 0) {
+            if (regexArray == null) {
+                try {
+                    Pattern[] patterns = new Pattern[5];
+                    patterns[0] = Pattern.compile(THAI_REGEX_0);
+                    patterns[1] = Pattern.compile(THAI_REGEX_1);
+                    patterns[2] = Pattern.compile(THAI_REGEX_2);
+                    patterns[3] = Pattern.compile(THAI_REGEX_3);
+                    patterns[4] = Pattern.compile(THAI_REGEX_4);
+                    regexArray = patterns;
+                } catch (Throwable ignoredException) {
+                    regexArray = null;
+                    return wordDict;
                 }
             }
-            return wordDict;
+
+            Matcher[] matcher = new Matcher[regexArray.length];
+            for (int i = 0; i < regexArray.length; i++) {
+                matcher[i] = regexArray[i].matcher(wordDict);
+            }
+
+            ArrayList<Integer> matches = new ArrayList<>();
+            int end = wordDict.length();
+            int start = 0;
+            int regexStart = 0;
+            while (start < end) {
+                start = end;
+                for (int k = 0; k < regexArray.length; k++) {
+                    if (matcher[k].reset().find(regexStart)) {
+                        start = Math.min(start, matcher[k].start() + 1);
+                    }
+                }
+
+                if (start >= end) {
+                    continue;
+                }
+                matches.add(start);
+                regexStart = start;
+            }
+
+            if (matches.size() > 0) {
+                StringBuilder newStr = new StringBuilder(wordDict);
+                for (int i = matches.size() - 1; i >= 0; i--) {
+                    newStr.insert(matches.get(i), "<wb>");
+                }
+                wordDict = newStr.toString();
+            }
         }
-        regexArray = null;
+
         return wordDict;
     }
-    
+
     public static void disableDim() {
         mActivity.runOnUiThread(new disableDimTask());
     }
-    
+
     public static void enableDim() {
         mActivity.runOnUiThread(new enableDimTask());
     }
-    
+
     public static String encodeCStringForBase64(String data, String key) {
         try {
             byte[] aesKey = new byte[16];
@@ -294,59 +435,58 @@ public class BraveFrontierJNI {
             Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
             aes.init(1, secKey);
             return sg.gumi.bravefrontier.Base64.encodeToString(aes.doFinal(data.getBytes()), false);
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return "";
         }
     }
-    
+
     public static boolean existsBundleFile(String fileName) {
         InputStream stream;
 
         try {
             stream = mActivity.getResources().getAssets().open(fileName);
 
-        } catch(Throwable ignoredException) {
+        } catch (Throwable ignoredException) {
             return false;
         }
 
         if (stream != null) {
             try {
                 stream.close();
-            } catch(Throwable ignoredException) {}
+            } catch (Throwable ignoredException) {
+            }
         }
 
         return true;
     }
-    
+
     public static String getAppVersion() {
         try {
-           return mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), 0).versionName;
-        } catch(Throwable ex) {
+            return mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), 0).versionName;
+        } catch (Throwable ex) {
             ex.printStackTrace();
             return "";
         }
     }
-    
+
     public static int getAvailableMemory() {
-        ActivityManager service = (ActivityManager)mActivity.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager service = (ActivityManager) mActivity.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo info = new ActivityManager.MemoryInfo();
         service.getMemoryInfo(info);
-        return (int)info.availMem;
+        return (int) info.availMem;
     }
-    
+
     public static String getDeepLinkParam() {
         return deepLinkParam;
     }
-    
+
     public static String getDeviceAdvertisingID() {
         return BraveFrontier.getDeviceAdvertisingID();
     }
-    
+
     public static String getDeviceID() {
         String devId = null;
-        TelephonyManager manager = (TelephonyManager)mActivity.getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager manager = (TelephonyManager) mActivity.getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
         if (VERSION.SDK_INT < 26) {
             devId = manager.getDeviceId();
         } else {
@@ -358,11 +498,11 @@ public class BraveFrontierJNI {
         String androidId = Settings.Secure.getString(mActivity.getContentResolver(), "android_id");
         return new UUID(androidId.hashCode(), devId.hashCode()).toString();
     }
-    
+
     public static String getDeviceLanguage() {
         return Locale.getDefault().getLanguage();
     }
-    
+
     public static String getDeviceLanguageLocale() {
         String language;
         String country;
@@ -380,108 +520,101 @@ public class BraveFrontierJNI {
                 "_" +
                 country;
     }
-    
+
     public static String getDeviceManufacturer() {
         return (PLATFORM != PLATFORM_AMAZON) ? android.os.Build.MANUFACTURER : "Amazon";
     }
-    
+
     public static String getDeviceModel() {
         return android.os.Build.MODEL +
                 "_android" +
                 VERSION.RELEASE;
     }
-    
+
     public static String getDeviceSDKVersion() {
         return String.valueOf(VERSION.SDK_INT);
     }
-    
+
     public static String getDeviceVersion() {
         return VERSION.RELEASE;
     }
-    
+
     public static String getISOCountryCode() {
-        TelephonyManager manager = (TelephonyManager)mActivity.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager manager = (TelephonyManager) mActivity.getSystemService(Context.TELEPHONY_SERVICE);
         String isoCountry = (manager == null) ? "" : manager.getSimCountryIso();
         if (!isoCountry.isEmpty()) {
             isoCountry = isoCountry.toUpperCase();
         }
         return isoCountry;
     }
-    
+
     public static void getLeaderBoardScore(String leaderboard) {
         if (mActivity instanceof sg.gumi.bravefrontier.BraveFrontier) {
-            ((sg.gumi.bravefrontier.BaseGameActivity)mActivity).getGameService().getLeaderBoardScore(leaderboard);
+            ((sg.gumi.bravefrontier.BaseGameActivity) mActivity).getGameService().getLeaderBoardScore(leaderboard);
         }
     }
-    
+
     public static String getNameFromAccount() {
         return mActivity.getSharedPreferences(PREFS_NAME_AUTH, 0).getString("name", "");
     }
-    
+
     public static int getNetworkState() {
-        if (!((ConnectivityManager)mActivity.getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(1).isConnected()) {
+        if (!((ConnectivityManager) mActivity.getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(1).isConnected()) {
             return 0;
         }
         return 1;
     }
-    
+
     public static long getNowUnixTimeForMulti() {
         return System.currentTimeMillis();
     }
-    
+
     public static String getPasswordFromAccount() {
         return mActivity.getSharedPreferences(PREFS_NAME_AUTH, 0).getString("password", "");
     }
-    
-    public static int getSecondsFromDate(String s) {
-        java.util.Date a = null;
-        String s0 = Calendar.getInstance().get(1) +
+
+    public static int getSecondsFromDate(String dateStr) {
+        Date selectedDate;
+        String dateFormatted = Calendar.getInstance().get(1) +
                 " " +
-                s;
-        java.util.Date a1 = java.util.Calendar.getInstance().getTime();
-        java.text.SimpleDateFormat a2 = new java.text.SimpleDateFormat("yyyy MMM dd, HH:mm  z", Locale.getDefault());
+                dateStr;
+        Date currentDate = java.util.Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MMM dd, HH:mm  z", Locale.getDefault());
         try {
-            a = a2.parse(s0);
-        } catch(Throwable a3) {
-            a3.printStackTrace();
-            a = null;
+            selectedDate = dateFormat.parse(dateFormatted);
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+            selectedDate = null;
         }
-        return (int)(a.getTime() - a1.getTime()) / 1000;
+        return (int) (selectedDate.getTime() - currentDate.getTime()) / 1000;
     }
-    
+
     public static String getSharedPrefString(String key) {
         return mActivity.getSharedPreferences(PREFS_NAME_GAMEDATA, 0).getString(key, "");
     }
-    
+
     public static int getUnzipStatus() {
         return s_UnzipStatus;
     }
-    
+
     public static String getWritablePath() {
         String s = null;
-        label1: {
-            label0: try {
-                s = ((android.app.Activity)mActivity).getBaseContext().getFilesDir().getAbsolutePath();
-                break label1;
-            } catch(Throwable ignoredException) {
-                String s0 = null;
-                try {
-                    s0 = sg.gumi.bravefrontier.BraveFrontier.getAppContext().getFilesDir().getAbsolutePath();
-                } catch(Throwable ignoredException0) {
-                    break label0;
-                }
-                return s0;
+
+        try {
+            return mActivity.getBaseContext().getFilesDir().getAbsolutePath();
+        } catch (Throwable ignoredException) {
+            try {
+                return BraveFrontier.getAppContext().getFilesDir().getAbsolutePath();
+            } catch (Throwable ignoredException0) {
             }
-            String s1 = null;
-            return s1;
         }
-        return s;
+        return null;
     }
-    
+
     public static boolean hasDeepLinkParam() {
         return deepLinkParam != null;
     }
-    
+
     public static void initialize(Cocos2dxActivity activity) {
         try {
             mActivity = activity;
@@ -489,94 +622,86 @@ public class BraveFrontierJNI {
             if (dataUri.getScheme().equals("gumiasia") && dataUri.getHost().equals("bravefrontier")) {
                 deepLinkParam = dataUri.getPath();
             }
-        } catch(Throwable ignoredException) {
+        } catch (Throwable ignoredException) {
         }
     }
-    
+
     public static boolean isCanSimultaneousDownload() {
         if (VERSION.SDK_INT < 11) {
             return false;
         }
-        label0: {
-            label5: {
-                label1: {
-                    int i = 0;
-                    label9: {
-                        boolean b = false;
-                        label3: {
-                            label4: try {
-                                android.net.ConnectivityManager a = (android.net.ConnectivityManager)((android.app.Activity)mActivity).getBaseContext().getSystemService("connectivity");
-                                android.telephony.TelephonyManager a0 = (android.telephony.TelephonyManager)((android.app.Activity)mActivity).getBaseContext().getSystemService("phone");
-                                android.net.NetworkInfo a1 = a.getActiveNetworkInfo();
-                                int i0 = android.os.Build$VERSION.SDK_INT;
-                                label8: {
-                                    if (i0 >= 23) {
-                                        break label8;
-                                    }
-                                    int i1 = a1.getType();
-                                    label7: {
-                                        if (i1 == 0) {
-                                            break label7;
-                                        }
-                                        label6: {
-                                            if (i1 == 1) {
-                                                break label6;
-                                            }
-                                            break label1;
-                                        }
-                                        if (a.getNetworkInfo(1).isConnected()) {
-                                            break label5;
-                                        }
-                                    }
-                                    int i2 = a0.getNetworkType();
-                                    if (i2 == 1) {
-                                        break label4;
-                                    }
-                                    if (i2 == 2) {
-                                        break label4;
-                                    }
-                                    break label1;
-                                }
-                                if (a == null) {
-                                    break label1;
-                                }
-                                android.net.NetworkCapabilities a2 = a.getNetworkCapabilities(a.getActiveNetwork());
-                                if (a2 == null) {
-                                    break label1;
-                                }
-                                boolean b0 = a2.hasTransport(1);
-                                label2: {
-                                    if (!b0) {
-                                        break label2;
-                                    }
-                                    b = a1.isConnected();
-                                    break label3;
-                                }
-                                if (!a2.hasTransport(0)) {
-                                    break label1;
-                                }
-                                i = a1.getSubtype();
-                                break label9;
-                            } catch(Throwable ignoredException) {
-                            }
-                            return false;
-                        }
-                        if (b) {
-                            return true;
-                        }
-                        break label1;
+
+        int networkSubType = 0;
+
+        try {
+            ConnectivityManager connectivityManager = (ConnectivityManager) mActivity.getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            TelephonyManager manager = (TelephonyManager) mActivity.getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+            if (VERSION.SDK_INT >= 23) {
+                if (connectivityManager == null) {
+                    return true;
+                }
+                NetworkCapabilities netCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+                if (netCapabilities == null) {
+                    return true;
+                }
+
+                if (!netCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    if (!netCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                        return true;
                     }
-                    if (i == 1) {
-                        break label0;
+                    networkSubType = networkInfo.getSubtype();
+                    if (networkSubType == 1) {
+                        return false;
                     }
-                    if (i == 2) {
-                        break label0;
+                    if (networkSubType == 2) {
+                        return false;
                     }
+                    return true;
+                }
+
+                if (networkInfo.isConnected()) {
+                    return true;
                 }
                 return true;
             }
+            int infoType = networkInfo.getType();
+            if (infoType == 0) {
+                if (ActivityCompat.checkSelfPermission(BraveFrontierJNI.getActivity(), android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+
+                int networkType = manager.getNetworkType();
+                if (networkType == TelephonyManager.NETWORK_TYPE_GPRS) {
+                    return false;
+                } else if (networkType == TelephonyManager.NETWORK_TYPE_EDGE) {
+                    return false;
+                }
+                return true;
+            }
+            if (infoType == 1) {
+                if (connectivityManager.getNetworkInfo(1).isConnected()) {
+                    return true;
+                }
+                if (ActivityCompat.checkSelfPermission(BraveFrontierJNI.getActivity(), android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+
+                int networkType = manager.getNetworkType();
+                if (networkType == TelephonyManager.NETWORK_TYPE_GPRS) {
+                    return false;
+                }
+                else if (networkType == TelephonyManager.NETWORK_TYPE_EDGE) {
+                    return false;
+                }
+
+                return true;
+            }
             return true;
+        } catch(Throwable ignoredException) {
         }
+
         return false;
     }
     
@@ -593,7 +718,7 @@ public class BraveFrontierJNI {
     }
     
     public static void launchNewBrowser(String url) {
-        sg.gumi.bravefrontier.webview.BFWebView.launchNewBrowser(url);
+        BFWebView.launchNewBrowser(url);
     }
     
     public static void leaveBreadcrumb(String unk) {
@@ -602,13 +727,14 @@ public class BraveFrontierJNI {
     public static void leaveHandledException(String exception) {
     }
     
-    native public static void nativeDownloadCallback(long arg, byte[] arg0, String arg1);
+    native public static void nativeDownloadCallback(long obj, byte[] data, String error);
+    
+
+    // status 0: rated, status 1: not rated
+    native public static void nativeRateThisAppPopupCallback(int status);
     
     
-    native public static void nativeRateThisAppPopupCallback(int unk);
-    
-    
-    native public static void nativeSetDeviceRegistrationId(String arg);
+    native public static void nativeSetDeviceRegistrationId(String deviceId);
     
     
     native public static void onDeviceShake();
@@ -624,18 +750,17 @@ public class BraveFrontierJNI {
     native public static void playPhonePurchaseSuccessCallBack(String arg, String arg0, String arg1);
     
     
-    public static void playVideo(String s) {
-        ((android.app.Activity)mActivity).runOnUiThread((Runnable)(Object)new sg.gumi.bravefrontier.BraveFrontierJNI$5(s));
+    public static void playVideo(String fileName) {
+        mActivity.runOnUiThread(new PlayVideoTask(fileName));
     }
     
-    public static void playVideoWithOption(String s, boolean b) {
-        ((android.app.Activity)mActivity).runOnUiThread((Runnable)(Object)new sg.gumi.bravefrontier.BraveFrontierJNI$6(s, b));
+    public static void playVideoWithOption(String fileName, boolean closeWhenTouched) {
+        mActivity.runOnUiThread(new PlayVideoWithOptionTask(fileName, closeWhenTouched));
     }
     
     public static void playYoutubeVideo(String url) {
-        if (sg.gumi.util.BFConfig.PLATFORM != sg.gumi.util.BFConfig.PLATFORM_AMAZON) {
-            android.content.Context a = ((android.app.Activity)mActivity).getApplicationContext();
-            ((android.app.Activity)mActivity).runOnUiThread((Runnable)(Object)new sg.gumi.bravefrontier.BraveFrontierJNI$8(url, a));
+        if (PLATFORM != PLATFORM_AMAZON) {
+            mActivity.runOnUiThread(new PlayYoutubeVideoTask(url, mActivity.getApplicationContext()));
         } else {
             BFWebView.playYoutubeVideo(url);
         }
@@ -650,20 +775,21 @@ public class BraveFrontierJNI {
     native public static void purchaseStateChangedCallback(String arg, String arg0, String arg1);
     
     
-    private static String replaceGooglePlayStoreName(String s, String s0, String s1) {
-        return s.replace((CharSequence)(Object)"Google Play Store", (CharSequence)(Object)s0).replace((CharSequence)(Object)"Google Play", (CharSequence)(Object)s1).replace((CharSequence)(Object)"Google", (CharSequence)(Object)s1);
+    private static String replaceGooglePlayStoreName(String input, String playStoreName, String companyName) {
+        return input.replace("Google Play Store", playStoreName).replace("Google Play", companyName).replace("Google", companyName);
     }
     
     public static void saveToAccount(String name, String pass) {
-        SharedPreferences.Editor a = mActivity.getSharedPreferences(PREFS_NAME_AUTH, 0).edit();
-        a.putString("name", name);
-        a.putString("password", pass);
-        a.commit();
+        SharedPreferences.Editor editor = mActivity.getSharedPreferences(PREFS_NAME_AUTH, 0).edit();
+        editor.putString("name", name);
+        editor.putString("password", pass);
+        editor.commit();
     }
     
     public static void sendAdSdkActionResult(String result) {
     }
-    
+
+    /* does not happen in decompilation? */
     native public static void setMultiInvateSchemeData(String arg, String arg0);
     
     
@@ -674,25 +800,25 @@ public class BraveFrontierJNI {
     }
     
     public static void setWebViewVisible(boolean visible) {
-        sg.gumi.bravefrontier.webview.BFWebView.setWebViewVisible(visible);
+        BFWebView.setWebViewVisible(visible);
     }
     
     public static void showPlayPhoneButton(boolean visible) {
-        if (mActivity instanceof sg.gumi.bravefrontier.BraveFrontier) {
-            ((sg.gumi.bravefrontier.BaseGameActivity)mActivity).getGameService().showPlayPhoneButton(visible);
+        if (mActivity instanceof BraveFrontier) {
+            ((BaseGameActivity)mActivity).getGameService().showPlayPhoneButton(visible);
         }
     }
     
-    private static void showRateThisAppPopup(String s, String s0, String s1, String s2) {
-        mActivity.runOnUiThread((Runnable)(Object)new sg.gumi.bravefrontier.BraveFrontierJNI$7(s0, s, s1, s2));
+    private static void showRateThisAppPopup(String title, String body, String btn1Text, String btn2Text) {
+        mActivity.runOnUiThread(new ShowRatePopupTask(body, title, btn1Text, btn2Text));
     }
     
     public static void showWebView(String s, float f, float f0, float f1, float f2) {
-        sg.gumi.bravefrontier.webview.BFWebView.showWebView(s, f, f0, f1, f2);
+        BFWebView.showWebView(s, f, f0, f1, f2);
     }
     
     public static void submitLeaderBoardScore(String leaderboard, int score) {
-        if (mActivity instanceof sg.gumi.bravefrontier.BraveFrontier) {
+        if (mActivity instanceof BraveFrontier) {
             ((BaseGameActivity)mActivity).getGameService().submitLeaderBoardScore(leaderboard, score);
         }
     }

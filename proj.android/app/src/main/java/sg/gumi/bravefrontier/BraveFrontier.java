@@ -110,7 +110,7 @@ public class BraveFrontier extends BaseGameActivity {
         com.google.firebase.crashlytics.FirebaseCrashlytics.getInstance().setCustomKey("UserName", s);
     }
     
-    public static sg.gumi.bravefrontier.BraveFrontier getActivity() {
+    public static BraveFrontier getActivity() {
         return act;
     }
     
