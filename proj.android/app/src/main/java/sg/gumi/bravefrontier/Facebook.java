@@ -94,7 +94,7 @@ public class Facebook {
         feedParams = null;
         sFacebook = this;
         mActivity = activity;
-        appEventsLogger = AppEventsLogger.newLogger(activity, activity.getResources().getString(2131558540));
+        appEventsLogger = AppEventsLogger.newLogger(activity, activity.getResources().getString(R.string.fb_app_id));
         mLoginManager = LoginManager.getInstance();
         callbackManager = CallbackManager.Factory.create();
         mLoginManager.registerCallback(callbackManager, new RegisterCallback(this));

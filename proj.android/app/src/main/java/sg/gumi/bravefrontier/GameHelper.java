@@ -208,10 +208,7 @@ final public class GameHelper extends GameService implements GameService.GameHel
     private static int RC_SIGN_IN = 10000;
     final static int RC_UNUSED = 9002;
     final private static int[] RES_IDS = new int[] {
-            2131558548,
-            2131558547,
-            2131558545,
-            2131558546,
+            R.string.gamehelper_unknown_error, R.string.gamehelper_sign_in_failed, R.string.gamehelper_app_misconfigured, R.string.gamehelper_license_failed
     };
 
     final public static int R_APP_MISCONFIGURED = 2;
@@ -335,18 +332,13 @@ final public class GameHelper extends GameService implements GameService.GameHel
         string.append("0123456789ABCDEF".substring(i2, i2 + 1));
     }
 
-    private void endTask() {
-        /* TODO: NOT ACCURATE!!! */
-        try {
-            if (mPendingTask != null) {
-                try {
-                    mPendingTask.cancel(true);
-                } catch(Throwable ignoredException) {
-                }
-                mPendingTask = null;
+    private synchronized void endTask() {
+        if (mPendingTask != null) {
+            try {
+                mPendingTask.cancel(true);
+            } catch(Throwable ignoredException) {
             }
-        } catch(NullPointerException ex) {
-            throw ex;
+            mPendingTask = null;
         }
     }
 
@@ -569,16 +561,11 @@ final public class GameHelper extends GameService implements GameService.GameHel
         dialog.show();
     }
 
-    private void startTask(int type) {
-        /* TODO: NOT ACCURATE!!! */
-        try {
-            if (mPendingTask == null) {
-                mPendingTask = new GameHelperTask(this, null);
-                mPendingTask.mTaskType = type;
-                mPendingTask.execute((Object[])null);
-            }
-        } catch(Throwable ex) {
-            throw ex;
+    private synchronized void startTask(int type) {
+        if (mPendingTask == null) {
+            mPendingTask = new GameHelperTask(this, null);
+            mPendingTask.mTaskType = type;
+            mPendingTask.execute((Object[])null);
         }
     }
 

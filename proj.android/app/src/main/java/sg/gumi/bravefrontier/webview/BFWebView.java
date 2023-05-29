@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import sg.gumi.bravefrontier.BraveFrontier;
 import sg.gumi.bravefrontier.BraveFrontierJNI;
+import sg.gumi.bravefrontier.R;
 import sg.gumi.util.BFConfig;
 
 import java.util.HashMap;
@@ -201,13 +202,13 @@ final public class BFWebView implements View.OnTouchListener, View.OnClickListen
     private void createWebViewContainer(View view) {
         if (webViewContainer != null) {
             ((FrameLayout)webViewContainer.getParent()).removeView(webViewContainer);
-            ((FrameLayout)cocos2dxActivity.findViewById(16908290)).addView(webViewContainer);
+            ((FrameLayout)cocos2dxActivity.findViewById(R.id.content)).addView(webViewContainer);
         } else {
             webViewContainer = new RelativeLayout(cocos2dxActivity);
             webViewContainer.setBackgroundColor(0);
             webViewContainer.addView(view);
             webViewContainer.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
-            ((android.widget.FrameLayout)(cocos2dxActivity.findViewById(16908290))).addView(webViewContainer);
+            ((android.widget.FrameLayout)(cocos2dxActivity.findViewById(R.id.content))).addView(webViewContainer);
         }
     }
     
@@ -366,7 +367,7 @@ final public class BFWebView implements View.OnTouchListener, View.OnClickListen
     private void setBrowserButtonVisibilityTask(Object param) {
         boolean isVisible = param == Boolean.TRUE;
 
-        FrameLayout frameLayout = cocos2dxActivity.findViewById(16908290);
+        FrameLayout frameLayout = cocos2dxActivity.findViewById(R.id.content);
         if (!isVisible) {
             frameLayout.requestFocus();
             frameLayout.setFocusableInTouchMode(true);
@@ -385,7 +386,7 @@ final public class BFWebView implements View.OnTouchListener, View.OnClickListen
     
     private void setWebViewVisibilityTask(Object param) {
         boolean visible = param == Boolean.TRUE;
-        FrameLayout frameLayout = this.cocos2dxActivity.findViewById(16908290);
+        FrameLayout frameLayout = this.cocos2dxActivity.findViewById(R.id.content);
         if (!visible) {
             frameLayout.requestFocus();
             frameLayout.setFocusableInTouchMode(true);

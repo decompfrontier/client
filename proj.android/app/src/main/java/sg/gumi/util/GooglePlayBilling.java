@@ -101,8 +101,8 @@ public class GooglePlayBilling implements PurchasesUpdatedListener {
         return true;
     }
     
-    private void runPendingRequests() {
-        /* TODO: MISSING!!! */
+    private synchronized void runPendingRequests() {
+
     }
     
     public void OldRequestPurchase() {

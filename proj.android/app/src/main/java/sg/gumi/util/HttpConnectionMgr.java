@@ -68,9 +68,7 @@ class HttpConnectionMgr {
         return client;
     }
     
-    public void downloadFinished(DefaultHttpClient a) {
-
-        /* TODO: NOT ACCURATE!!! */
+    public synchronized void downloadFinished(DefaultHttpClient a) {
         for (int i = 0; i < connections.size(); i++)
         {
             if (connections.get(i) == a)
@@ -78,8 +76,7 @@ class HttpConnectionMgr {
         }
     }
     
-    public void downloadStarted(DefaultHttpClient a) {
-        /* TODO: NOT ACCURATE!!! */
+    public synchronized void downloadStarted(DefaultHttpClient a) {
         for (int i = 0; i < connections.size(); i++)
         {
             if (connections.get(i) == a)
@@ -87,8 +84,7 @@ class HttpConnectionMgr {
         }
     }
     
-    public DefaultHttpClient getConnection() {
-        /* TODO: NOT ACCURATE!!! */
+    public synchronized DefaultHttpClient getConnection() {
         for (int i = 0; i < status.size(); i++)
         {
             if (status.get(i)) {

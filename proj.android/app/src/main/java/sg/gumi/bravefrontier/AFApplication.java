@@ -11,6 +11,8 @@ import com.appsflyer.AppsFlyerConversionListener;*/
 
 public class AFApplication extends MultiDexApplication {
 
+    public static final String APPSFLYER_KEY = "WMa4kPf8ZdvNhcpvdpwAvE";
+
     class AFListener /*implements com.appsflyer.AppsFlyerConversionListener*/ {
         final AFApplication app;
 
@@ -53,7 +55,7 @@ public class AFApplication extends MultiDexApplication {
         /* we do not have appsflyer
         try {
             AFListener listener = new AFListener(this);
-            AppsFlyerLib.getInstance().init("WMa4kPf8ZdvNhcpvdpwAvE", listener, this);
+            AppsFlyerLib.getInstance().init(APPSFLYER_KEY, listener, this);
             AppsFlyerLib.getInstance().setCollectIMEI(false);
             AppsFlyerLib.getInstance().setCurrencyCode("USD");
             appsflyerInitialized = true;

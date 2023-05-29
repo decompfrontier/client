@@ -25,8 +25,8 @@ abstract public class YouTubeFailureRecoveryActivity extends YouTubeBaseActivity
         if (result.isUserRecoverableError()) {
             result.getErrorDialog(this, RECOVERY_DIALOG_REQUEST).show();
         } else {
-            String fmt = getString(2131558539);
-            android.widget.Toast.makeText((Context)this, String.format(fmt, result), Toast.LENGTH_LONG).show();
+            String fmt = getString(R.string.error_player);
+            Toast.makeText(this, String.format(fmt, result), Toast.LENGTH_LONG).show();
         }
     }
 }

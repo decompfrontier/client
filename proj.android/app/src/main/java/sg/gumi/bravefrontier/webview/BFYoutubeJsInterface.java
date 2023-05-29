@@ -3,13 +3,10 @@ package sg.gumi.bravefrontier.webview;
 import android.annotation.SuppressLint;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import sg.gumi.bravefrontier.BraveFrontierJNI;
-
-/*
-    TODO: THE METHODS OF THIS CLASS ARE NOT ACCURATE!!!! MISSING SYMC OBJECTS
- */
 
 final public class BFYoutubeJsInterface implements View.OnKeyListener {
     final private static int PLAYER_STATE_ENDED = 2;
@@ -42,10 +39,8 @@ final public class BFYoutubeJsInterface implements View.OnKeyListener {
     }
     
     public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-        /* TODO: INACCURATE!!! */
-
         if (keyEvent.getAction() == 0 && keyCode == 4) {
-            try {
+            synchronized (this)  {
                 if (playerState == PLAYER_STATE_STARTED) {
                     closeWebView();
                     BraveFrontierJNI.videoSkippedCallback();
@@ -55,70 +50,53 @@ final public class BFYoutubeJsInterface implements View.OnKeyListener {
                 if (playerState != PLAYER_STATE_ENDED) {
                     return true;
                 }
-            } catch (Throwable ex) {
-                throw ex;
             }
         }
         return false;
     }
     
     public void onVideoEnded() {
-        /* TODO: INACCURATE!!! */
-        try {
+        synchronized (this) {
             closeWebView();
             BraveFrontierJNI.videoFinishedCallback();
-        } catch(Throwable ex) {
-            throw ex;
         }
     }
     
     public void onVideoError() {
-        /* TODO: INACCURATE!!! */
-        try {
+        synchronized (this) {
             closeWebView();
             BraveFrontierJNI.videoSkippedCallback();
-        } catch(Throwable ex) {
-            throw ex;
         }
     }
     
     public void onVideoPaused() {
-        /* TODO: INACCURATE!!! */
-        try {
+        synchronized (this) {
             closeWebView();
             BraveFrontierJNI.videoSkippedCallback();
-        } catch(Throwable ex) {
-            throw ex;
         }
     }
     
     public void onVideoStarted() {
-        /* TODO: INACCURATE!!! */
-        try {
+        synchronized (this) {
             this.playerState = PLAYER_STATE_STARTED;
             BraveFrontierJNI.videoPreparedCallback();
-        } catch(Throwable ex) {
-            throw ex;
         }
     }
-    
-    @SuppressLint("JavascriptInterface") // TODO: REMOVE THIS
-    void setAsJsInterface(WebView webView) {
+
+    @JavascriptInterface
+    public void setAsJsInterface(WebView webView) {
         webView.setWebChromeClient(new WebChromeClient());
         webView.addJavascriptInterface(this, "bfJsInterface");
         webView.setOnKeyListener(this);
     }
     
     void stopYoutubeVideo() {
-        /* TODO: INACCURATE!!! */
-        try {
+        synchronized (this) {
             if (playerState == PLAYER_STATE_ENDED) {
                 return;
             }
             closeWebView();
-            sg.gumi.bravefrontier.BraveFrontierJNI.videoSkippedCallback();
-        } catch(Throwable ex) {
-            throw ex;
+            BraveFrontierJNI.videoSkippedCallback();
         }
     }
 }
