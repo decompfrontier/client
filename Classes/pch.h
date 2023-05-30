@@ -17,6 +17,12 @@ constexpr const char* BF_JNI_CLASS = ",/sg/gumi/bravefrontier/BraveFrontierJNI";
 #define RANDOM_FUNC() rand()
 #endif
 
+#ifdef _DEBUG
+#define API_URL "http://127.0.0.1:9960/"
+#else
+#define API_URL "https://api-sl.gl.gumi.sg/"
+#endif
+
 // C++
 #include <vector>
 #include <string>
