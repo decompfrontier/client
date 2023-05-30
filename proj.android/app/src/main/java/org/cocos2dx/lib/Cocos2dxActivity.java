@@ -166,7 +166,6 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 			mGLSurefaceView.setCocos2dxRenderer(Cocos2dxRenderer.createDisabledRenderer());
 		}
 
-        mGLSurefaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
         mGLSurefaceView.setCocos2dxEditText(edittext);
 
         // Set framelayout as the content view
