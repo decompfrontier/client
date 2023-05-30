@@ -1,0 +1,780 @@
+BATTLE_SET^Battle Set^Thai^Indonesian
+ITEM_LIST^Item List^Thai^Indonesian
+BACK^Back^Thai^Indonesian
+NUMBER_OF_POSSESSIONS^You have^Thai^Indonesian
+ITEM^Item^Thai^Indonesian
+SPHERE^Sphere^Thai^Indonesian
+MIX^Synthesize^Thai^Indonesian
+WAREHOUSE^Storage^Thai^Indonesian
+NUMBER^pc(s)^Thai^Indonesian
+NEED_MATERIAL^Required Materials^Thai^Indonesian
+MIX_RECIPE^Synthesis Recipe^Thai^Indonesian
+PARTY_EDIT^Manage Squad^Thai^Indonesian
+LEADER_CHANGE^Change Leader^Thai^Indonesian
+DISP_STATUS^Show Stats^Thai^Indonesian
+UNIT_LIST^Unit List^Thai^Indonesian
+UNIT_SORT_RARITY^Rare^Thai^Indonesian
+UNIT_SORT_LV^Lv^Thai^Indonesian
+UNIT_SORT_ATK^Attack^Thai^Indonesian
+UNIT_SORT_DEF^Defense^Thai^Indonesian
+UNIT_SORT_HEAL^Recovery^Thai^Indonesian
+UNIT_SORT_BBLV^BB Lv^Thai^Indonesian
+UNIT_SORT_GET^Acquired^Thai^Indonesian
+UNIT_SORT_ELEM^Element^Thai^Indonesian
+UNIT_SORT_HP^HP^Thai^Indonesian
+UNIT_SORT_COST^Cost^Thai^Indonesian
+ELEMENT_ALL^All^Thai^Indonesian
+ELEMENT_FIRE^Fire^Thai^Indonesian
+ELEMENT_WATER^Water^Thai^Indonesian
+ELEMENT_TREE^Earth^Thai^Indonesian
+ELEMENT_THUNDER^Thunder^Thai^Indonesian
+ELEMENT_LIGHT^Light^Thai^Indonesian
+ELEMENT_DARK^Dark^Thai^Indonesian
+ATK_SHORT^ATK^Thai^Indonesian
+DEF_SHORT^DEF^Thai^Indonesian
+HEAL_SHORT^REC^Thai^Indonesian
+NEXT_LV_REST^XP to Level Up^Thai^Indonesian
+REST^Remaining:^Thai^Indonesian
+NOW_ZEL^Zel^Thai^Indonesian
+MIX_ZEL^Fusion Cost^Thai^Indonesian
+SELL_ZEL^Zel Gain^Thai^Indonesian
+ELEM_UNIT^Material Unit^Thai^Indonesian
+GET_EXP^XP Gain^Thai^Indonesian
+GET_ZEL^Zel Obtained^Thai^Indonesian
+GET_KARMA^Karma Obtained^Thai^Indonesian
+GET_EXP2^XP Obtained^Thai^Indonesian
+MAX_COMBO^Max Combo^Thai^Indonesian
+MAX_DAMAGE^Max Damage^Thai^Indonesian
+ZEL^Zel^Thai^Indonesian
+KARMA^Karma^Thai^Indonesian
+BRAVE_COIN^Gem(s)^Thai^Indonesian
+COST^Cost^Thai^Indonesian
+LAST_PLAY^Online^Thai^Indonesian
+BEFORE_HOUR^hrs ago^Thai^Indonesian
+BEFORE_DAY^days ago^Thai^Indonesian
+BEFORE_MINUTES^mins ago^Thai^Indonesian
+FROM_GIFT^Gift from <param=friend>^Thai^Indonesian
+ZEL_UNIT^z^Thai^Indonesian
+KARMA_UNIT^P^Thai^Indonesian
+GIFT^Gift^Thai^Indonesian
+FRIENDS_WANTS_THIS_GIFT^Friends who want this^Thai^Indonesian
+ITEM_BOX^All Items^Thai^Indonesian
+NEED_KARMA^Karma Required^Thai^Indonesian
+SHEET^pcs^Thai^Indonesian
+PRICE^Price^Thai^Indonesian
+PRICE_UNIT^USD$^Thai^Indonesian
+MAX_ITEM_BOX_CNT^Max Item Capacity: <param=itcap>^Thai^Indonesian
+MAX_UNIT_BOX_CNT^Max Unit Capacity: <param=uncap>^Thai^Indonesian
+TYPE^Type^Thai^Indonesian
+COST_ALPHA^COST^Thai^Indonesian
+LV^Lv^Thai^Indonesian
+NEXT_LV^XP until next Lv^Thai^Indonesian
+HP^HP^Thai^Indonesian
+ATK^ATK^Thai^Indonesian
+DEF^DEF^Thai^Indonesian
+HEL^REC^Thai^Indonesian
+BBLV^BB Lv^Thai^Indonesian
+NO_LEADER_SKILL^None^Thai^Indonesian
+NO_BRAVE_BURST^None^Thai^Indonesian
+PLV^Lv^Thai^Indonesian
+SPHERE_CNT^Spheres Available^Thai^Indonesian
+SELL_PRICE^Item Value^Thai^Indonesian
+SELL_TOTAL_PRICE^Total^Thai^Indonesian
+ITEM_EDIT_DESC^The amount you can carry differs by Item.^Thai^Indonesian
+ONCE^time^Thai^Indonesian
+NOW_COIN^Gems available^Thai^Indonesian
+CAN_SUMMONS^You can Summon^Thai^Indonesian
+FRIEND_POINT^Honor^Thai^Indonesian
+FRIEND_POINT_UNIT^P^Thai^Indonesian
+NOW_FRIEND_POINT^Honor Points available^Thai^Indonesian
+NEXT_LV_ALPA^NEXT LEVEL^Thai^Indonesian
+USE_ACTION_POINT^Energy^Thai^Indonesian
+CLEAR_CNT^times cleared^Thai^Indonesian
+MOST_TIME^Best Time^Thai^Indonesian
+GET_BC_CNT^BC obtained^Thai^Indonesian
+GET_HC_CNT^HC obtained^Thai^Indonesian
+SUMMONER_HELP^Summoner Helper^Thai^Indonesian
+SUMMONER_FRIEND^Summoner Friend^Thai^Indonesian
+SP_AREA_NAME^Vortex Gate (Special Dungeon)^Thai^Indonesian
+OVER_UNIT_CAP^Over Unit Capacity^Thai^Indonesian
+OVER_UNIT_UNIT^^Thai^Indonesian
+OVER_UNIT_MSG^You are at max Unit capacity. <color=255:255:0>Expand</color> your capacity or go to <color=255:255:0>Unit</color> to fuse, evolve, or sell Units.^Thai^Indonesian
+OVER_UNIT_MSG1^^Thai^Indonesian
+OVER_UNIT_MSG2^^Thai^Indonesian
+OVER_UNIT_MSG3^^Thai^Indonesian
+OVER_UNIT_MSG4^^Thai^Indonesian
+QUEST^Quest^Thai^Indonesian
+BETWEEN_GATE^Vortex Gate^Thai^Indonesian
+OVER_ITEM_CAP^Over Item Capacity^Thai^Indonesian
+OVER_ITEM_UNIT^^Thai^Indonesian
+OVER_ITEM_MSG^You are at max Item capacity. <color=255:255:0>Expand</color> your capacity or <color=255:255:0>sell</color> Items.^Thai^Indonesian
+OVER_ITEM_MSG1^^Thai^Indonesian
+OVER_ITEM_MSG2^^Thai^Indonesian
+OVER_ITEM_MSG3^^Thai^Indonesian
+OVER_ITEM_MSG4^^Thai^Indonesian
+NOW_ARENA_RANK^Current Rank^Thai^Indonesian
+ARENA_RANK_POINT_UNIT^pt^Thai^Indonesian
+RANKUP^Rank Up^Thai^Indonesian
+ARENA_ARCHIVE_CAP^Record^Thai^Indonesian
+ARENA_ARCHIVE_ACCEPT_CAP^Attacked Record^Thai^Indonesian
+WIN^Win^Thai^Indonesian
+LOSE^Lose^Thai^Indonesian
+FRIEND^Friends^Thai^Indonesian
+FRIEND_CNT^^Thai^Indonesian
+EQUIP_ITEM_PAGE_DESC1^Equip Battle Item^Thai^Indonesian
+EQUIP_ITEM_PAGE_DESC2^Press and hold for Item details^Thai^Indonesian
+EQUIP_ITEM_PAGE_DESC3^The amount you can carry differs by Item.<br>You cannot carry two sets of the same Item.^Thai^Indonesian
+EQUIP_ITEM_PAGE_DESC4^Select Battle Items^Thai^Indonesian
+EQUIP_ITEM_PAGE_DESC5^Select Storage Items^Thai^Indonesian
+EQUIP_ITEM_PAGE_NOT_REMOVE^Item cannot be removed as storage is full.^Thai^Indonesian
+ITEM_MINX_PAGE_DESC1^Make an Item^Thai^Indonesian
+PARTY_EDIT_PAGE_DESC1^Select Battle Unit^Thai^Indonesian
+PARTY_EDIT_PAGE_DESC2^Press and hold for Unit details^Thai^Indonesian
+UNIT_TOP_PAGE_TITLE^Unit^Thai^Indonesian
+UNIT_TOP_PAGE_DESC^Unit Description^Thai^Indonesian
+ITEM_TOP_PAGE_TITLE^Item^Thai^Indonesian
+ITEM_TOP_PAGE_DESC^Item Description^Thai^Indonesian
+UNIT_MIX_TOP_PAGE_TITLE^Unit Fusion^Thai^Indonesian
+UNIT_MIX_TOP_PAGE_DESC^Unit Fusion Description^Thai^Indonesian
+MENU_TOP_PAGE_TITLE^MENU^Thai^Indonesian
+MENU_TOP_PAGE_DESC^MENU Description^Thai^Indonesian
+PARTY_INFO_TITLE^Player Info^Thai^Indonesian
+PARTY_INFO_DESC^Player Info Description^Thai^Indonesian
+UNIT_SELL_TOP_PAGE_TITLE^Sell Units^Thai^Indonesian
+UNIT_SELL_TOP_PAGE_DESC^Sell Units Description^Thai^Indonesian
+UNIT_DICTIONARY_TITLE^Unit Archive^Thai^Indonesian
+UNIT_DICTIONARY_DESC^Unit Archive Description^Thai^Indonesian
+ITEM_WAREHOUSE_TITLE^Item Storage^Thai^Indonesian
+ITEM_WAREHOUSE_DESC^Edit/Sell Items^Thai^Indonesian
+MISSION_RESULT_LV_UP^You reached Lv <color=0:162:232><param=lv></color>^Thai^Indonesian
+MISSION_RESULT_VIT_UP^Energy + <color=53:217:102><param=vit></color>^Thai^Indonesian
+MISSION_RESULT_COST_UP^Cost + <color=53:217:102><param=cost></color>^Thai^Indonesian
+MISSION_RESULT_FRIEND_UP^Friend Capacity + <color=53:217:102><param=friend></color>^Thai^Indonesian
+MISSION_RESULT_RECOVER^Energy has been fully restored.^Thai^Indonesian
+UNIT_EVO_SELECT_TITLE^Evolve Unit^Thai^Indonesian
+UNIT_EVO_SELECT_DESC^Evolve Unit Description^Thai^Indonesian
+UNIT_EVO_DETAIL_TITLE^Unit Evolution Details^Thai^Indonesian
+UNIT_EVO_DETAIL_DESC^Unit Evolution Details Description^Thai^Indonesian
+SHOP_TOP_PAGE_TITLE^Shop^Thai^Indonesian
+SHOP_TOP_PAGE_DESC^Shop Description^Thai^Indonesian
+SHOP_HEL_ACTION_TITLE^Restore Energy^Thai^Indonesian
+SHOP_HEL_ACTION_DESC_AREA^You can use <param=coin> Gem(s) to <color=255:0:0>restore your Energy</color>.^Thai^Indonesian
+SHOP_UNIT_BOX_EXT_TITLE^Unit Capacity^Thai^Indonesian
+SHOP_UNIT_BOX_EXT_DESC_AREA^You can use <param=coin> Gem(s) to add 5 slots to your <color=255:0:0>Max Unit Capacity</color>.^Thai^Indonesian
+SHOP_ITEM_BOX_EXT_TITLE^Item Capacity^Thai^Indonesian
+SHOP_ITEM_BOX_EXT_DESC_AREA^You can use <param=coin> Gem(s) to add 5 slots to your <color=255:0:0>Max Item Capacity</color>.^Thai^Indonesian
+SHOP_BUY_COIN_TITLE^Buy Gems^Thai^Indonesian
+FRIEND_TOP_TITLE^Social^Thai^Indonesian
+FRIEND_LIST_TITLE^Friend List^Thai^Indonesian
+FRIEND_DETAIL_TITLE^Friend Detail^Thai^Indonesian
+MYTOWN_TOP_TITLE^My Town^Thai^Indonesian
+MYTOWN_SPHERE_LIST_TITLE^Sphere List^Thai^Indonesian
+MYTOWN_ITEM_LIST_TITLE^Synthesis List^Thai^Indonesian
+MYTOWN_ITEM_MIX_TITLE^Item Synthesis^Thai^Indonesian
+MYTOWN_SPHERE_MIX_TITLE^Forge Sphere^Thai^Indonesian
+UNIT_SELECT^Unit Selection^Thai^Indonesian
+GIFT_RECIEVE_TITLE^Receive Gifts^Thai^Indonesian
+GIFT_SEND_TITLE^Send Gifts^Thai^Indonesian
+USE_ITEM^Use Item^Thai^Indonesian
+GIFT_LIST_TITLE^Select Gift^Thai^Indonesian
+ITEM_EDIT^Manage Items^Thai^Indonesian
+FRIEND_AGREE^Friend Request^Thai^Indonesian
+SPHERE_EQP^Equip Sphere^Thai^Indonesian
+BRAVE_BURST^Brave Burst^Thai^Indonesian
+BASE_SELECT^Select Base^Thai^Indonesian
+ELEM_SELECT^Select Ingredient^Thai^Indonesian
+UNIT_MIX^Fuse Units^Thai^Indonesian
+MIX_PRICE^Fusion Cost^Thai^Indonesian
+GET_EXP^XP Obtained^Thai^Indonesian
+ITEM_SELL^Sell Item^Thai^Indonesian
+ITEM_BOX^All Items^Thai^Indonesian
+UNIT_BOX^All Units^Thai^Indonesian
+SUMMONS^Summon^Thai^Indonesian
+MYTOWN_FACILITY_EXT^Upgrade Facility^Thai^Indonesian
+HELP_TOP^Help^Thai^Indonesian
+HELP_SUB^Sub Help^Thai^Indonesian
+HELP_DETAIL^Help Details^Thai^Indonesian
+DUNGEON_SELECT^Select Quest^Thai^Indonesian
+REINFORCEMENT_SELECT^Reinforcement^Thai^Indonesian
+MISSION_START_CHECK^Confirmation^Thai^Indonesian
+CONFIG^Configure^Thai^Indonesian
+BATTLE_MENU^Menu^Thai^Indonesian
+PRESENT_TOP^Presents^Thai^Indonesian
+GIVEUP_CONFIRM_TEXT^If you Give Up now, all<color=255:0:0> Units, Material, Zel and Karma</color> obtained in this session will be lost. Is that OK?^Thai^Indonesian
+ARENA_TOP^Arena^Thai^Indonesian
+ARCHIVE^Battle Record^Thai^Indonesian
+BATTLE_PARTY_EDIT^Unit Details^Thai^Indonesian
+MISSION_FRIEND_REQUEST_TEXT^You can now add Summoner Helper <color=255:255:0><param=name></color> as a Friend.^Thai^Indonesian
+ARENA_FRIEND_REQUEST_TEXT^You can now add your opponent <color=255:255:0><param=name></color> as a Friend.^Thai^Indonesian
+GIVEUP^Give Up^Thai^Indonesian
+ARENA_SUGGEST_ENEMY^Arena Battle^Thai^Indonesian
+MISSION_REWARD^Mission Reward^Thai^Indonesian
+MISSION_REWARD_ZEL^You received <color=146:208:80><param=zel_num> Zel</color>.^Thai^Indonesian
+MISSION_REWARD_DIA^You received <color=146:208:80><param=dia_num> Gems</color>.^Thai^Indonesian
+MISSION_REWARD_ITEM^You received <color=146:208:80><param=zel_num></color> <param=Item_name>.^Thai^Indonesian
+MISSION_REWARD_KARMA^You received <color=146:208:80><param=karma_num> Karma</color>.^Thai^Indonesian
+LVUP_TEXT^You reached Lv <color=255:255:0><param=lv_num></color>.^Thai^Indonesian
+ARENA_BATTLE_END^Arena Battle Result^Thai^Indonesian
+FRIEND_REQUEST^Friend Request^Thai^Indonesian
+NOTHING^None^Thai^Indonesian
+MISSION_FIRST_CLEAR_BONUS^First Mission Clear Bonus^Thai^Indonesian
+ITEM_DICTIONARY_TITLE^Item Archive^Thai^Indonesian
+ITEM_DICTIONARY_DESC^Item Archive Description^Thai^Indonesian
+SPHERE_DICTIONARY_TITLE^Sphere Archive^Thai^Indonesian
+SPHERE_DICTIONARY_DESC^Sphere Archive Description^Thai^Indonesian
+UNIT_DESCRIPTION^Unit Description^Thai^Indonesian
+FRIEND_CANCEL_TEXT^Remove <color=255:255:0><param=name></color> from your Friend List?^Thai^Indonesian
+WAREHOUSE_OVER_ERROR^Storage Capacity has been reached. You are unable to pick up <color=255:0:0><param=Item></color>.^Thai^Indonesian
+CONTINUE_CONFIRM^Continue?^Thai^Indonesian
+CONTINUE_DESC^You can use <param=use_dia_num> Gem<br>to revive all Units.^Thai^Indonesian
+USER_DIA_NUM^You have <param=hava_dia_num> Gems.^Thai^Indonesian
+MOVE_SHOP_CONFIRM_TEXT^You do not have any Gems.<br>Buy Gems from the Shop?^Thai^Indonesian
+MISSION_SELECT_SHORTAGE_STAMINA_TITLE^Out of Energy^Thai^Indonesian
+MISSION_SELECT_SHORTAGE_STAMINA_TEXT^You can use <param=coin> Gems to<br><color=255:0:0>fully restore Energy</color>.^Thai^Indonesian
+MISSION_SELECT_SHORTAGE_BRAVECOIN_TEXT^You can use <param=coin> Gems to <br><color=255:0:0>fully restore your Energy</color>.<br>Buy Gems?^Thai^Indonesian
+MISSION_SELECT_SHORTAGE_BRAVECOIN_TITLE^Out of Energy^Thai^Indonesian
+ITEM_DETAIL^Item Description^Thai^Indonesian
+ITEM_DETAIL_ITEM^Item Name^Thai^Indonesian
+ITEM_DETAIL_TARGET^Type^Thai^Indonesian
+ITEM_DETAIL_EFFICACY^Effect^Thai^Indonesian
+ITEM_DETAIL_TARGET_TYPE_MY_PARTY^Ally^Thai^Indonesian
+ITEM_DETAIL_TARGET_TYPE_OTHER_PARTY^Opponent^Thai^Indonesian
+ITEM_DETAIL_TARGET_AREA_SOLO^single Unit^Thai^Indonesian
+ITEM_DETAIL_TARGET_AREA_ALL^all Units^Thai^Indonesian
+CREDIT_TOP^Credits^Thai^Indonesian
+CREDIT_TEXT^<center>Executive Producer<br>Hisatoshi Hayakashi<br><br>Producer/Director<br>Eiji Takahashi<br><br>Main Programmer<br>Hiroshi Sugiyama<br><br>Main Planner<br>Takafumi Iwabuchi<br><br>Art Director<br>Yu Iwasaki<br><br>Programmer<br>Junichi Motoyama<br>Kousuke Kyogoku<br>Takeo Soga<br>Shigeyuki Kanbe<br><br>Server Engineer<br>Masashi Nishi<br><br>Assistant Director<br>Yosuke Shinomura<br><br>Planner<br>Tukasa Monma<br>Riiko Nagaoka<br><br>Scenario Writer<br>Hiroshi Sasako<br><br>Graphic Designer<br>Masaya Shiozaki<br>Takaho Saito<br>Hiroto Mizuhashi<br>Mayumi Hayashi<br><br>Web Designer<br>Eri Nakamura<br><br>Graphic Management<br>Hiroyuki Goto<br><br>BG Designer<br>Hiroshi Shiraishi<br>Yoshihiro Sato<br>Satoshi Miyawaki<br><br>Illustrator<br>Yutaka Ebishima<br><br>Dot Designer<br>Tomoki Oda<br>Seiichiro Ishiguro<br>Satoshi Hatsuya<br>Takumi Ishikawa<br>Jun Matsuda<br>Takaharu Takagaki<br>ta2nb<br>Yuyan<br>Teppei Okada<br>Noriyo Kitahara<br>Keiichirou Morita<br><br>Sound Composer<br>Hikoshi Hashimoto<br><br>Promotion<br>Arata Hanyuda<br>Kaoringo<br><br>Test Play<br>Kazuki Fujio<br>Daisuke Noguchi<br>Hisashi Yokoyama<br>METRO CORPORATION<br><br>Global Publishing<br>Yuji Saito<br>Ping-Wen Chen<br>Keiya Kitafuji<br><br>Global Engineering<br>John Abrehamson<br>Shunketsu Sai<br><br>Localization<br>Don Cerny<br>Jason Johnson<br><br>Game Operations and Development<br>David Ng<br>Ronnie Tan<br>Rizky Medzseva<br>Sohaib Muhammad<br>Alvin De Cruz<br>Michael Capulong<br>Yuan Long Lian<br>Geok Yee Lim<br>Russell Ng<br>Joan Chia<br>Lisa Lee<br>Derek Toh<br>Ivan Tan<br>Ling Siu Ng<br>Zulkarnain Shariff<br>Samuel Chan<br><br>Special Thanks<br>Fuji Startup Ventures Inc.<br>B Dash Ventures Inc.<br>gumi ventures Inc.<br>Fontworks Inc.<br><br>Hironao Kunimitsu<br>Trendy Kawamoto<br>Nell Motoyoshi<br><br>Katsuya Shoji<br>Alim all staff<br></center>^Thai^Indonesian
+MYTOWN_SOUND_ROOM_TITLE^Music House^Thai^Indonesian
+MYTOWN_SOUND_ROOM_NOT_OPEN^Locked^Thai^Indonesian
+GET_PT^Obtained PT^Thai^Indonesian
+ARENA_RANK_UP^You have been promoted to the rank of <color=255:158:62><param=name></color>!^Thai^Indonesian
+ARENA_RANK_DOWN^You have been demoted to the rank of <color=255:158:62><param=name></color>...^Thai^Indonesian
+FRIEND_ID_SEARCH_TITLE^Friend Search^Thai^Indonesian
+FRIEND_ID_SEARCH_PLAYER_ID_TEXT^Your Player ID^Thai^Indonesian
+FRIEND_ID_SEARCH_SEARCH_ID_TEXT^Enter a friend's ID in the field and search for his/her player profile.^Thai^Indonesian
+FRIEND_REQUEST_FINISH^Friend Request has been sent.^Thai^Indonesian
+INPUT_USER_NAME^Enter Username (Max 8 characters)^Thai^Indonesian
+EMPTY_USER_NAME^No Username^Thai^Indonesian
+ELEM_DESC1^<center>Believers in Potential,<br>with a passionate<br>heart of <color=255:0:0>Fire</color></center>^Thai^Indonesian
+ELEM_DESC2^<center>Seekers of the Truth,<br>with a crystal clear<br>heart of <color=60:123:255>Water</color></center>^Thai^Indonesian
+ELEM_DESC3^<center>Bearers of Hope,<br>with a healing<br>heart of <color=146:208:80>Earth</color></center>^Thai^Indonesian
+ELEM_DESC4^<center>Warriors for Justice,<br>with a strikingly honest<br>heart of <color=255:255:0>Thunder</color></center>^Thai^Indonesian
+FRIEND_ID_SEARCH_FRIEND_REQUEST_TEXT^Send <color=255:255:0><param=name></color> a Friend Request?^Thai^Indonesian
+ITEM_SELL_CONFIRM_TEXT^Proceed with sale?^Thai^Indonesian
+ITEM_SELL_CONFIRM_TOTAL_NUMBER^Items^Thai^Indonesian
+SHOP_HEL_FIGHT_TITLE^Arena Orbs^Thai^Indonesian
+SHOP_HEL_FIGHT_DESC_AREA^You can use <param=coin> Gem(s) to <color=255:0:0>fully restore your Arena Orbs</color>.^Thai^Indonesian
+BUY_COIN_END_MESSAGE^Your purchase of %s has been completed.^Thai^Indonesian
+FRIEND_AGREE_FINISH^Friend Request accepted.^Thai^Indonesian
+PT^pt^Thai^Indonesian
+ACTION_POINT_CAP^Energy^Thai^Indonesian
+EVO_ZEL^Zel Cost^Thai^Indonesian
+OVER_COST_CAP^Cost limit exceeded^Thai^Indonesian
+OVER_COST_MSG^The required cost exceeds your cost limit.<br><br>Edit your Squad to lower the cost.^Thai^Indonesian
+OVER_COST_MSG1^^Thai^Indonesian
+OVER_COST_MSG2^^Thai^Indonesian
+OVER_COST_MSG3^^Thai^Indonesian
+OVER_COST_MSG4^^Thai^Indonesian
+CONNECT^Connecting...^Thai^Indonesian
+DOWNLOAD^Downloading...^Thai^Indonesian
+LOADING^Loading...^Thai^Indonesian
+RECOVER_TIME^REFILL IN:^Thai^Indonesian
+GET_MATERIAL^Materials^Thai^Indonesian
+GET_UNIT^Units Acquired^Thai^Indonesian
+QUEST_CLEAR_REWARD^Quest Clear Reward^Thai^Indonesian
+REST_NEXT_LEVEL^XP to next Lv^Thai^Indonesian
+UNIT_DETAIL^Change Formation^Thai^Indonesian
+ELEMENT_RELATION^Element Correlation^Thai^Indonesian
+GET_REWARD^Rewards^Thai^Indonesian
+MATERIAL^Material(s)^Thai^Indonesian
+UNIT^Unit(s)^Thai^Indonesian
+CONTINUE^Continue^Thai^Indonesian
+DOWNLOAD_NOTICE^Downloading data.<br>This may take a few minutes.^Thai^Indonesian
+REST_HP_TOTAL^Total Remaining HP^Thai^Indonesian
+DAMAGE_TOTAL^Total Damage Inflicted^Thai^Indonesian
+FILE_CHECK^Checking files...^Thai^Indonesian
+STAMINA_FULL^Energy is full.^Thai^Indonesian
+GET_NUM^Amount Obtained^Thai^Indonesian
+BGM_VOL^BGM Volume^Thai^Indonesian
+SE_VOL^SFX Volume^Thai^Indonesian
+NOTFOUND_USER^Could not retrieve user info.<br>Please wait and try again.^Thai^Indonesian
+dummy47^^Thai^Indonesian
+dummy48^^Thai^Indonesian
+dummy49^^Thai^Indonesian
+dummy50^^Thai^Indonesian
+TUTORIAL1_1^<anchor=center><speed=10><br><wait=20><br>I am Lucius...<wait=20><br>The god of this Gate...^Thai^Indonesian
+TUTORIAL1_2^<anchor=center><speed=10><br><wait=20><br>I have been waiting<wait=20><br>for the day of<wait=20><br>your arrival...<wait=20><br>^Thai^Indonesian
+TUTORIAL1_3^<anchor=center><speed=10><br><wait=20><br>Chosen One...<wait=20><br>What is your name?<wait=20><br>^Thai^Indonesian
+TUTORIAL1_4^<anchor=center><speed=10><br><user_name>...<wait=20><br>Beyond this gate,<wait=20><br>a new source of power<wait=20><br>awaits you...<wait=20><br><br>^Thai^Indonesian
+TUTORIAL1_5^<anchor=center><speed=10><br>You must go<wait=20><br>make that power yours,<wait=20><br>and use it to bring peace<wait=20><br>to this world...<br>^Thai^Indonesian
+TUTORIAL_END_MSG^<center>Important Notice<br><br>Your Inquiry ID<br><color=255:0:0><param=user_id></color></center><br><br>Your Enquiry ID can be viewed at<br>Menu > Help > Inquiry<br>at any time.<br><br>This ID is required to identify your player data in the event of an inquiry. It is advised that you take a screenshot or make note of it for safekeeping outside of the game. Do not disclose your ID to others.^Thai^Indonesian
+TUTORIAL1_7^<anchor=center><speed=10>^Thai^Indonesian
+TUTORIAL1_8^<anchor=center><speed=10>^Thai^Indonesian
+TUTORIAL1_9^hoge^Thai^Indonesian
+TUTORIAL1_10^hoge^Thai^Indonesian
+TUTORIAL1_11^hoge^Thai^Indonesian
+TUTORIAL1_12^hoge^Thai^Indonesian
+TUTORIAL1_13^hoge^Thai^Indonesian
+TUTORIAL1_14^hoge^Thai^Indonesian
+TUTORIAL1_15^hoge^Thai^Indonesian
+TUTORIAL1_16^hoge^Thai^Indonesian
+TUTORIAL1_17^hoge^Thai^Indonesian
+TUTORIAL1_18^hoge^Thai^Indonesian
+TUTORIAL1_19^hoge^Thai^Indonesian
+TUTORIAL1_20^hoge^Thai^Indonesian
+TUTORIAL1_21^hoge^Thai^Indonesian
+TUTORIAL1_22^hoge^Thai^Indonesian
+TUTORIAL1_23^hoge^Thai^Indonesian
+TUTORIAL1_24^hoge^Thai^Indonesian
+TUTORIAL1_25^hoge^Thai^Indonesian
+TUTORIAL1_26^hoge^Thai^Indonesian
+TUTORIAL1_27^hoge^Thai^Indonesian
+TUTORIAL1_28^hoge^Thai^Indonesian
+TUTORIAL1_29^hoge^Thai^Indonesian
+TUTORIAL1_30^hoge^Thai^Indonesian
+TUTORIAL1_31^hoge^Thai^Indonesian
+TUTORIAL1_32^hoge^Thai^Indonesian
+TUTORIAL1_33^hoge^Thai^Indonesian
+TUTORIAL1_34^hoge^Thai^Indonesian
+TUTORIAL1_35^hoge^Thai^Indonesian
+TUTORIAL1_36^hoge^Thai^Indonesian
+TUTORIAL1_37^hoge^Thai^Indonesian
+TUTORIAL1_38^hoge^Thai^Indonesian
+TUTORIAL1_39^hoge^Thai^Indonesian
+TUTORIAL1_40^hoge^Thai^Indonesian
+TUTORIAL1_41^hoge^Thai^Indonesian
+TUTORIAL1_42^hoge^Thai^Indonesian
+TUTORIAL1_43^hoge^Thai^Indonesian
+TUTORIAL1_44^hoge^Thai^Indonesian
+TUTORIAL1_45^hoge^Thai^Indonesian
+TUTORIAL1_46^hoge^Thai^Indonesian
+TUTORIAL1_47^hoge^Thai^Indonesian
+TUTORIAL1_48^hoge^Thai^Indonesian
+TUTORIAL1_49^hoge^Thai^Indonesian
+TUTORIAL1_50^hoge^Thai^Indonesian
+ARENA_BATTLE_POINT_CAPTION^ABP^Thai^Indonesian
+NEXT_RANK_CAPTION^Next Rank Up^Thai^Indonesian
+ARENA_TOTAL_RESULT_CAP^TOTAL^Thai^Indonesian
+ARENA_ATK_RESULT_CAP^ATTACK^Thai^Indonesian
+ARENA_DEF_RESULT_CAP^DEFENSE^Thai^Indonesian
+UNIT_EVO_ELEM_CAP^Evolve Material Unit^Thai^Indonesian
+NEED_CAP^Required^Thai^Indonesian
+HAVE_CAP^Available^Thai^Indonesian
+MIX_MATERIAL^Synthesis Material^Thai^Indonesian
+MATERIAL_SHORTAGE^No Material^Thai^Indonesian
+BATTLE_CNT_CAP^Battles^Thai^Indonesian
+MENU_OPTION^Settings^Thai^Indonesian
+ARENA_RANK^Arena Rank^Thai^Indonesian
+SORT_CAP^Sort^Thai^Indonesian
+ARENA_ARCHIVE^Arena Record^Thai^Indonesian
+NO_PRESENT^There are no Gifts to receive.^Thai^Indonesian
+RANK^th/st/nd/rd/th^Thai^Indonesian
+ARENA_RANK_NAME_CAPTION^Rank Title^Thai^Indonesian
+REWARD^Reward^Thai^Indonesian
+SHOP_SHORTAGE_BRAVECOIN_TITLE^Insufficient Gems^Thai^Indonesian
+SHOP_SHORTAGE_BRAVECOIN_TEXT^Buy Gems?^Thai^Indonesian
+ARENA_SHORTAGE_BRAVECOIN_TITLE^Insufficient Arena Orbs^Thai^Indonesian
+ARENA_SHORTAGE_BRAVECOIN_TEXT^You can use <param=coin> Gem to<br><color=255:0:0>fully restore your Arena Orbs</color>. Buy Gems?^Thai^Indonesian
+NOT_OPEN^Currently unavailable. <br>Proceed through more Quests to unlock.^Thai^Indonesian
+ARENA_SHORTAGE_FIGHT_TITLE^Insufficient Arena Orbs^Thai^Indonesian
+ARENA_SHORTAGE_FIGHT_TEXT^You can use <param=coin> Gem to<br><color=255:0:0>fully restore your Arena Orbs</color>. Proceed and restore?^Thai^Indonesian
+DAY^d^Thai^Indonesian
+HOUR^hr^Thai^Indonesian
+MINUTES^min^Thai^Indonesian
+NO_FRIEND_NO_SKILL^Unable to activate Friend Skill.^Thai^Indonesian
+SOUND_SHORTAGE_ZEL^Insufficient Zel^Thai^Indonesian
+SOUND_BUY_TEXT^<center>Use <param=zel>z to buy<br><param=name></center>^Thai^Indonesian
+SOUND_BUY_END_TEXT^Purchase complete.^Thai^Indonesian
+FRIEND_AGREE_REC^Waiting^Thai^Indonesian
+FRIEND_AGREE_REQ^Pending^Thai^Indonesian
+FRIEND_REQUEST_TIME^Date Requested^Thai^Indonesian
+FRIEND_SEARCH_NOT_FOUND^User not found.^Thai^Indonesian
+FRIEND_SEARCH_MYID^Please search for a different user.^Thai^Indonesian
+UNIT_SELL_CONFIRM_RARE^A rare Unit (<param=rare>-star or higher) has been selected. Are you sure you want to sell?^Thai^Indonesian
+UNIT_MIX_CONFIRM_RARE^A rare Unit (<param=rare>-star or higher) has been selected as Ingredient. Are you sure you want to proceed?^Thai^Indonesian
+ITEM_USE_CONFIRM^The following Items will be used.<br>Proceed?^Thai^Indonesian
+ITEM_USE^Use^Thai^Indonesian
+CONNECT_ERROR^A connection error has occured.<br><br>Please move to an area with better reception and try again. Press the button to reconnect.^Thai^Indonesian
+CONNECT_ERROR2^A connection error has occured.<br><br>Please move to an area with better reception and try again. Press the button to reconnect.<br><br>*Connection errors may occur more frequently for some versions of your OS. If you experience unstable performance please confirm your OS version.^Thai^Indonesian
+NO_REINFORCEMENT^Reinforcements could not be found. Proceed with Mission?^Thai^Indonesian
+CREATE_USER_ERROR1^No name has been entered.^Thai^Indonesian
+CREATE_USER_ERROR2^Character limit exceeded.^Thai^Indonesian
+CREATE_USER_CONFIRM^User Data will be created. Proceed?^Thai^Indonesian
+FACILITY_EXT_MAX_LEVEL_MSG^Max level achieved^Thai^Indonesian
+FRIEND_REQ_CANCEL_MSG^Cancel Friend Request?^Thai^Indonesian
+FRIEND_REQ_OK_MSG^Accept Friend Request?^Thai^Indonesian
+OVER_UNIT_MSG_SUMMON^You cannot summon because you are at max Unit capacity. <color=255:255:0>Expand<color> your Unit capacity or got to <color=255:255:0>Unit<color> to fuse, evolve, or sell Units.^Thai^Indonesian
+BUY_COIN_CONFIRM^Confirm Purchase^Thai^Indonesian
+BUY_COIN_START_MSG^<center>Initiating purchase. Please wait.</center>^Thai^Indonesian
+BUY_COIN_STORE_KIT_MSG^<center>Processing purchase. Please wait.</center>^Thai^Indonesian
+BUY_COIN_END_MSG^<center>Finalizing purchase. Please wait.</center>^Thai^Indonesian
+BUY_COIN_FAILD_MSG^Purchase failed.^Thai^Indonesian
+BUY_COIN_RESTART_MSG^Purchase of Gems was previously interrupted. Restarting purchase process.^Thai^Indonesian
+BUY_COIN_PURCHASE_RESTART_MSG^Processing Gem purchase.<br>You will be sent to the Purchase Page.^Thai^Indonesian
+BUY_COIN_PURCHASE_RECEIPT_NG^Unable to process purchase.^Thai^Indonesian
+PURCHASE_ERROR_FIRST_TITLE^A connection error has occured.^Thai^Indonesian
+PURCHASE_ERROR_FIRST_MSG^Please move to an area with better reception and try again. Retry now?^Thai^Indonesian
+PURCHASE_ERROR_SECOND_TITLE^Attention!^Thai^Indonesian
+PURCHASE_ERROR_SECOND_MSG^There is a possibility that your payment has been processed but you not yet received your Gems.<br><br>Retry?^Thai^Indonesian
+PURCHASE_ERROR_THIRD_TITLE^<color=255:0:0>Do you really want to stop the transaction?</color>^Thai^Indonesian
+PURCHASE_ERROR_THIRD_MSG^There is a possibility that your payment has been processed but you not yet received your Gems.<br><br>Retry?^Thai^Indonesian
+PURCHASE_ERROR_GIVEUP^Purchase of Gems was interrupted.<br><br>If there are discrepancies in the amount paid and the amount of Gems credited, please contact Customer Support from the Help > Inquiry.^Thai^Indonesian
+UNIT_SELL_CONFIRM^Continue with sale?^Thai^Indonesian
+FRIEND_ID_SEARCH_NOT_ID^ID has not been entered.^Thai^Indonesian
+FRIEND_DETAIL_DESC^Friend Detail Description^Thai^Indonesian
+ARENA_BATTLE_CONFIRM^Start Battle?<br><color=255:0:0><param=count></color> Arena Orb will be used.^Thai^Indonesian
+ARENA_FIGHT_SHORTAGE^Out of Arena Orbs.<br><color=255:0:0><param=count></color> Arena Orb will be restored in <color=255:0:0><param=time></color> hr.<br>Restore now?^Thai^Indonesian
+NOT_CHALLENGE_QUEST^You currently don't have enough energy to take part in this Quest.^Thai^Indonesian
+UNIT_SELL_NOT_SELECT^No Units have been selected.^Thai^Indonesian
+UNIT_MIX_NOT_SELECT^Material has not been selected.^Thai^Indonesian
+UNIT_MIX_SHORTAGE_PRICE^Insufficient Zel.^Thai^Indonesian
+UNIT_EVO_SHORTAGE_ZEL^Insufficient Zel.^Thai^Indonesian
+UNIT_EVO_NOT_REACHING_LV^Only able to Evolve at Max Lv.^Thai^Indonesian
+UNIT_EVO_NOT_ELEM^You don't have all required Material Units.^Thai^Indonesian
+SHOP_HEL_ACTION_MAX_ACTION^Energy is already full.^Thai^Indonesian
+SHOP_HEL_ACTION_SHORTAGE_DYER^Insufficient Gems.^Thai^Indonesian
+SHOP_HEL_FIGHT_MAX_FIGHT^Arena Orbs are already full.^Thai^Indonesian
+SHOP_HEL_FIGHT_SHORTAGE_DYER^Insufficient Gems.^Thai^Indonesian
+SHOP_UNIT_BOX_EXT_SHORTAGE_DYER^Insufficient Gems.^Thai^Indonesian
+SHOP_ITEM_BOX_EXT_SHORTAGE_DYER^Insufficient Gems.^Thai^Indonesian
+UNIT_MIX_MAX_LV^This Unit is already at Max Lv.^Thai^Indonesian
+MYTOWN_SPHERE_SHORTAGE_ELEM^Insufficient Materials.^Thai^Indonesian
+MYTOWN_SPHERE_SHORTAGE_KARMA^Insufficient Karma.^Thai^Indonesian
+MYTOWN_ITEM_SHORTAGE_ELEM^Insufficient Materials.^Thai^Indonesian
+SHOP_UNIT_BOX_EXT_MAX_CNT^Unable to further increase Unit Capacity.^Thai^Indonesian
+SHOP_ITEM_BOX_EXT_MAX_CNT^Unable to further increase Item Capacity.^Thai^Indonesian
+NOT_RARE_SUMMONS^Insufficient Gems.^Thai^Indonesian
+NOT_FREE_SUMMONS^Insufficient Honor Points.^Thai^Indonesian
+PARTY_EDIT_NOT_SELECT^Insufficient Cost.^Thai^Indonesian
+UNIT_SELL_RESULT^Units sold for <param=price> Zel.^Thai^Indonesian
+ITEM_SELL_RESULT^Items sold for <param=price> Zel.^Thai^Indonesian
+PARTY_EDIT_CHANGE_LEADER^Change Leader^Thai^Indonesian
+NUMBER_OF_FRIEND^Friends^Thai^Indonesian
+REINFORCEMENT_SELECT_FRIEND_POINT^Honor +<param=num>^Thai^Indonesian
+FRIEND_AGREE_NOT_AGREE^Friend Capacity has been reached.^Thai^Indonesian
+MYTOWN_SPHERE_MIX_CONFIRM^A currently equipped Sphere will be used as Material.<br>Proceed?^Thai^Indonesian
+FRIEND_POINT_CAP^Honor^Thai^Indonesian
+LV_CAP^Lv.^Thai^Indonesian
+GIFT_RECIEVE_NOT_RECIEVE^There are no Gifts to receive.^Thai^Indonesian
+GIFT_SEND_NOT_SEND^You have no Friends to send Gifts to.^Thai^Indonesian
+FRIEND_AGREE_CONFIRM_REFUSE^Proceed?^Thai^Indonesian
+GIFT_RECIEVE_WANT_GIFT^Desired Gifts^Thai^Indonesian
+GIFT_SEND_WANT_GIFT_FRIEND^Friends who want this^Thai^Indonesian
+ARENA_RESULT_PT^Arena Battle Point^Thai^Indonesian
+ARENA_RESULT_ITEMGET1^^Thai^Indonesian
+ARENA_RESULT_ITEMGET2^pc(s)^Thai^Indonesian
+ARENA_RESULT_ITEMGET3^received^Thai^Indonesian
+UNIT_MIX_ZEL_NG^Insufficient Zel^Thai^Indonesian
+ARENA_RANK_FRIEND_NULL^You have no Friends.^Thai^Indonesian
+TEXT_PARTY^Squad^Thai^Indonesian
+HEADER_FRIEND_INFO^Friend Info^Thai^Indonesian
+HEADER_PLAYER_INFO^Player Info^Thai^Indonesian
+PARTY_SPOT^Change Position^Thai^Indonesian
+PARTY_SPOT_ACT^Changing Position^Thai^Indonesian
+PRESENT_UNIT_NG^You are at max Unit capacity. <br>Increase your capacity or fuse,<br>evolve or sell Units.^Thai^Indonesian
+PRESENT_ITEM_NG^You are at max Item capacity. <br>Increase your capacity or sell some Items.^Thai^Indonesian
+SITE_INFO^Tips & Information^Thai^Indonesian
+EVO_FAVORITE_NG^A Favorited Unit has been selected<br>as an Evolution Material Unit.^Thai^Indonesian
+RANK_POINT_OMIT^ABP^Thai^Indonesian
+FRIEND_AGREE_CONFIRM_REFUSE2^Cancel Friend Request?^Thai^Indonesian
+UNIT_FAVORITE_RECORD^You've added a Unit to your Favorites.^Thai^Indonesian
+UNIT_FAVORITE_CANCEL^You've removed a Unit from your Favorites.^Thai^Indonesian
+CAMPAIGN_CODE_INPUT_TITLE^Special^Thai^Indonesian
+CAMPAIGN_CODE_INPUT_TEXT^Enter a Serial Code to receive a special Gift! Serial Codes can only be used once per event.^Thai^Indonesian
+CAMPAIGN_CODE_NOT_INPUT^<center>Code has not been entered.^Thai^Indonesian
+CAMPAIGN_CODE_REQUEST_TITLE^Special^Thai^Indonesian
+CAMPAIGN_CODE_REQUEST_TEXT^Serial Code verified!<br>Your special bonus will be sent to your Gift Box. However, please be patient as sometimes it may take some time to appear.^Thai^Indonesian
+TRANSFER_CODE_ISSUE_TITLE^Transfer Settings^Thai^Indonesian
+TRANSFER_CODE_ISSUE_TEXT^Set the password required for<br>data transfer.^Thai^Indonesian
+TRANSFER_CODE_ISSUE_NOTICE^Enter a password of 4~12 alphanumeric characters.^Thai^Indonesian
+TRANSFER_CODE_ISSUE_ERROR_EMPTY^<center>Password has not been entered.^Thai^Indonesian
+TRANSFER_CODE_ISSUE_ERROR_TYPE^<center>Please use alphanumeric characters.^Thai^Indonesian
+TRANSFER_CODE_ISSUE_ERROR_NUM^<center>Enter a password of 4~12 alphanumeric characters.^Thai^Indonesian
+TRANSFER_CODE_ISSUE_DONE_TITLE^Code Confirmation^Thai^Indonesian
+TRANSFER_CODE_ISSUE_DONE_TEXT^On the Data Transfer page,<br>enter the following code and password within the effective period to transfer your data.^Thai^Indonesian
+TRANSFER_CODE_ISSUE_DONE_CODE^Transfer Code^Thai^Indonesian
+TRANSFER_CODE_ISSUE_DONE_PASSWORD^Password^Thai^Indonesian
+TRANSFER_CODE_ISSUE_DONE_EXPIRE^Code Effective Period^Thai^Indonesian
+TRANSFER_CODE_INPUT_TITLE^Data Transfer^Thai^Indonesian
+TRANSFER_CODE_INPUT_CODE^Transfer Code^Thai^Indonesian
+TRANSFER_CODE_INPUT_PASSWORD^Password^Thai^Indonesian
+TRANSFER_CODE_INPUT_ERROR_EMPTY_CODE^<center>Transfer Code has not been entered.^Thai^Indonesian
+TRANSFER_CODE_INPUT_ERROR_EMPTY_PASSWORD^<center>Password has not been entered.^Thai^Indonesian
+TRANSFER_CODE_INPUT_CONFIRM_TITLE^Transfer Confirmation^Thai^Indonesian
+TRANSFER_CODE_INPUT_CONFIRM_TEXT^Starting data transfer.<br>Please do not access Brave Frontier on your previous device during the transfer.^Thai^Indonesian
+TRANSFER_CODE_INPUT_CONFIRM_DATA^Transfer data^Thai^Indonesian
+TRANSFER_CODE_INPUT_DONE_TITLE^Transfer completed.^Thai^Indonesian
+TRANSFER_CODE_INPUT_DONE_TEXT^Data transfer has been completed.<br><br>Please restart the app.<br>Please enjoy Brave Frontier on your new device!^Thai^Indonesian
+INVITE_INPUT_TITLE^Enter Friend ID^Thai^Indonesian
+INVITE_INPUT_TEXT^Entering your friend's ID will entitle you both to a special Gift.<br>You can only enter an ID once.^Thai^Indonesian
+INVITE_INPUT_ERROR_EMPTY^ID has not been entered.^Thai^Indonesian
+INVITE_INPUT_ERROR_NO_DATA^ID not found.<br>Please verify your friend's ID and try again.^Thai^Indonesian
+INVITE_INPUT_ERROR_OWN_ID^Invalid ID.<br>Please verify your friend's ID and try again.^Thai^Indonesian
+INVITE_INPUT_DONE_TITLE^Enter Friend ID^Thai^Indonesian
+INVITE_INPUT_DONE_TEXT^ID verified!<br>The present will be sent to your Presents box.<br><br>The bonus might take a few minutes to be sent, please wait for it to be sent to your Presents box.^Thai^Indonesian
+MENU_OPTION_SOUND_TITLE^Sound^Thai^Indonesian
+MENU_OPTION_GAME_TITLE^Battle Effects^Thai^Indonesian
+MENU_OPTION_TRANSFER_TITLE^Data Transfer^Thai^Indonesian
+MENU_OPTION_SOUND_TEXT^Adjusts BGM and SFX volume.^Thai^Indonesian
+MENU_OPTION_GAME_TEXT^Show/Hide battle effects. Hiding effects may improve game speed.^Thai^Indonesian
+MENU_OPTION_TRANSFER_TEXT^Allows you to transfer your play data to a new device.^Thai^Indonesian
+MENU_OPTION_SOUND_BGM^BGM Volume^Thai^Indonesian
+MENU_OPTION_SOUND_SE^SFX Volume^Thai^Indonesian
+MENU_OPTION_GAME_BB^Display Brave Burst Details^Thai^Indonesian
+MENU_OPTION_GAME_BATTLE_EFFECT^Display Battle Effects^Thai^Indonesian
+MENU_OPTION_GAME_BG_EFFECT^Display Background Effects^Thai^Indonesian
+FRIEND_INTRODUCTION_TITLE^Introduce a Friend^Thai^Indonesian
+FRIEND_INTRODUCTION_TEXT^Introduce this game to a friend and receive a special present when your friend enters your ID!<br>You will now be sent to the Introduction Page. Copy your ID before proceeding?^Thai^Indonesian
+INITIAL_DOWNLOAD_NOTICE1^Downloading might take some time to complete.^Thai^Indonesian
+INITIAL_DOWNLOAD_NOTICE2^A <color=245:218:147>Wi-Fi connection</color> is recommended^Thai^Indonesian
+INITIAL_DOWNLOAD_NOTICE3^for this download.^Thai^Indonesian
+MISSION_REWARD_NO_MATERIAL^<color=255:0:0>No Materials were obtained.</color>^Thai^Indonesian
+MISSION_REWARD_NO_UNIT^<color=255:0:0>No Units were obtained.</color>^Thai^Indonesian
+UNIT_EVO_ERROR_MATERIAL^Insufficient Units^Thai^Indonesian
+UNIT_EVO_ERROR_ZEL^Insufficient Zel^Thai^Indonesian
+UNIT_EVO_ERROR_LV^Insufficient Lv^Thai^Indonesian
+UNIT_EVO_OK_MESSAGE^Can be Evolved^Thai^Indonesian
+UNIT_SELL_UNIT_NUM^Units^Thai^Indonesian
+UNIT_MIX_ZEL^Zel Cost^Thai^Indonesian
+UNIT_MIX_BONUS_TEXT1^<color=255:255:0>Great Success! <param=bonus>x XP!</color>^Thai^Indonesian
+UNIT_MIX_BONUS_TEXT2^<color=255:255:0>Super Success! <param=bonus>x XP!</color>^Thai^Indonesian
+RATE_APP_TITLE^Enjoying Brave Frontier?^Thai^Indonesian
+RATE_APP_BODY^Please rate this game in the app store so we can keep making more games!^Thai^Indonesian
+RATE_APP_RATEIT^Yes, rate it!^Thai^Indonesian
+RATE_APP_REMINDLATER^Remind me later^Thai^Indonesian
+RATE_APP_DONTASK^Don't ask again^Thai^Indonesian
+GC_INVITATION_TITLE^Invitation from %s^Thai^Indonesian
+GC_INVITATION_BODY^Want to play %s?^Thai^Indonesian
+GC_INVITATION_ACCEPT^Accept^Thai^Indonesian
+GC_INVITATION_REJECT^Reject^Thai^Indonesian
+GC_NOT_AUTHENTICATED_TITLE^User not authenticated^Thai^Indonesian
+GC_NOT_AUTHENTICATED_BODY^Please login to Game Center to continue.^Thai^Indonesian
+GC_NOT_AUTHENTICATED_OK^OK^Thai^Indonesian
+GC_RECONNECT_TITLE^Connection Error^Thai^Indonesian
+GC_RECONNECT_BODY^Attempting to Reconnect\n\n\n^Thai^Indonesian
+GC_RECONNECT_FORFEIT_GAME^Forfeit Game^Thai^Indonesian
+GC_RECONNECT_WAITING_PLAYER^Waiting for %s\n\n\n^Thai^Indonesian
+TXT_LOGIN_FACEBOOK_UNREACHABLE^Error in connecting to Facebook. Please check your internet connection.^Thai^Indonesian
+TITLE_TEXT_TERMS^Terms & Conditions^Thai^Indonesian
+TERMS_AND_CONDITIONS_URL^/bf/web/terms.htm^Thai^Indonesian
+GUMI_LIVE_FB_LOGIN_TEXT^<color=255:0:0>Receive an in-game reward</color> when you connect with Facebook. <color=255:255:0>(Only 1 per Facebook Account.)</color><br><br>If you have connected with Facebook before and have an existing game, it will resume after logging in.^Thai^Indonesian
+GUMI_LIVE_GUEST_LOGIN_TEXT^Selecting to Play as Guest will limit you to play on this source ONLY. Connect with Facebook later.^Thai^Indonesian
+GUMI_LIVE_LOGIN_OR_TEXT^or^Thai^Indonesian
+SUMMON_BRAVE_COIN_REQUIRED^<color=102:255:204>Summon once for <param=coinreq> Gem(s).</color>^Thai^Indonesian
+SUMMON_FRIEND_POINT_REQUIRED^<color=102:255:204>Summon once for <param=fptreq> Honor Pt(s).</color>^Thai^Indonesian
+SUMMON_BRAVE_COIN_AVAILABLE^Available: <param=coinav> Gem(s)^Thai^Indonesian
+SUMMON_FRIEND_POINT_AVAILABLE^Available: <param=fptav> Honor Pt(s)^Thai^Indonesian
+SUMMON_COUNT^You can summon <color=255:255:0><param=summct></color> time(s).^Thai^Indonesian
+MENU_OPTION_BINDFB_TITLE^Facebook Connect^Thai^Indonesian
+MENU_OPTION_BINDFB_TEXT^<color=255:0:0>Receive an in-game reward</color> when you connect with Facebook. <color=255:255:0>(Only 1 per Facebook Account.)</color><br><br>Login to bind your game progress to your Facebook account. By logging in Facebook on a new device, you will be able to resume your game.^Thai^Indonesian
+BINDFB_POPUP_TITLE^Facebook Connect^Thai^Indonesian
+BINDFB_POPUP_SUB_TITLE^You are about to Login Facebook^Thai^Indonesian
+BINDFB_POPUP_NOTICE^** Notice: If you have logged in with Facebook before and have an existing game progress bound to your account, it will resume the game and <color=224:80:80>replacing your current game progress.</color>^Thai^Indonesian
+BINDFB_POPUP_BTN_TEXT^Connect Facebook^Thai^Indonesian
+BINDFB_POPUP_ERROR^<center>Connection Error</center><br><br>Unknown error occurred while processing your request. Please try again later.^Thai^Indonesian
+BINDFB_EXISTING_USER_POPUP_TITLE^Welcome back!^Thai^Indonesian
+BINDFB_EXISTING_USER_POPUP_MSG^You have an <color=255:255:0>existing account</color> connected to Facebook. Connecting to Facebook will <color=224:80:80>remove the current guest account</color>. Do you wish to continue?^Thai^Indonesian
+BINDFB_EXISTING_USER_POPUP_TITLE_2^<color=255:0:0>Remove Guest Account</color>^Thai^Indonesian
+BINDFB_EXISTING_USER_POPUP_MSG_2^The current guest account has <color=255:255:0>Player Level <param=gplv>, <param=ggem> Gems, <param=gzel> Zel, <param=gkar> Karma, and <param=guni> Units</color>. The restored Facebook account has <color=146:208:80>Player Level <param=fplv>, <param=fgem> Gems, <param=fzel> Zel, <param=fkar> Karma, and <param=funi> Units</color>. This process is <color=255:0:0>permanent</color>. Do you wish to continue?^Thai^Indonesian
+BINDFB_TRANSFER_SUCCESS_ALERT^<center>Transfer Successful</center><br><br>Press OK to exit and relaunch the game.^Thai^Indonesian
+BINDFB_FACEBOOK_REWARD_TITLE^Gem^Thai^Indonesian
+BINDFB_FACEBOOK_REWARD_MSG^Connect with Facebook and receive one <color=255:255:0>FREE Gem</color>!^Thai^Indonesian
+GUMI_LIVE_RELOGIN_SUCCESS^<center>Re-Login Successful</center><br><br>Press OK to restart.^Thai^Indonesian
+WIN_SCORE_FORMAT^Win: <param=winct> Lose: <param=losect>^Thai^Indonesian
+MIX_NEED_CAP^Use^Thai^Indonesian
+MIX_HAVE_CAP^Own^Thai^Indonesian
+BRAVE_COIN_SINGULAR^Gem^Thai^Indonesian
+BRAVE_COIN_PLURAL^Gems^Thai^Indonesian
+BUY_COIN_CONFIRM_MSG^<br>Do you want to buy %s for %s?^Thai^Indonesian
+WIN_SCORE_FORMAT_SHORT^W: <param=winct> L: <param=losect>^Thai^Indonesian
+NETWORK_ERROR_RETRY^<center>Connection Error</center><br><br>Press OK to retry.^Thai^Indonesian
+NETWORK_SERVER_ERROR^<center>Server Error</center><br><br>Internal server error.^Thai^Indonesian
+NETWORK_SERVERDOWN^<center>Server Maintenance</center><br><br>Just some regular server maintenance! Visit www.fb.com/BraveFrontier for more details!^Thai^Indonesian
+NETWORK_ERROR_SESSION_EXPIRED^<center>Invalid Session</center><br><br>You game session has expired. Press OK to re-login.^Thai^Indonesian
+FRIEND_POINT_GIFT_UNIT^pts^Thai^Indonesian
+FRIEND_POINT_GIFT^Honor Pts^Thai^Indonesian
+UNIT_EVOLVE_HAVE_CAP^Have <param=num>^Thai^Indonesian
+LAST_PLAY_DAYS^Online <param=num> days ago^Thai^Indonesian
+LAST_PLAY_DAY^Online 1 day ago^Thai^Indonesian
+LAST_PLAY_HRS^Online <param=num> hrs ago^Thai^Indonesian
+LAST_PLAY_HR^Online 1 hr ago^Thai^Indonesian
+LAST_PLAY_MINS^Online <param=num> mins ago^Thai^Indonesian
+LAST_PLAY_MIN^Online 1 min ago^Thai^Indonesian
+MISSION_START^Begin Quest^Thai^Indonesian
+MISSION_SELECT^Select Quest^Thai^Indonesian
+BG_DOWNLOAD_COMPLETE^Download has been completed^Thai^Indonesian
+SP_AREA_DAYS^<param=num> days left^Thai^Indonesian
+SP_AREA_DAY^1 day left^Thai^Indonesian
+SP_AREA_HRS^<param=num> hrs left^Thai^Indonesian
+SP_AREA_HR^1 hr left^Thai^Indonesian
+SP_AREA_MINS^<param=num> mins left^Thai^Indonesian
+SP_AREA_MIN^1 min left^Thai^Indonesian
+COPYRIGHT_TEXT^Copyright (c) 2013 Alim co., LTD. All Rights Reserved. Published by gumi Inc.^Thai^Indonesian
+FRIEND_ID_SEARCH_PLAYER_ID_DESC^Share this for your friends to add you.^Thai^Indonesian
+FRIEND_ADD_TITLE^Add Friend^Thai^Indonesian
+FRIEND_ID_SEARCH_AREA_LABEL^Friend ID:^Thai^Indonesian
+EARLY_BIRD_POPUP_TITLE^Limited Time Offer^Thai^Indonesian
+EARLY_BIRD_POPUP_TEXT^<color=220:44:16><param=num>% More Gems!</color>^Thai^Indonesian
+SHOP_EARLY_BIRD_TEXT^<color=42:255:101><param=num>% More!</color>^Thai^Indonesian
+SHOP_EARLY_BIRD_GEMS_TEXT^%d <color=42:255:101>%d</color> Gems^Thai^Indonesian
+SHOP_EARLY_BIRD_OFFER_TEXT^Get this limited time offer now!^Thai^Indonesian
+HOME_EXIT_GAME_TITLE^Exit Game^Thai^Indonesian
+HOME_EXIT_GAME_TEXT^Do you wish to exit the game?^Thai^Indonesian
+MENU_OPTION_LANG_TITLE^Language Setting^Thai^Indonesian
+MENU_OPTION_LANG_DESC^Change Language Display of the Game,^Thai^Indonesian
+MENU_OPTION_LANG_CONFIRM_DESC^<center><br>Change the game display language to %s<size=15>?</size><br>(A small patch will be initiated)</center>^Thai^Indonesian
+LANG_EN^<size=15><color=255:165:0>English</color></size>^Thai^Indonesian
+LANG_PT^<size=15><color=255:165:0>Portuguese</color></size>^Thai^Indonesian
+LANG_DE^<size=15><color=255:165:0>German</color></size>^Thai^Indonesian
+LANG_RU^<size=15><color=255:165:0>Russian</color></size>^Thai^Indonesian
+LANG_IT^<size=15><color=255:165:0>Italian</color></size>^Thai^Indonesian
+LANG_FR^<size=15><color=255:165:0>French</color></size>^Thai^Indonesian
+LANG_ES^<size=15><color=255:165:0>Spanish</color></size>^Thai^Indonesian
+LANG_TH^<size=15><color=255:165:0>Thai</color></size>^Thai^Indonesian
+LANG_ID^<size=15><color=255:165:0>Indonesian</color></size>^Thai^Indonesian
+LANG_VI^<size=15><color=255:165:0>Vietnamese</color></size>^Thai^Indonesian
+OG_TUTORIAL_TITLE^Tutorial^Thai^Indonesian
+OG_TUTORIAL_DESC^<param=fb_name> has completed the tutorial and ready to venture into Grand Gaia!^Thai^Indonesian
+OG_LEVEL_UP_TITLE^<param=Unit_name> (Max Level!)^Thai^Indonesian
+OG_LEVEL_UP_DESC^<param=fb_name> has leveled up <param=Unit_name> to level <param=level>!^Thai^Indonesian
+OG_EVOLVE_TITLE^<param=Unit_name> to <param=new_Unit_name>^Thai^Indonesian
+OG_EVOLVE_DESC^<param=fb_name> has evolved <param=Unit_name> to <param=new_Unit_name>!^Thai^Indonesian
+OG_ACHIEVE_RANK_TITLE^<param=rank_name>^Thai^Indonesian
+OG_ACHIEVE_RANK_DESC^<param=fb_name> is now ranked <param=rank_name> in the Arena!^Thai^Indonesian
+OG_AREA_CLEAR_TITLE^<param=area_name>^Thai^Indonesian
+OG_AREA_CLEAR_DESC^<param=fb_name> has cleared the <param=area_name>!^Thai^Indonesian
+OG_SUPER_RARE_TITLE^Super Rare Unit, <param=Unit_name>^Thai^Indonesian
+OG_SUPER_RARE_DESC^<param=fb_name> received a Super Rare Unit, <param=Unit_name> from Rare Summon!^Thai^Indonesian
+OG_MEGA_RARE_TITLE^Mega Rare Unit, <param=Unit_name>^Thai^Indonesian
+OG_MEGA_RARE_DESC^<param=fb_name> received a Mega Rare Unit, <param=Unit_name> from Rare Summon!^Thai^Indonesian
+VIDEO_TUTORIAL^Video Tutorials^Thai^Indonesian
+VIDEO_TUTORIAL_DESCRIPTION^Watch video tutorials for the first time to earn rewards!^Thai^Indonesian
+REWARD_COLLECT_SUCCESSFUL^Reward has been sent to your gift.^Thai^Indonesian
+REWARD_ALREADY_COLLECTED^Reward has already been collected.^Thai^Indonesian
+POPUP_TUTORIAL_TEXT^Complete tutorial to get these REWARDS!^Thai^Indonesian
+POPUP_TUTORIAL_GEM_TEXT^x3^Thai^Indonesian
+POPUP_TUTORIAL_UNIT_TEXT^x1^Thai^Indonesian
+POPUP_TUTORIAL_END^<center>Tutorial Complete<br><br>You have completed the basic tutorial, Gifts have been awarded to you. Visit your presents box to receive them.^Thai^Indonesian
+POPUP_TUTORIAL_MANAGE_ITEMS_TITLE^Managing Items^Thai^Indonesian
+POPUP_TUTORIAL_MANAGE_ITEMS_DESC^You are only able to manage Items after you have completed the Items management tutorial by visiting the town.^Thai^Indonesian
+RATE_APP_ANDROID_BODY^Please rate this game in the Google Play Store so we can keep making more games!^Thai^Indonesian
+ANDROID_BACKBUTTON_DISABLED^Back button is disabled^Thai^Indonesian
+FB_LIST_TITLE^Facebook Friends^Thai^Indonesian
+FB_LIST_ADD_CAP^Facebook Friends Playing Brave Frontier^Thai^Indonesian
+FB_LIST_ADD_CAP_EMPTY^No More Playing Friends to Add^Thai^Indonesian
+FB_LIST_INVITE_CAP^Invite Facebook Friends^Thai^Indonesian
+FB_DIALOG_INVITE_TITLE^Invite^Thai^Indonesian
+FB_DIALOG_INVITE_MESSAGE^Let's play Brave Frontier!^Thai^Indonesian
+FB_LIST_TICKER^You can invite your Facebook friends to play Brave Frontier.^Thai^Indonesian
+FB_LIST_DOWNLOAD_ERROR^Failed to download Facebook friend list.^Thai^Indonesian
+DL_NOT_ENOUGH_DISK_SPACE_TITLE^Not enough disk space!^Thai^Indonesian
+DL_NOT_ENOUGH_DISK_SPACE_DESC^Download failed because there isn't enough free space on device.<br><br>Free up some space and try again.^Thai^Indonesian
+DL_RETRY^Retry^Thai^Indonesian
+DL_ABORT^Abort^Thai^Indonesian
+MENU_OPTION_GFX_TITLE^Graphics Quality^Thai^Indonesian
+MENU_OPTION_GFX_TEXT^Adjust graphics quality^Thai^Indonesian
+CHALLENGE_ITEM_HEADER^Item Set^Thai^Indonesian
+CHALLENGE_ITEM_EXPLAIN^These are the Items distributed by the Summoners' Hall. They are used in place of the items you already have, but all unused Items are collected after your mission is over.^Thai^Indonesian
+CHALLENGE_HUNTER_RESULT^Hunter Score^Thai^Indonesian
+CHALLENGE_BONUS_WIN^Victory Bonus^Thai^Indonesian
+CHALLENGE_BONUS_DEAD^Survival Bonus^Thai^Indonesian
+CHALLENGE_BONUS_SPARK^Spark Bonus^Thai^Indonesian
+CHALLENGE_BONUS_OVERKILL^Overkill Bonus^Thai^Indonesian
+CHALLENGE_BONUS_MULTIKILL^Multi-Kill Bonus^Thai^Indonesian
+CHALLENGE_BONUS_WEAKATK^Weak Element Attack Bonus^Thai^Indonesian
+CHALLENGE_PARTICIPATION_BONUS^Reward^Thai^Indonesian
+CHALLENGE_FLOOR_BONUS^Stage Reward^Thai^Indonesian
+CHALLENGE_EVALUATION_BONUS^Esteem Reward^Thai^Indonesian
+CHALLENGE_FLOOR_CLEAR^<color=0:255:0>Stage<param=floor></color><color=255:102:60> Cleared!!</color>^Thai^Indonesian
+CHALLENGE_POINT_CLEAR^<param=point><color=255:165:0> pts</color><color=255:102:60> Cleared!!</color>^Thai^Indonesian
+CHALLENGE_GET_REWARD^<color=255:102:60>Received!!</color>^Thai^Indonesian
+CHALLENGE_GIVEUP_CONFIRM_TEXT^Give up now and you'll be taken to the results screen with your current Esteem pts. <br>Proceed?^Thai^Indonesian
+OPEN_PERIOD^Event Period^Thai^Indonesian
+CHALLENG_NEEDPT^Esteem Required^Thai^Indonesian
+CHALLENG_CHECK_COST_UP^Set Cost has been exceeded. <br>Please edit your Squad.^Thai^Indonesian
+CHALLENG_CHECK_COST_DOWN^Set Cost hasn't been met. <br>Please edit your Squad.^Thai^Indonesian
+CHALLENG_CHECK_ELEMENT^Squad contains Units whose elements are invalid. <br>Please edit your Squad.^Thai^Indonesian
+CHALLENG_CHECK_SEX^Squad contains Units whose gender is invalid. <br>Please edit your Squad.^Thai^Indonesian
+CHALLENG_CHECK_TRIBE^Squad contains Units whose race is invalid. <br>Please edit your Squad.^Thai^Indonesian
+CHALLENG_CHECK_TIME^No events currently being held.^Thai^Indonesian
+RANDALL_FACILITY_COMMON^Akras Summoners' Hall^Thai^Indonesian
+RANDALL_FACILITY_SPHERE^Sphere^Thai^Indonesian
+RANDALL_FACILITY_CHALLENGE^Survey Office^Thai^Indonesian
+RANDALL_FACILITY_SUMMON^Administration Office^Thai^Indonesian
+RANDALL_FACILITY_TRIAL^Summoners' Research Lab^Thai^Indonesian
+RANDALL_SUMMON_HEADER^Administration Office^Thai^Indonesian
+RANDALL_SUMMON_MSG^This is the Administration Office of the Akras Summoners' Hall. <br>What can I help you with?^Thai^Indonesian
+RANDALL_KEY_HEADER^Receive Keys^Thai^Indonesian
+RANDALL_NAVI_PAYMENT_KEY^A key has been delivered from the Summoners' Hall. <br>Please take it.^Thai^Indonesian
+RANDALL_NAVI_NO_PAYMENT_KEY^There are currently no keys to pick up. <br>Please stop by again later.^Thai^Indonesian
+RANDALL_NO_PAYMENT_KEY_LIST^There are no keys to pick up.^Thai^Indonesian
+RANDALL_HAVE_KEY^You have: <param=num>^Thai^Indonesian
+RANDALL_NEXT_RECEIPT_POSSIBLE_DATE^Next delivery: <param=date>^Thai^Indonesian
+RANDALL_GET_KEY_NG^You can't receive any more keys as you've reached the max number of keys. <br>Please use your keys on the corresponding Quests in the Vortex Gate.^Thai^Indonesian
+USE_KEY_TITLE^Use Dungeon Key^Thai^Indonesian
+USE_KEY_CONFIRMATION^1 <param=keyname> is required to proceed. <br>Use a <param=keyname>? <br>*Valid for 1 hour of use. <br><br><param=keyname>s in stock: <param=num>^Thai^Indonesian
+USE_KEY_CONFIRMATION_DONOTHAVE^1 <param=keyname> is required to proceed. <br><br><param=keyname>s in stock: <param=num>^Thai^Indonesian
+TRIAL_TOP_HEADER^Summoners' Research Lab^Thai^Indonesian
+TRIAL_PARTY_TOP_HEADER^Edit Squad^Thai^Indonesian
+TOURNAMENT_RANK^Rank^Thai^Indonesian
+TOURNAMENT_TITLE^Victory Points Tournament^Thai^Indonesian
+TOURNAMENT_POINTS_LABEL^Victory Points Achieved^Thai^Indonesian
+DAILYLOGIN_TITLE^<color=255:235:145>Daily Login Bonus</color>^Thai^Indonesian
+DAILYLOGIN_SUBTITLE^Login daily to raise your bonus reward's rarity!^Thai^Indonesian
+DAILYLOGIN_RAREBAR^Rarity Bar^Thai^Indonesian
+LOCALNOTIF_ENERGY^Summoner, your energy is full! Quest on!^Thai^Indonesian
+LOCALNOTIF_ARENA^Summoner, your arena orbs has been replenished! It's time to take on some challengers!^Thai^Indonesian
+LOCALNOTIF_NOLOGIN^There are still much to be done to supress the corruption in Grand Gaia, we need you back summoner!^Thai^Indonesian
+LOCALNOTIF_METALKEY^Summoner, your METAL key is ready for collection.^Thai^Indonesian
+DLC_RESET_TITLE^Reset application DLC^Thai^Indonesian
+DLC_RESET_MESSAGE^<br>This will remove all application downloadable content on this device.<br>(Application will exit)<br><br><color=255:97:97>Would you like to proceed?</color>^Thai^Indonesian
+TOURNAMENT_EVENT_PERIOD^Event Period^Thai^Indonesian
+TOURNAMENT_CLAIM_PERIOD^Claim Period^Thai^Indonesian
+TOURNAMENT_POINT_CAP^Victory Pts^Thai^Indonesian
+CHALLENG_MAXPT^Max Esteem pts^Thai^Indonesian
+CHALLENG_CHECK_RARE_UP^Squad contains Units whose rarity is too high. <br>Please edit your Squad^Thai^Indonesian
+CHALLENG_CHECK_RARE_DOWN^Squad contains Units whose rarity is too low. <br>Please edit your Squad^Thai^Indonesian
+CHALLENGE_ACCEPT^Survey Office^Thai^Indonesian
+CHALLENGE_SHORTAGE_AUBE_TITLE^You have no Hunter Orbs left.^Thai^Indonesian
+CHALLENGE_SHORTAGE_AUBE_TEXT^You can use 1 Gem to<br><color=255:0:0> fully restore your Hunter Orbs</color>.^Thai^Indonesian
+CHALLENGE_REWARDLIST_HEADER^Rewards^Thai^Indonesian
+CHALLENGE_REWARDLIST_SEARCH^Survey Rewards^Thai^Indonesian
+CHALLENGE_REWARDLIST_MVP^MVP Rewards^Thai^Indonesian
+CHALLENGE_RANKING_HEADER^Ranking^Thai^Indonesian
+CHALLENGE_MVP_HEADER^MVP^Thai^Indonesian
+CHALLENGE_TOP_HEADER^Challenge^Thai^Indonesian
+CHALLENGE_TOP_NONREWARD^There are no Rewards to receive.^Thai^Indonesian
+CHALLENGE_NAVI_RECEIPT^Well done! You've received a Reward from the Akras Summoners' Hall! <br>I knew you could do it!^Thai^Indonesian
+CHALLENGE_NAVI_RESULT1^Huh? What happened? Maybe you didn't prepare enough? <br>Better luck next time!^Thai^Indonesian
+CHALLENGE_NAVI_RESULT2^Here's the amount of Frontier Service you provided this time!<br> I knew you had it in you!<br> I look forward to seeing how you do next time!^Thai^Indonesian
+CHALLENGE_RESULT_RECEIPT_RANK1^HR <param=before>^Thai^Indonesian
+CHALLENGE_RESULT_RECEIPT_RANK2^→^Thai^Indonesian
+CHALLENGE_RESULT_RECEIPT_RANK3^<color=255:255:0><param=next></color>^Thai^Indonesian
+CHALLENGE_RECEIPT_HEADER^Receive Rewards^Thai^Indonesian
+CHALLENGE_NAVI_RANKING_TOTAL1^Here are the rankings of all Summoners! <br>Wow! You did great! <br>You're truly amazing!^Thai^Indonesian
+CHALLENGE_NAVI_RANKING_TOTAL2^Here are the rankings of all Summoners. <br>They're all so strong! <br>You did good as well!^Thai^Indonesian
+CHALLENGE_NAVI_RANKING_TOTAL3^Here are the rankings of all Summoners. <br>Don't worry about what place you finish! <br>Go at your own pace!^Thai^Indonesian
+CHALLENGE_NAVI_RANKING_FRIEND^Here are the rankings of all your friends. <br>They're all working so hard! <br>Be sure to do the same!^Thai^Indonesian
+CHALLENGE_NAVI_RANKING_MVP^Here are the MVP rankings. <br>Rank 1st in a certain field to get a special Sphere in recognition of your service!^Thai^Indonesian
+CHALLENGE_NAVI_REWARD_LIST^Here are the Rewards you can get from the Akras Summoners' Hall. <br>Which are you going after?^Thai^Indonesian
+CHALLENGE_NAVI_STATE_NULL^Currently not in session.^Thai^Indonesian
+CHALLENGE_SHORTAGE_COIN_TEXT^You can use 1 Gem to <br><color=255:0:0>fully restore your Hunter Orbs</color>. <br>Buy Gems?^Thai^Indonesian
+CHALLENGE_MISSEL_HEADER^Choose your Frontier^Thai^Indonesian
+TRIAL_TOP_MSG^Trial Overview^Thai^Indonesian
+TRIAL_NOT_MISSION^I'm still preparing for the next trial! <br>You have no chance in defeating the incredibly powerful mock Unit I'm working on, so you'd better get to training!^Thai^Indonesian
+TRIAL_PARTY_SUBHEADER_EDIT^Manage Squad^Thai^Indonesian
+TRIAL_PARTY_SUBHEADER_PLACEMENT^Change Position^Thai^Indonesian
+TRIAL_PARTY_SUBHEADER_ORDER^Change Battle Order^Thai^Indonesian
+TRIAL_NAVI_PARTY_TOP^Select the Units that will be in the 3 parties you take on this Trial. You're allowed 2 times your normal Cost allowance, so go ahead and choose your strongest Units!^Thai^Indonesian
+TRIAL_NAVI_PARTY_ORDER^Select the order in which you want your Squads to fight. Or rather, the order in which they are to be defeated by my mock Unit. <br>Easy enough, right?^Thai^Indonesian
+TRIAL_NAVI_PARTY_PLACEMENT^Do you wish to swap positions between the Units that will participate? I won't accept Squads without a Leader. You know how to assign Leaders, right?^Thai^Indonesian
+TRIAL_NOT_SELECT_FRIEND_TITLE^Summoner Helper Select^Thai^Indonesian
+TRIAL_NOT_SELECT_FRIEND^A Summoner Helper has not been chosen. <br>Parties have been set. Would you like to proceed?^Thai^Indonesian
+AGREEMENT_CONFIRM^Agree to Terms of Use^Thai^Indonesian
+TOURNAMENT_REWARD_LABEL^Rewards^Thai^Indonesian
+TOURNAMENT_CLAIM_MESSAGE^Received!!^Thai^Indonesian
+TOURNAMENT_INACTIVE_LABEL^There are no Rewards to receive.^Thai^Indonesian
+CHALLENGE_EVENT_PERIOD^Event Period^Thai^Indonesian
+CHALLENGE_CALCULATE_PERIOD^Calculating Period^Thai^Indonesian
+CHALLENGE_RANKING_PERIOD^Ranking Result^Thai^Indonesian
+MAINTENANCE_COUNTDOWN_MSG^Maintenance in <param=timetomaintenance>!^Thai^Indonesian
+END_OF_LIST^^^

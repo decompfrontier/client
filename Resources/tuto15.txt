@@ -1,0 +1,121 @@
+﻿*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=35,param=-1,#
+*,type=PARAM,id=26,param=1,#
+*,type=PARAM,id=1,param=bg1:dungeon_battle_10100.jpg,#
+*,type=PARAM,id=1,param=ip5h:battle_header_ip5.png,#
+*,type=PARAM,id=1,param=chr1_fu:navi_chara1_0.png,#
+*,type=PARAM,id=1,param=chr1_ki:navi_chara1_1.png,#
+*,type=PARAM,id=1,param=chr1_do:navi_chara1_2.png,#
+*,type=PARAM,id=1,param=chr1_bi:navi_chara1_3.png,#
+*,type=PARAM,id=1,param=chr1_ai:navi_chara1_4.png,#
+*,type=PARAM,id=1,param=chr1_ko:navi_chara1_8.png,#
+*,type=PARAM,id=33,param=bf010_map_grass.mp3,#
+*,type=PARAM,id=8,param=2:0&0&0,#
+*,type=PARAM,id=2,param=bg1:0:0:1:0.5,#
+*,type=PARAM,id=2,param=ip5h:0:0:1:0.5,#
+*,type=PARAM,id=42,param=BattleDungeon10100CloudBack:160:110:BattleDungeon10100CloudBack.sam:none,#
+*,type=PARAM,id=42,param=BattleDungeon10100WindAddBack:160:110:none:BattleDungeon10100WindAddBack.sam,#
+*,type=PARAM,id=42,param=BattleDungeon10100SunShineAddFront:160:110:none:BattleDungeon10100SunShineAddFront.sam,#
+*,type=STOP,id=-1,#
+*,type=PLAYWAIT,param=1,#
+*,type=PARAM,id=2,param=chr1_fu:60:30:2:0.5,#
+*,type=PARAM,id=39,param=Tilith,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=It seems like there's nothing left for me to teach you. Why don't you try getting out of the grasslands by yourself?,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_fu:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=I'll come see you again once you've made it to the cave just beyond the grasslands.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_ki:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Be sure to strengthen up before then! <wait=20>You can do it, <rep_handlename>!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=45,param=3,#
+*,type=PARAM,id=7,param=3:255&255&255,#
+*,type=PARAM,id=34,param=bf251_se_whiteout.mp3,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=43,param=BattleDungeon10100CloudBack,#
+*,type=PARAM,id=43,param=BattleDungeon10100WindAddBack,#
+*,type=PARAM,id=43,param=BattleDungeon10100SunShineAddFront,#
+*,type=PARAM,id=3,param=ip5h:1:0.5,#
+*,type=PARAM,id=37,param=255&255&255,#
+*,type=PARAM,id=30,param=-1,#
+*,type=PLAYWAIT,param=2,#
+*,type=PARAM,id=7,param=1:0&0&0,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=37,param=0&0&0,#
+*,type=PARAM,id=26,param=1,#
+*,type=PARAM,id=1,param=bg1:mytown_base.jpg,#
+*,type=PARAM,id=1,param=ip5h:battle_header_ip5.png,#
+*,type=PARAM,id=1,param=elgaia:elgaia.png,#
+*,type=PARAM,id=1,param=chr2_fu:navi_chara2_0.png,#
+*,type=PARAM,id=1,param=chr2_ki:navi_chara2_1.png,#
+*,type=PARAM,id=1,param=chr2_do:navi_chara2_2.png,#
+*,type=PARAM,id=1,param=chr2_bi:navi_chara2_3.png,#
+*,type=PARAM,id=1,param=chr2_ak:navi_chara2_5.png,#
+*,type=PARAM,id=2,param=bg1:0:0:1:0.5,#
+*,type=PARAM,id=2,param=ip5h:0:0:1:0.5,#
+*,type=PLAYWAIT,param=2,#
+*,type=PARAM,id=38,param=-1,#
+*,type=PARAM,id=33,param=bf009_village.mp3,#
+*,type=PARAM,id=44,param=5,#
+*,type=PARAM,id=8,param=5:0&0&0,#
+*,type=PARAM,id=5,param=bg1:0:-184:8:tag65,#
+*,type=PLAYWAIT,param=2,#
+*,type=PARAM,id=2,param=elgaia:80:70:2:1.5,#
+*,type=PLAYWAIT,param=4,#
+*,type=PARAM,id=3,param=elgaia:2:1.5,#
+*,type=STOP,id=-1,#
+*,type=PLAYWAIT,param=1,#
+*,type=PARAM,id=2,param=chr2_do:-110:-40:2:0.5,#
+*,type=PARAM,id=39,param=Karl,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Oh, <wait=20>welcome back. <wait=40><br>I've got news for you.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Another powerful demon has appeared in Morgan... The Summoners' Hall has decided once again to assemble a Demon Slayer squad.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=And it looks like I am to be among its members. <wait=20><br>Seems like it's going to be a long expedition as well.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr2_ki:-110:-40:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=So, before I go, <wait=20>this is for you.<wait=40><br>The treasure of Grand Gaia...  <color=00FFFF>Gems</color>.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=3,param=chr2_fu:1:0.5,#
+*,type=PARAM,id=3,param=chr2_ki:1:0.5,#
+*,type=PARAM,id=3,param=chr2_do:1:0.5,#
+*,type=PARAM,id=40,param=-1,#
+*,type=PARAM,id=34,param=bf312_se_dia_get.mp3,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=You received 5 <color=00FFF>Gems</color>.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=39,param=Karl,#
+*,type=PARAM,id=2,param=chr2_ki:-110:-40:2:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Now summon yourself a strong Unit! <wait=20>I'll show you how.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=7,param=2:0&0&0,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=30,param=-1,#
+*,type=PARAM,id=100,param=change_town_top_scene:change_town_top_scene:none,#
+*,type=STOP,id=-1,#
+*,type=PLAYWAIT,param=0.3,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=28,param=213:428:53:53:_ip5yd,#
+*,type=PARAM,id=22,param=213:428:53:53:_ip5yd,#
+*,type=PARAM,id=21,param=239:429:_ip5yd,#
+*,type=PARAM,id=13,param=2:,#*,type=MSGDRAW,msg=When summoning, <color=FFD700>you can't choose what you get</color>, but you will sometimes get strong Units. <color=00FF00>Tap Summon</color>.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=34,param=bf300_se_action.mp3,#
+*,type=PARAM,id=100,param=change_gacha_top_scene:change_gacha_top_scene:none,#
+*,type=PARAM,id=31,param=-1,#
+*,type=STOP,id=-1,#
+*,type=PLAYWAIT,param=0.2,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=22,param=92:267:134:40:tag107,#
+*,type=PARAM,id=21,param=161:273:tag108,#
+*,type=PARAM,id=13,param=2:,#*,type=MSGDRAW,msg=This is where you summon. You can use the <color=00FFFF>Gems</color> you just received to <color=00FF00>summon a Unit</color>. Try tapping Summon.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=change_gacha_detail_scene:change_gacha_detail_scene:none,#
+*,type=PARAM,id=31,param=-1,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=22,param=95:341:134:40:tag113,#
+*,type=PARAM,id=21,param=158:347:tag114,#
+*,type=PARAM,id=13,param=0:,#*,type=MSGDRAW,msg=,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=change_gacha_action_scene:change_gacha_action_scene:none,#
+*,type=PARAM,id=31,param=-1,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=32,param=-1,#
+*,type=PARAM,id=22,param=0:0:320:480:_ip5ex,#
+*,type=PARAM,id=13,param=2:,#*,type=MSGDRAW,msg=Well done. You can summon a Unit at any time with <color=FFD700>5 Gems</color>, though honestly speaking they are pretty rare.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=7,param=1:0&0&0,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=30,param=-1,#
+*,type=PARAM,id=27,param=-1,#
+*,type=PARAM,id=100,param=change_tuto_step_scene:change_tuto_step_scene:none,#

@@ -1,0 +1,16 @@
+page id=0 file="num32_s_font.png"
+chars count=13
+char id=48 x=0   y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="0"
+char id=49 x=26  y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="1"
+char id=50 x=52  y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="2"
+char id=51 x=78  y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="3"
+char id=52 x=104 y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="4"
+char id=53 x=130 y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="5"
+char id=54 x=156 y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="6"
+char id=55 x=182 y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="7"
+char id=56 x=208 y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="8"
+char id=57 x=234 y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="9"
+char id=88 x=260 y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="X"
+char id=47 x=286 y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="/"
+char id=63 x=312 y=0 width=26 height=32 xoffset=0 yoffset=0 xadvance=26 page=0 chnl=0 letter="?"
+kernings count=0

@@ -487,7 +487,6 @@ tools/jenkins_scripts/mac/android/userconf.ini
 Debug.win32/
 Release.win32/
 .vs/
-Resources/
 
 metadata
 bin/

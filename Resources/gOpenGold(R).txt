@@ -1,0 +1,7 @@
+*,type=PARAM,id=42,param=door_open:160:240:GachaGateOpen3.sam:GachaGateOpenAdd.sam,#
+*,type=PARAM,id=34,param=bf110_zin_act_gatya021.mp3,#
+*,type=PLAYWAIT,param=0.5,#
+*,type=PARAM,id=46,param=light:160:240:1:eff_page_723_1.plist,#
+*,type=PARAM,id=46,param=light:160:240:1:eff_page_723_2.plist,#
+*,type=STOP,id=-1,#
+

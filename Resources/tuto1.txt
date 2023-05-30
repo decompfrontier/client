@@ -1,0 +1,328 @@
+﻿*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=37,param=255&255&255,#
+*,type=PARAM,id=35,param=-1,#
+*,type=PARAM,id=26,param=1,#
+*,type=PARAM,id=100,param=battle_ui_off:battle_ui_off:none,#
+*,type=PARAM,id=100,param=battle_party_off:battle_party_off:none,#
+*,type=PARAM,id=1,param=chr1_fu:navi_chara1_0.png,#
+*,type=PARAM,id=1,param=chr1_ki:navi_chara1_1.png,#
+*,type=PARAM,id=1,param=chr1_do:navi_chara1_2.png,#
+*,type=PARAM,id=1,param=chr1_bi:navi_chara1_3.png,#
+*,type=PARAM,id=1,param=chr1_ai:navi_chara1_4.png,#
+*,type=PARAM,id=1,param=chr1_mj:navi_chara1_7.png,#
+*,type=PARAM,id=1,param=chr1_ko:navi_chara1_8.png,#
+*,type=PLAYWAIT,param=3,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=8,param=3:255&255&255,#
+*,type=PARAM,id=16,param=1,#*,type=MSGDRAW,msg=<anchor=center><color=000000><speed=5><size=12>...<short_handle_name>...,#
+*,type=PLAYWAIT,param=4,#
+*,type=PARAM,id=7,param=3:255&255&255,#
+*,type=STOP,id=-1,#
+*,type=PLAYWAIT,param=2,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=8,param=3:255&255&255,#
+*,type=PARAM,id=16,param=1,#*,type=MSGDRAW,msg=<anchor=center><color=000000><speed=7><size=12>...<rep_handlename>?,#
+*,type=PLAYWAIT,param=4,#
+*,type=PARAM,id=7,param=3:255&255&255,#
+*,type=STOP,id=-1,#
+*,type=PLAYWAIT,param=2,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=36,param=0.2:3:30:15,#
+*,type=PARAM,id=16,param=2,#*,type=MSGDRAW,msg=<anchor=center><color=000000><speed=15><size=40>Hey<br><rep_handlename>!!,#
+*,type=PLAYWAIT,param=4,#
+*,type=STOP,id=-1,#
+*,type=PLAYWAIT,param=2,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=33,param=bf010_map_grass.mp3,#
+*,type=PARAM,id=44,param=5,#
+*,type=PLAYWAIT,param=3,#
+*,type=PARAM,id=38,param=-1,#
+*,type=PARAM,id=8,param=5:255&255&255,#
+*,type=STOP,id=-1,#
+*,type=PLAYWAIT,param=1,#
+*,type=PARAM,id=2,param=chr1_do:60:30:2:0.5,#
+*,type=PARAM,id=39,param=???,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Come on... <wait=20>WAKE UP ALREADY!!!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=10000,param=Tutorial Tracking Point:Q1W1 Basic GP (Dialog End),#
+*,type=PARAM,id=2,param=chr1_ko:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=...Hmm?<wait=30> Me?<wait=40><br>I'm your guide, can't you tell?!<br>Didn't you hear from Lord Lucius?<wait=40><br>Hmph…,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_fu:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=I'm the goddess, Tilith. <wait=40><br>I've been assigned as your guide to help you ,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=39,param=Tilith,#
+*,type=PARAM,id=2,param=chr1_bi:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Huh?<wait=20> Guide you where?<wait=20> Through Grand Gaia, of course!<wait=20><br>My my, for someone who has the power to enter the Gate, you're pretty clueless, aren't you?,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_mj:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=At any rate, we first need to get across this field<wait=40><br>We can talk more later.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_bi:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Wh-<wait=20>What's that?!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=3,param=chr1_do:1:0.5,#
+*,type=PARAM,id=3,param=chr1_ki:1:0.5,#
+*,type=PARAM,id=3,param=chr1_fu:1:0.5,#
+*,type=PARAM,id=3,param=chr1_mj:1:0.5,#
+*,type=PARAM,id=3,param=chr1_ko:1:0.5,#
+*,type=PARAM,id=3,param=chr1_bi:2:0.3,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=34,param=bf303_se_magic.mp3,#
+*,type=PARAM,id=100,param=tuto1_enemy_appear:tuto1_enemy_appear:none,#
+*,type=PLAYWAIT,param=2,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_ai:60:30:2:0.3,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=<size=24>Look out!!<wait=20><br>I-It's a monster!!<br><size=20>Quick, do something, summon your Units!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_bi:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=...What? <wait=20>You don't know how?,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_do:60:30:1:0.5,#
+*,type=PARAM,id=36,param=0.15:2:30:15,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=<size=24>You're a summoner, aren't you?!<br>Just concentrate!!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=3,param=chr1_ai:1:0.5,#
+*,type=PARAM,id=3,param=chr1_bi:1:0.5,#
+*,type=PARAM,id=3,param=chr1_fu:1:0.5,#
+*,type=PARAM,id=3,param=chr1_do:2:0.3,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=34,param=bf303_se_magic.mp3,#
+*,type=PARAM,id=100,param=tuto1_player_appear:tuto1_player_appear:none,#
+*,type=PLAYWAIT,param=2,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_fu:60:30:2:0.3,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Phew... <wait=40><br>That's right... <wait=20>That's how it's done...,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_bi:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Wait, <wait=20>how did you manage to summon <leader_unit_name>?!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_do:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=No matter! Quick, attack now before it attacks us!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_fu:60:30:2:0.3,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Well, what are you waiting for!? <wait=20>Attack!!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=7,param=1:0&0&0,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=3,param=chr1_do:1:0.5,#
+*,type=PARAM,id=3,param=chr1_ai:1:0.5,#
+*,type=PARAM,id=3,param=chr1_bi:1:0.5,#
+*,type=PARAM,id=3,param=chr1_ko:1:0.5,#
+*,type=PARAM,id=3,param=chr1_fu:2:0.3,#
+*,type=PARAM,id=26,param=0,#
+*,type=PARAM,id=100,param=not_item:not_item:none,#
+*,type=PARAM,id=100,param=battle_ui_on:battle_ui_on:none,#
+*,type=PARAM,id=100,param=set_focus:set_focus:none,#
+*,type=PARAM,id=8,param=1:0&0&0,#
+*,type=STOP,id=-1,#
+*,type=PLAYWAIT,param=0.5,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=14,param=Enemy Energy Bar:100:154:2:tag116,#
+*,type=PARAM,id=17,param=0:231:320:248:cm_all_ip5h,#
+*,type=PARAM,id=19,param=0:201:320:32:tag118,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=<color=00FF00>Summon Units</color> to attack your Enemy. Reduce your <color=FFD700>Enemy's Energy to 0</color> to defeat them.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=17,param=0:232:320:58:mask1,#
+*,type=PARAM,id=17,param=0:347:320:133:mask2_ip5h,#
+*,type=PARAM,id=17,param=159:289:161:58:mask3,#
+*,type=PARAM,id=14,param=Corresponding Unit:168:165:1:tag125,#
+*,type=PARAM,id=14,param=Action Button:13:248:2:tag126,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Attacking is simple. Tap on the <color=00FF00>Action Button</color> and the <color=FFD700>corresponding Unit</color> will automatically attack.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=21,param=70:311:tag129,#
+*,type=PARAM,id=22,param=0:290:159:57:tag130,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Now you try. Tap the <color=00FF00>Action Button</color>.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=unit_middle_atk:unit_stop_atk:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=17,param=159:231:161:180:la_all,#
+*,type=PARAM,id=17,param=0:405:320:75:item_ip5h,#
+*,type=PARAM,id=17,param=0:289:161:58:mask3,#
+*,type=PARAM,id=21,param=70:253:tag140,#
+*,type=PARAM,id=22,param=0:231:159:57:tag141,#
+*,type=PARAM,id=24,param=-1,#
+*,type=PARAM,id=17,param=0:0:320:231:field_area,#
+*,type=PARAM,id=17,param=0:347:160:58:unit_lb,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Your <color=FFD700>Unit has begun an attack</color>. Press the <color=00FF00>Action Button</color> to <color=00FFFF>attack simultaneously</color> with remaining Units!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=25,param=-1,#
+*,type=PARAM,id=18,param=field_area,#
+*,type=PARAM,id=100,param=unit_top_atk:unit_stop_atk:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=24,param=-1,#
+*,type=PARAM,id=17,param=0:0:320:231:field_area,#
+*,type=PARAM,id=17,param=0:231:160:58:unit_lt,#
+*,type=PARAM,id=18,param=unit_lb,#
+*,type=PARAM,id=22,param=0:347:159:57:tag155,#
+*,type=PARAM,id=21,param=70:367:tag156,#
+*,type=PARAM,id=13,param=0:,#*,type=MSGDRAW,msg=,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=25,param=-1,#
+*,type=PARAM,id=18,param=field_area,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=100,param=unit_bottom_atk:battle_end:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=17,param=0:231:320:248:cm_all_ip5h,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Wow, perfect!<br>Good thing you had me to teach you, right? What's with that face? Forget it, let's go!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=100,param=next_battle:battle_start:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=set_focus:set_focus:none,#
+*,type=PARAM,id=22,param=40:146:40:32:tag172,#
+*,type=PARAM,id=21,param=62:143:tag173,#
+*,type=PARAM,id=17,param=0:231:320:248:cm_all_ip5h,#
+*,type=PARAM,id=10000,param=Tutorial Tracking Point:Q1W2a Targetting,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=There's more... Which should we attack first... Let's get the <color=00FFFF>one at the back</color>. <color=FFD700>Tap the Enemy</color> to select it.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=34,param=bf247_se_town_get.mp3,#
+*,type=PARAM,id=100,param=tuto1_bat2_target:tuto1_bat2_target:none,#
+*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=You've changed your target. Remember, you can freely <color=FFD700>change your target</color> at any time by <color=00FF00>tapping an Enemy</color>.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=17,param=0:231:160:58:unit_lt,#
+*,type=PARAM,id=17,param=0:347:160:58:unit_lb,#
+*,type=PARAM,id=17,param=0:405:320:75:item_ip5h,#
+*,type=PARAM,id=17,param=159:231:161:180:la_all,#
+*,type=PARAM,id=21,param=70:311:tag186,#
+*,type=PARAM,id=22,param=0:290:160:58:tag187,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Hurry, tap the Action Button to attack!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=unit_middle_atk:unit_stop_atk:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=24,param=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=17,param=0:0:320:231:field_area,#
+*,type=PARAM,id=17,param=0:289:160:58:unit_lm,#
+*,type=PARAM,id=18,param=unit_lt,#
+*,type=PARAM,id=21,param=70:253:tag196,#
+*,type=PARAM,id=22,param=0:231:160:58:tag197,#
+*,type=PARAM,id=13,param=0:,#*,type=MSGDRAW,msg=,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=25,param=-1,#
+*,type=PARAM,id=18,param=field_area,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=100,param=unit_top_atk:unit_stop_atk:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=24,param=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=17,param=0:0:320:231:field_area,#
+*,type=PARAM,id=17,param=0:231:160:58:unit_lt,#
+*,type=PARAM,id=18,param=unit_lb,#
+*,type=PARAM,id=21,param=70:367:tag209,#
+*,type=PARAM,id=22,param=0:347:160:58:tag210,#
+*,type=PARAM,id=13,param=0:,#*,type=MSGDRAW,msg=,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=25,param=-1,#
+*,type=PARAM,id=18,param=field_area,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=100,param=unit_bottom_atk:enemy_turn_end:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=return_battle:player_turn_start:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=19,param=55:305:100:26:tag222,#
+*,type=PARAM,id=28,param=55:305:100:26:tag223,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=10000,param=Tutorial Tracking Point:Q1W2b HC,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=A <color=FFD700>Unit's HP decreases</color> when it's attacked. Be careful as a Unit is <color=FF637>knocked out when their HP reaches 0</color>.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=17,param=0:231:160:58:unit_lt,#
+*,type=PARAM,id=17,param=0:347:160:58:unit_lb,#
+*,type=PARAM,id=17,param=0:405:320:75:item_ip5h,#
+*,type=PARAM,id=17,param=159:231:161:180:la_all,#
+*,type=PARAM,id=21,param=70:311:tag232,#
+*,type=PARAM,id=22,param=0:290:160:58:tag233,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Alright, last one. Let's do this!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=unit_middle_atk:unit_stop_atk:tuto_drop_heart,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=24,param=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=17,param=0:0:320:231:field_area,#
+*,type=PARAM,id=17,param=0:289:160:58:unit_lm,#
+*,type=PARAM,id=18,param=unit_lt,#
+*,type=PARAM,id=21,param=70:253:tag242,#
+*,type=PARAM,id=22,param=0:231:160:58:tag243,#
+*,type=PARAM,id=13,param=0:,#*,type=MSGDRAW,msg=,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=25,param=-1,#
+*,type=PARAM,id=18,param=field_area,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=100,param=unit_top_atk:unit_stop_atk:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=24,param=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=17,param=0:0:320:231:field_area,#
+*,type=PARAM,id=17,param=0:231:160:58:unit_lt,#
+*,type=PARAM,id=18,param=unit_lb,#
+*,type=PARAM,id=21,param=70:367:tag255,#
+*,type=PARAM,id=22,param=0:347:160:58:tag256,#
+*,type=PARAM,id=13,param=0:,#*,type=MSGDRAW,msg=,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=25,param=-1,#
+*,type=PARAM,id=18,param=field_area,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=100,param=unit_bottom_atk:player_turn_end:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=17,param=0:231:320:248:cm_all_ip5h,#
+*,type=PARAM,id=14,param=Heart Crystals:64:148:1:tag266,#
+*,type=PARAM,id=10000,param=Tutorial Tracking Point:Q1W2c Chests,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=<color=FF6347>Heart Crystals</color> dropped during battle <color=FFD700>slightly restore HP</color>. <color=00FFFF>More hits</color> produces more Heart Crystals.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=100,param=return_battle:treasure_start:clear,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=17,param=0:231:320:248:cm_all_ip5h,#
+*,type=PARAM,id=14,param=Treasure Chests:0:110:2:tag273,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Monsters occasionally drop <color=00FF00>Treasure Chests</color>. <color=FFD700>Tap one</color> to open it. Each holds something different!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=21,param=66:146:tag276,#
+*,type=PARAM,id=22,param=32:128:54:54:tag277,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Alright, go ahead and <color=00FF00>tap the Treasure Chest</color> to open it. I wonder what's inside!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=100,param=tuto1_bat2_treasure:battle_end:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=17,param=0:231:320:248:cm_all_ip5h,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Treasure Chests contain <color=00FF00>many different things</color>, but <color=FFD700>be careful</color> as they sometimes contain <color=FF6347>monsters</color>, too!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=100,param=next_battle:battle_start:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=17,param=0:231:320:248:cm_all_ip5h,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=10000,param=Tutorial Tracking Point:Q1W3 Heal Item,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Looks like we've encountered a <color=00FFFF>Boss</color>. This won't be easy, you'd better prepare yourself!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=17,param=0:405:320:75:item_ip5h,#
+*,type=PARAM,id=100,param=return_battle:enemy_turn_end:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=enable_item:enable_item:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=return_battle:player_turn_start:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=18,param=item_ip5h,#
+*,type=PARAM,id=17,param=0:0:320:409:field,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=At this rate your Unit will be knocked out. It's good to have <color=00FF00>Recovery Items</color> for such situations.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=22,param=22:406:40:74:_ip5h,#
+*,type=PARAM,id=21,param=40:415:tag306,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Using a cure from the <color=00FF00>Item Menu</color> on your Unit will <color=FFD700>restore its HP</color>. <color=FFD700>Tap the cure</color> to give it a try.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=change_item_scene:change_item_scene:tuto_use_item,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=17,param=0:231:160:58:unit_lt,#
+*,type=PARAM,id=17,param=0:347:160:58:unit_lb,#
+*,type=PARAM,id=17,param=0:405:320:75:item_ip5h,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=21,param=70:311:tag315,#
+*,type=PARAM,id=22,param=0:290:160:58:tag316,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=That's it, now you've <color=00FFFF>selected a cure</color>. Now, tap the <color=FFD700>Unit whose HP you wish to restore</color>!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=100,param=use_item:use_item:none,#
+*,type=PLAYWAIT,param=1,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Yay! You restored their HP! Now, let's go all out and defeat the Enemy!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=100,param=change_mission_scene:change_mission_scene:clear,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=disp_touch_navi:disp_touch_navi:none,#
+*,type=PARAM,id=100,param=return_battle:return_battle:none,#
+*,type=PARAM,id=27,param=-1,#

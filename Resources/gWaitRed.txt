@@ -1,0 +1,11 @@
+*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=42,param=door_appear:160:240:GachaGateClose4.sam:none,#
+*,type=PARAM,id=34,param=bf253_se_gousei02.mp3,#
+*,type=PLAYWAIT,param=1,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=22,param=0:0:320:480,#
+*,type=PARAM,id=21,param=160:173,#
+*,type=PARAM,id=13,param=0:,#*,type=MSGDRAW,msg=,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=43,param=door_appear,#
+
