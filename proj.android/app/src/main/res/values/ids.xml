@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="layout_videoscreen" />
+    <item type="id" name="video_view" />
+    <item type="id" name="youtube_view" />
+</resources>

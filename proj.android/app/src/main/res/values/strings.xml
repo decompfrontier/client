@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Brave Frontier</string>
+	<string name="app_save_data">BraveFrontier</string>
+	<string name="fb_app_id">230335887118237</string>
+	<string name="fb_client_token">000000</string>
+	<string name="app_googlegamesvc_id">821991734423</string>
+	<string name="build">2204191038</string>
+	<string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
+</resources>
