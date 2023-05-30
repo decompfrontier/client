@@ -488,7 +488,6 @@ Debug.win32/
 Release.win32/
 .vs/
 Resources/
-proj.android/app/src/main/res/
 
 metadata
 bin/
