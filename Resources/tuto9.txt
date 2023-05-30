@@ -1,0 +1,153 @@
+﻿*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=26,param=1,#
+*,type=PARAM,id=100,param=battle_ui_off:battle_ui_off:none,#
+*,type=PARAM,id=100,param=battle_party_off:battle_party_off:none,#
+*,type=PARAM,id=1,param=bg1:dungeon_battle_10100.jpg,#
+*,type=PARAM,id=1,param=ip5h:battle_header_ip5.png,#
+*,type=PARAM,id=1,param=chr1_fu:navi_chara1_0.png,#
+*,type=PARAM,id=1,param=chr1_ki:navi_chara1_1.png,#
+*,type=PARAM,id=1,param=chr1_do:navi_chara1_2.png,#
+*,type=PARAM,id=1,param=chr1_bi:navi_chara1_3.png,#
+*,type=PARAM,id=1,param=chr1_ai:navi_chara1_4.png,#
+*,type=PARAM,id=1,param=chr1_mj:navi_chara1_7.png,#
+*,type=PARAM,id=2,param=bg1:0:0:1:0.5,#
+*,type=PARAM,id=2,param=ip5h:0:0:1:0.5,#
+*,type=PARAM,id=42,param=BattleDungeon10100CloudBack:160:110:BattleDungeon10100CloudBack.sam:none,#
+*,type=PARAM,id=42,param=BattleDungeon10100WindAddBack:160:110:none:BattleDungeon10100WindAddBack.sam,#
+*,type=PARAM,id=42,param=BattleDungeon10100SunShineAddFront:160:110:none:BattleDungeon10100SunShineAddFront.sam,#
+*,type=PARAM,id=8,param=2:0&0&0,#
+*,type=STOP,id=-1,#
+*,type=PLAYWAIT,param=1,#
+*,type=PARAM,id=2,param=chr1_do:60:30:2:0.5,#
+*,type=PARAM,id=39,param=Tilith,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Hey, you! <wait=40><br>Do you know how long I've been waiting here!?,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_fu:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Wow!<wait=40> Looks like you've already fused some of your Units, am I right?<br>They do look stronger!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_mj:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=But the path ahead is truly a long one. Never forget to strengthen your Units, your enemies will only grow stronger from here on out.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr1_fu:60:30:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Well then, let's continue with the fundamentals of battle.<wait=40> <br>Are you ready?<wait=20> Then let's make our way across the grasslands!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=7,param=2:0&0&0,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=43,param=BattleDungeon10100CloudBack,#
+*,type=PARAM,id=43,param=BattleDungeon10100WindAddBack,#
+*,type=PARAM,id=43,param=BattleDungeon10100SunShineAddFront,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=30,param=-1,#
+*,type=PARAM,id=26,param=0,#
+*,type=PARAM,id=1,param=element:elemental_relation.png,#
+*,type=PARAM,id=1,param=battle_crystal:tuto_battle_crystal.png,#
+*,type=PARAM,id=100,param=battle_party_on:battle_party_on:none,#
+*,type=PARAM,id=100,param=set_focus:set_focus:none,#
+*,type=PARAM,id=100,param=battle_ui_on:battle_ui_on:none,#
+*,type=PARAM,id=8,param=1:0&0&0,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=17,param=0:231:320:248:cm_all_ip5h,#
+*,type=PARAM,id=10000,param=Tutorial Tracking Point:Q2W1a Element (Dialog End),#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Let's look at <color=FFD700>Unit Elements</color>. Remembering the Elements is <color=00FFFF>useful in battle</color>, so don't forget them!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=14,param=Unit Element:106:227:2:tag56,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=19,param=159:271:20:20:tag58,#
+*,type=PARAM,id=28,param=159:271:20:20:tag59,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Each Unit has an <color=FFD700>Element</color>. There are <color=00FFFF>six in all</color> including <color=FF0000>Fire</color>, <color=00A2E8>Water</color>, <color=33FF33>Earth</color>, <color=FFFF00>Thunder</color>, <color=C6D6D6>Light</color>, and <color=FF77FF>Dark</color>. ,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=19,param=12:199:24:24:tag63,#
+*,type=PARAM,id=28,param=12:199:24:24:tag64,#
+*,type=PARAM,id=100,param=tuto6_bat1_target:tuto6_bat1_target:none,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=<color=FFD700>Monsters have Elements, too</color>. This one's a <color=00A2E8>Water</color> type. Each type also has a <color=00FF00>strength</color> and <color=FF6347>weakness</color>.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=19,param=4:376:29:28:tag69,#
+*,type=PARAM,id=28,param=4:376:29:28:tag70,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=When you tap an enemy, an <color=00FFFF>icon</color> is displayed over Units who can cause <color=FFD700>extra damage</color>. Have a look!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=21,param=70:367:tag74,#
+*,type=PARAM,id=22,param=0:347:160:58:tag75,#
+*,type=PARAM,id=28,param=0:347:160:58:tag76,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=<color=FFFF00>Thunder</color> is very strong against <color=00A2E8>Water</color>! Use a <color=00FFFF>stronger Unit</color> to knock the enemy out in one blow!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=17,param=0:231:320:250:_ip5h,#
+*,type=PARAM,id=100,param=unit_bottom_atk:active_action_end:tuto_disable_touch,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Great! You're lucky to have me around... <wait=20><br>Oh, that's right! Let me show you how the rest work.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=2,param=element:36:18:2:0.5,#
+*,type=PARAM,id=13,param=0:,#*,type=MSGDRAW,msg=,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=3,param=element:2:0.3,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=10000,param=Tutorial Tracking Point:Q2W1b After Diagram,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Elements <color=FFD700>heavily affect battle</color>, so you should always build your Squad accordingly. Let's finish 'em!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=remove_target:remove_target:none,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=return_battle:battle_end:clear,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=next_battle:battle_start:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=17,param=0:231:320:248:cm_all_ip5h,#
+*,type=PARAM,id=10000,param=Tutorial Tracking Point:Q2W2a BB,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Looks like your enemy is powering up. Guess it's time I teach you about your special move, <color=FFD700>Brave Burst</color>.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=19,param=55:324:100:22:tag103,#
+*,type=PARAM,id=28,param=55:324:100:22:tag104,#
+*,type=PARAM,id=14,param=Brave Gauge:41:279:2:tag105,#
+*,type=PARAM,id=14,param=Battle Crystals:69:146:1:tag106,#
+*,type=PARAM,id=2,param=battle_crystal:115:105:1:0.5,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Sometimes enemies drop <color=00FFFF>Battle Crystals</color> when attacked which randomly <color=FFD700>fill your Units' Brave Gauges</color>.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=3,param=battle_crystal:1:0.5,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=19,param=55:324:100:22:tag111,#
+*,type=PARAM,id=14,param=Brave Gauge:41:279:2:tag112,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=But your <color=00FF00>gauge</color> isn't full yet. Just this once I'll help you out with my magic.<br><color=FF99FF>Bless me, calm light...</color>,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=17,param=0:231:320:248:cm_all_ip5h,#
+*,type=PARAM,id=36,param=0.2:3:30:15,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=<size=14><color=FF0066>B</color><color=FF0033>A</color><color=FF0000>T</color><color=FF6600>T</color><color=FF9900>L</color><color=FFCC00>E </color><color=FFFF00>C</color><color=CCFF00>R</color><color=99FF00>Y</color><color=66FF00>S</color><color=33FF00>T</color><color=00FF00>A</color><color=00FF66>L </color><br><color=00FF99>K</color><color=00FFCC>I</color><color=00FFFF>S</color><color=00CCFF>S</color><color=0099FF>!</color><color=0066FF>!</color><color=0000FF>!</color></size>,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=100,param=tuto6_bat2_drop_crystal:tuto6_bat2_drop_crystal:none,#
+*,type=PLAYWAIT,param=1.5,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=100,param=tuto6_bat2_get_crystal:tuto6_bat2_get_crystal:tuto_get_battle_crystal,#
+*,type=PLAYWAIT,param=1.5,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=22,param=0:290:160:58:tag127,#
+*,type=PARAM,id=21,param=70:311:hold,#
+*,type=PARAM,id=28,param=0:289:160:58:tag129,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Hehe, pretty amazing, right!? <br>Now you can use <color=FFFF00>Brave Burst</color>. <color=00FF00>Press and hold</color> the Action Button.,#*,type=MSGWAIT,#
+*,type=PARAM,id=100,param=tuto6_bat2_long_touch:tuto6_bat2_long_touch:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=100,param=tuto6_bat2_on_flick_navi:tuto6_bat2_on_flick_navi:none,#
+*,type=PARAM,id=10000,param=Tutorial Tracking Point:Q2W2b Try BB,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=A <color=FFD700>long press when your Brave Gauge is full</color> brings up the <color=00FFFF>Brave Command</color>. Now <color=00FF00>flick up and to the right</color>!,#*,type=MSGWAIT,#
+*,type=PARAM,id=100,param=tuto6_bat2_flick:tuto6_bat2_flick:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=100,param=tuto6_bat2_brave_burst:battle_end:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=17,param=0:231:320:248:cm_all_ip5h,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Great! Well done!<br><color=FFD700>Each Unit has their very own Brave Burst</color> they can release when their <color=00FF00>gauge</color> is full.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=You should fill your Squad with Units with complimentary Brave Bursts, like <color=FF6347>Attack</color> and <color=00FF00>Recovery</color>.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=100,param=next_battle:battle_start:none,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=17,param=0:231:320:248:cm_all_ip5h,#
+*,type=PARAM,id=10000,param=Tutorial Tracking Point:Q2W3 Try Boss,#
+*,type=PARAM,id=13,param=1:,#*,type=MSGDRAW,msg=Look, it's another Boss! Use everything I taught you and put all you've got into knocking this guy out!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=18,param=all,#
+*,type=PARAM,id=20,param=0,#
+*,type=PARAM,id=100,param=return_battle:return_battle:none,#
+*,type=PARAM,id=27,param=-1,#

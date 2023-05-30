@@ -1,0 +1,8 @@
+494,18,140,24,0,ap_gage,
+494+66,18+8,0,0,20,ap_label,
+0,0,644,129,0,header_guild,
+90,22,160,26,22,guild_name,
+165,50,32,27,20,round_num,
+320,68,110,18,16,phase_timer,
+468,55,85,18,16,comment_label,
+320,0,0,0,0,top_phase_image,

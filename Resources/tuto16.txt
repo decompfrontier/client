@@ -1,0 +1,30 @@
+﻿*,type=PARAM,id=23,param=-1,#
+*,type=PARAM,id=26,param=1,#
+*,type=PARAM,id=1,param=bg1:mytown_base.jpg,#
+*,type=PARAM,id=1,param=ip5h:battle_header_ip5.png,#
+*,type=PARAM,id=1,param=chr2_fu:navi_chara2_0.png,#
+*,type=PARAM,id=1,param=chr2_ki:navi_chara2_1.png,#
+*,type=PARAM,id=1,param=chr2_do:navi_chara2_2.png,#
+*,type=PARAM,id=1,param=chr2_bi:navi_chara2_3.png,#
+*,type=PARAM,id=1,param=chr2_ak:navi_chara2_5.png,#
+*,type=PARAM,id=33,param=bf009_village.mp3,#
+*,type=PARAM,id=8,param=2:0&0&0,#
+*,type=PARAM,id=2,param=bg1:0:-184:1:0.5,#
+*,type=PARAM,id=2,param=ip5h:0:0:1:0.5,#
+*,type=STOP,id=-1,#
+*,type=PLAYWAIT,param=1,#
+*,type=PARAM,id=2,param=chr2_ki:-110:-40:2:0.5,#
+*,type=PARAM,id=39,param=Karl,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Well then, <wait=20>looks like it's time for us to part ways.,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=And though I may be a Demon Slayer now, <wait=20>I wouldn't be surprised if you are recruited into the Summoner Army in the future as well,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr2_fu:-110:-40:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=Our battlegrounds may differ, <wait=20>but our objective is the same. <wait=40>To protect this world!,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr2_do:-110:-40:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=So get stronger, <rep_handlename>. <wait=20>Should the day come when we find ourselves fighting the same enemy, <wait=40>I want us to have each other's backs...,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=2,param=chr2_fu:-110:-40:1:0.5,#
+*,type=PARAM,id=15,param=0,#*,type=MSGDRAW,msg=I bid you farewell...,#*,type=MSGWAIT,#*,type=STOP,id=-1,#
+*,type=PARAM,id=7,param=3:0&0&0,#
+*,type=STOP,id=-1,#
+*,type=PARAM,id=30,param=-1,#
+*,type=PARAM,id=27,param=-1,#
+*,type=PARAM,id=100,param=change_tuto_step_scene:change_tuto_step_scene:none,#
