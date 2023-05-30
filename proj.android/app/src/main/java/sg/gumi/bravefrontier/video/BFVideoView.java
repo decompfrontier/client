@@ -44,7 +44,8 @@ public class BFVideoView extends VideoView {
     public static BFVideoView getInstance(Cocos2dxActivity activity) {
         if (instance == null) {
             View view = LayoutInflater.from(activity).inflate(R.layout.video_activity, null);
-            ((FrameLayout)activity.findViewById(R.id.content)).addView(view);
+            FrameLayout layout = activity.findViewById(android.R.id.content);
+            layout.addView(view);
             BFVideoView videoView = view.findViewById(R.id.video_view);
             instance = videoView;
             videoView.Initialize(activity);

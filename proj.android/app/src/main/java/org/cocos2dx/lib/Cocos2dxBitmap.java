@@ -82,6 +82,10 @@ public class Cocos2dxBitmap {
 
 	private static native void nativeInitBitmapDC(final int pWidth, final int pHeight, final byte[] pPixels);
 
+	// __DECOMP__, THIS CODE DOES NOT EXISTS IN NORMAL COCOS!!!!
+	public static void createTextBitmap(byte[] pString, final byte[] pFontName, final int pFontSize, final int pAlignment, final int pWidth, final int pHeight) {
+		createTextBitmap(new String(pString), new String(pFontName), pFontSize, pAlignment, pWidth, pHeight);
+	}
 	/**
 	 * @param pWidth
 	 *            the width to draw, it can be 0

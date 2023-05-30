@@ -12,6 +12,6 @@ final public class BFConfig {
     final public static Platform PLATFORM = Platform.PLATFORM_GOOGLE;
     final public static Platform PLATFORM_AMAZON = Platform.PLATFORM_AMAZON;
     final public static Platform PLATFORM_GOOGLE = Platform.PLATFORM_GOOGLE;
-    final public static Platform PLATFORM_SAMSUNG = Platform.PLATFORM_GOOGLE;
+    final public static Platform PLATFORM_SAMSUNG = Platform.PLATFORM_SAMSUNG;
 
 }
