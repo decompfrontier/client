@@ -6,6 +6,10 @@ plugins {
 repositories {
     google()
     mavenCentral()
+    maven {
+        name "Tapjoy's maven repo"
+        url "https://sdk.tapjoy.com/"
+    }
 }
 
 android {
@@ -22,6 +26,17 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            resources {
+                assets
+                {
+                    srcDirs = ["../../Resources"]
+
+                }
+            }
         }
     }
 }
@@ -43,5 +58,6 @@ dependencies {
     implementation files('libs/httpclientandroidlib-1.1.2.jar')
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
     implementation 'com.pusher:pusher-java-client:2.4.4'
-    implementation "com.google.android.gms:play-services-games:+"
+    implementation "com.google.android.gms:play-services-games:23.1.0"
+    implementation 'com.tapjoy:tapjoy-android-sdk:13.0.1'
 }
