@@ -75,7 +75,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\cocos2d-x\cocos2dx;$(ProjectDir)..\cocos2d-x\CocosDenshion\include;$(ProjectDir)..\cocos2d-x\cocos2dx\include;$(ProjectDir)..\cocos2d-x\cocos2dx\kazmath\include;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\zlib;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;..\Classes\compat1;..\Classes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\external\includes;$(ProjectDir)..\cocos2d-x\extensions;$(ProjectDir)..\cocos2d-x\cocos2dx;$(ProjectDir)..\cocos2d-x\CocosDenshion\include;$(ProjectDir)..\cocos2d-x\cocos2dx\include;$(ProjectDir)..\cocos2d-x\cocos2dx\kazmath\include;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\zlib;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;..\Classes\compat1;..\Classes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -90,7 +90,7 @@
     <Link>
       <AdditionalDependencies>opengl32.lib;glew32.lib;libzlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\libraries;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\external\win32\debug;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\libraries;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -104,7 +104,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\cocos2d-x\cocos2dx;$(ProjectDir)..\cocos2d-x\CocosDenshion\include;$(ProjectDir)..\cocos2d-x\cocos2dx\include;$(ProjectDir)..\cocos2d-x\cocos2dx\kazmath\include;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\zlib;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;..\Classes\compat1;..\Classes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\external\includes;$(ProjectDir)..\cocos2d-x\extensions;$(ProjectDir)..\cocos2d-x\cocos2dx;$(ProjectDir)..\cocos2d-x\CocosDenshion\include;$(ProjectDir)..\cocos2d-x\cocos2dx\include;$(ProjectDir)..\cocos2d-x\cocos2dx\kazmath\include;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\zlib;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;..\Classes\compat1;..\Classes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -118,7 +118,7 @@
     <Link>
       <AdditionalDependencies>opengl32.lib;glew32.lib;libzlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\libraries;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\external\win32\;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\libraries;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -170,6 +170,9 @@
     </ProjectReference>
     <ProjectReference Include="..\cocos2d-x\CocosDenshion\proj.win32\CocosDenshion.vcxproj">
       <Project>{f8edd7fa-9a51-4e80-baeb-860825d2eac6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\cocos2d-x\extensions\proj.win32\libExtensions.vcxproj">
+      <Project>{21b2c324-891f-48ea-ad1a-5ae13de12e28}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
