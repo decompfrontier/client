@@ -58,7 +58,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 builder.setWhen(System.currentTimeMillis());
                 notificationMngr.notify(notification, 0, builder.build());
             }
-            PendingIntent pendingIntent1 = PendingIntent.getBroadcast(ctx, 0, intent, PendingIntent.FLAG_NO_CREATE);
+            PendingIntent pendingIntent1 = PendingIntent.getBroadcast(ctx, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_NO_CREATE);
             ((AlarmManager)ctx.getSystemService(Context.ALARM_SERVICE)).cancel(pendingIntent1);
             pendingIntent1.cancel();
         } catch(Exception ex) {
