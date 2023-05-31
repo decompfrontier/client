@@ -1,19 +1,21 @@
 #include "pch.h"
 #include "NetworkManager.h"
+#include "BFCertificateProvider.h"
 
-NetworkManager* NetworkManager::instance = nullptr;
+using namespace cocos2d::extension;
 
-NetworkManager* NetworkManager::sharedInstance()
-{
-	if (!instance)
-	{
-		instance = new NetworkManager();
-	}
-
-	return instance;
-}
+SET_SHARED_SINGLETON(NetworkManager);
 
 NetworkManager::NetworkManager()
 {
+	apiUrl = API_URL;
+	CCHttpClient::getInstance()->setCertificateProvider(BFCertificateProvider::shared());
+}
 
+std::string NetworkManager::getStringForAPIVersion(API_VERSION version)
+{
+	if (version == API_VERSION::V2)
+		return "/api/1.1/";
+
+	return "/api/1.0/";
 }
