@@ -15,6 +15,9 @@ public:
 	~NetworkManager();
 
 	std::string getStringForAPIVersion(API_VERSION version);
+	void onNetworkRequestResponse(cocos2d::CCNode* node, void* user);
+	void onNetworkRequestComplete(void* user, bool, bool);
+	void forwardResponse(cocos2d::extension::CCHttpResponse* resp);
 
 private:
 	char unk2[27];
