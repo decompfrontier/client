@@ -18,15 +18,6 @@ USING_NS_CC;
 	buf >> c; \
 	return c;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#define GET_JNI(method, signature) \
-	JniMethodInfo method; \
-	std::string className = BF_JNI_CLASS; \
-	if (!JniHelper::getStaticMethodInfo(&method, className.c_str(), method, signature)) \
-		return;
-#endif
-
-
 std::string CommonUtils::FloatToString(float conv, int _unused)
 {
 	TOSTR(conv);
@@ -117,11 +108,7 @@ std::string CommonUtils::ULongLongToString(unsigned long long conv)
 void CommonUtils::appExit()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	JniMethodInfo method;
-	std::string className = BF_JNI_CLASS;
-	if (!JniHelper::getStaticMethodInfo(&method, className.c_str(), "appExit", "()V"))
-		return;
-
+	GET_JNI("appExit", "()V");
 	method.env->CallStaticVoidMethod(method.classID, method.methodID);
 	method.env->DeleteLocalRef(method.classID);
 #else	/* __DECOMP__ */

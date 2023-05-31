@@ -13,6 +13,12 @@
 #include "jni/JniHelper.h"
 constexpr const char* BF_JNI_CLASS = ",/sg/gumi/bravefrontier/BraveFrontierJNI";
 
+#define GET_JNI(method, signature) \
+	JniMethodInfo method; \
+	std::string className = BF_JNI_CLASS; \
+	if (!JniHelper::getStaticMethodInfo(&method, className.c_str(), method, signature)) \
+		return;
+
 #define RANDOM_FUNC() arc4random()
 #else
 #define RANDOM_FUNC() rand()
