@@ -1,8 +1,9 @@
 #pragma once
 
 // cocos2d-x
-#include "cocos2d.h"
-#include "SimpleAudioEngine.h"
+#include "cocos2d.h" // libcocos2d
+#include "cocos-ext.h"  // Extensions
+#include "SimpleAudioEngine.h" // CocosDenshion
 #include "CCMutableArray.h" // COMPATIBILITY WITH COCOS2D-X v1 API
 
 // zlib
@@ -15,12 +16,6 @@ constexpr const char* BF_JNI_CLASS = ",/sg/gumi/bravefrontier/BraveFrontierJNI";
 #define RANDOM_FUNC() arc4random()
 #else
 #define RANDOM_FUNC() rand()
-#endif
-
-#ifdef _DEBUG
-#define API_URL "http://127.0.0.1:9960/"
-#else
-#define API_URL "https://api-sl.gl.gumi.sg/"
 #endif
 
 // C++
@@ -52,3 +47,4 @@ enum class ReinforcementType : uint
 #include "Singleton.h"
 #include "CrashlyticsUtil.h"
 #include "CommonUtils.h"
+#include "ServerConfig.h"
