@@ -304,11 +304,11 @@ public class BraveFrontierJNI {
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.setAction("EnergyNotif");
-        alarm.cancel(PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_ONE_SHOT));
+        alarm.cancel(PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_ONE_SHOT));
         intent.setAction("ArenaNotif");
-        alarm.cancel(PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_ONE_SHOT));
+        alarm.cancel(PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_ONE_SHOT));
         intent.setAction("NoLoginNotif");
-        alarm.cancel(PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_ONE_SHOT));
+        alarm.cancel(PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_ONE_SHOT));
     }
 
     public static void clearApplicationData() {
