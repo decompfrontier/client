@@ -32,6 +32,8 @@
 #include "HttpRequest.h"
 #include "HttpResponse.h"
 
+#include <curl/curl.h>
+
 NS_CC_EXT_BEGIN
 
 /**
@@ -39,6 +41,15 @@ NS_CC_EXT_BEGIN
  * @{
  */
 
+/* __DECOMP__, THIS IS NOT PART OF COCOS2D-X, I assume it's something custom made by Alim */
+class SGCertificateProvider : public cocos2d::CCObject
+{
+public:
+    SGCertificateProvider() = default;
+    ~SGCertificateProvider() = default;
+
+    virtual curl_ssl_ctx_callback getSSLCTXFunction() const = 0 { return nullptr; }
+};
 
 /** @brief Singleton that handles asynchrounous http requests
  * Once the request completed, a callback will issued in main thread when it provided during make request
@@ -89,6 +100,14 @@ public:
      * @return int
      */
     inline int getTimeoutForRead() {return _timeoutForRead;};
+
+    inline SGCertificateProvider* getCertificateProvider() {
+        return _certificateProvider;
+    }
+
+    inline void setCertificateProvider(SGCertificateProvider* prov) {
+        _certificateProvider = prov;
+    }
         
 private:
     CCHttpClient();
@@ -104,6 +123,7 @@ private:
     void dispatchResponseCallbacks(float delta);
     
 private:
+    SGCertificateProvider* _certificateProvider;
     int _timeoutForConnect;
     int _timeoutForRead;
     
