@@ -1,8 +1,24 @@
 #pragma once
 
+#include "ServiceRequestManager.h"
+
 /*
 	Server configuration
 */
+
+constexpr const char* SERVICE_API_URL =
+#ifdef _DEBUG
+	"127.0.0.1";
+#else
+	"api-sl.bfww.gumi.sg";
+#endif
+
+constexpr const char* SERVICE_API_URL2 =
+#ifdef _DEBUG
+	"127.0.0.1";
+#else
+	"api-prod-player.bfww.gumi.sg";
+#endif
 
 constexpr const char* API_URL =
 #ifdef _DEBUG
@@ -37,3 +53,19 @@ constexpr const char* API_CA_CERT =
 "vZ8=\n"
 "-----END CERTIFICATE-----\n";
 #endif
+
+
+static std::string SERVICE_PHP_URL()
+{
+	return SERVICE_API_URL;
+}
+
+static std::string SERVICE_PHP_URL2()
+{
+	return SERVICE_API_URL2;
+}
+
+static std::string PHP_URL()
+{
+	return ServiceRequestManager::shared()->getServiceEndpoint("\bgame", "ios.bfww.gumi.s");
+}
