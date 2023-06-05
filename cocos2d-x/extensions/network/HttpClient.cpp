@@ -230,6 +230,67 @@ bool configureCURL(CURL *handle)
     if (code != CURLE_OK) {
         return false;
     }
+
+    /* BRAVE FRONTIER CUSTOM CODE */
+
+    code = curl_easy_setopt(handle, CURLOPT_NOSIGNAL, 1);
+    if (code != CURLE_OK) {
+        return false;
+    }
+
+    code = curl_easy_setopt(handle, CURLOPT_ACCEPT_ENCODING, "gzip");
+    if (code != CURLE_OK) {
+        return false;
+    }
+
+
+    code = curl_easy_setopt(handle, CURLOPT_CAINFO, nullptr);
+    if (code != CURLE_OK) {
+        return false;
+    }
+
+    code = curl_easy_setopt(handle, CURLOPT_CAPATH, nullptr);
+    if (code != CURLE_OK) {
+        return false;
+    }
+
+
+#ifdef _DEBUG
+    code = curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0);
+#else
+    code = curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 2);
+#endif
+    if (code != CURLE_OK) {
+        return false;
+    }
+
+
+#ifdef _DEBUG
+    code = curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0);
+#else
+    code = curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 1);
+#endif
+    if (code != CURLE_OK) {
+        return false;
+    }
+
+    code = curl_easy_setopt(handle, CURLOPT_SSLCERTTYPE, "PEM");
+    if (code != CURLE_OK) {
+        return false;
+    }
+
+    const auto provider = CCHttpClient::getInstance()->getCertificateProvider();
+    if (provider)
+    {
+        code = curl_easy_setopt(handle, CURLOPT_SSL_CTX_FUNCTION, provider->getSSLCTXFunction());
+        if (code != CURLE_OK) {
+            return false;
+        }
+    }
+    else
+        return false;
+
+    /* END OF BRAVE FRONTIER CUSTOM CODE */
     
     return true;
 }
