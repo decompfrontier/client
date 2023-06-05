@@ -75,7 +75,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\external\includes;$(ProjectDir)..\cocos2d-x\extensions;$(ProjectDir)..\cocos2d-x\cocos2dx;$(ProjectDir)..\cocos2d-x\CocosDenshion\include;$(ProjectDir)..\cocos2d-x\cocos2dx\include;$(ProjectDir)..\cocos2d-x\cocos2dx\kazmath\include;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\zlib;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;..\Classes\compat1;..\Classes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\external\includes;$(ProjectDir)..\cocos2d-x\extensions;$(ProjectDir)..\cocos2d-x\cocos2dx;$(ProjectDir)..\cocos2d-x\CocosDenshion\include;$(ProjectDir)..\cocos2d-x\cocos2dx\include;$(ProjectDir)..\cocos2d-x\cocos2dx\kazmath\include;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\zlib;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;..\Classes\compat1;..\Classes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -88,9 +88,9 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;libzlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;libzlib.lib;libcurl_imp.lib;libcrypto.lib;libssl.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\external\win32\debug;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\libraries;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\libraries;$(ProjectDir)..\external\win32\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -104,7 +104,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\external\includes;$(ProjectDir)..\cocos2d-x\extensions;$(ProjectDir)..\cocos2d-x\cocos2dx;$(ProjectDir)..\cocos2d-x\CocosDenshion\include;$(ProjectDir)..\cocos2d-x\cocos2dx\include;$(ProjectDir)..\cocos2d-x\cocos2dx\kazmath\include;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\zlib;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;..\Classes\compat1;..\Classes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\external\includes;$(ProjectDir)..\cocos2d-x\extensions;$(ProjectDir)..\cocos2d-x\cocos2dx;$(ProjectDir)..\cocos2d-x\CocosDenshion\include;$(ProjectDir)..\cocos2d-x\cocos2dx\include;$(ProjectDir)..\cocos2d-x\cocos2dx\kazmath\include;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\zlib;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;..\Classes\compat1;..\Classes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -116,9 +116,9 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;libzlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;libzlib.lib;libcurl_imp.lib;libcrypto.lib;libssl.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\external\win32\;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\libraries;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\libraries;$(ProjectDir)..\external\win32\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -138,6 +138,7 @@
     <ClCompile Include="..\Classes\CrashlyticsUtil.cpp" />
     <ClCompile Include="..\Classes\GameLayer.cpp" />
     <ClCompile Include="..\Classes\GumiLiveManager.cpp" />
+    <ClCompile Include="..\Classes\GumiLiveNetworkManagement.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\LocalNotificationManager.cpp" />
     <ClCompile Include="..\Classes\NetworkManager.cpp" />
@@ -145,6 +146,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\Classes\SaveUtils.cpp" />
+    <ClCompile Include="..\Classes\ServiceRequestManager.cpp" />
     <ClCompile Include="..\Classes\TextManager.cpp" />
     <ClCompile Include="..\Classes\UserConfigInfo.cpp" />
     <ClCompile Include="..\Classes\UserTeamInfo.cpp" />
@@ -160,12 +163,17 @@
     <ClInclude Include="..\Classes\DefineMst.h" />
     <ClInclude Include="..\Classes\GameLayer.h" />
     <ClInclude Include="..\Classes\GumiLiveManager.h" />
+    <ClInclude Include="..\Classes\GumiLiveConstants.h" />
+    <ClInclude Include="..\Classes\GumiLiveNetworkManagement.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\LocalNotificationManager.h" />
     <ClInclude Include="..\Classes\NetworkManager.h" />
     <ClInclude Include="..\Classes\pch.h" />
     <ClInclude Include="..\Classes\PWConstants.h" />
+    <ClInclude Include="..\Classes\PWFacebookUser.h" />
+    <ClInclude Include="..\Classes\SaveUtils.h" />
     <ClInclude Include="..\Classes\ServerConfig.h" />
+    <ClInclude Include="..\Classes\ServiceRequestManager.h" />
     <ClInclude Include="..\Classes\Singleton.h" />
     <ClInclude Include="..\Classes\TextManager.h" />
     <ClInclude Include="..\Classes\UserConfigInfo.h" />
