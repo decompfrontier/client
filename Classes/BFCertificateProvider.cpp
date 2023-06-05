@@ -42,8 +42,9 @@ SHARED_SINGLETON_BODY(BFCertificateProvider)
 
 		g_bfBIOcert = BIO_new_mem_buf(API_CA_CERT, -1);
 		PEM_read_bio_X509(g_bfBIOcert, &g_bfCertificate, nullptr, nullptr);
-
 	}
+
+	return SINGLETON_INSTANCE(BFCertificateProvider);
 }
 
 BFCertificateProvider::BFCertificateProvider()

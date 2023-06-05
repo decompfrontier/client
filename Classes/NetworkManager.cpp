@@ -19,3 +19,8 @@ std::string NetworkManager::getStringForAPIVersion(API_VERSION version)
 
 	return "/api/1.0/";
 }
+
+void NetworkManager::forwardResponse(cocos2d::extension::CCHttpResponse* resp)
+{
+	// TODO
+}

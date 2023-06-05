@@ -1,8 +1,25 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "CommonUtils.h"
 #include "GameLayer.h"
 
+/*
+	__DECOMP__ TODO: Once we get this working please refactor this to use C++11
+*/
+
 constexpr auto Z_BUFFER_SIZE = 32768;
+
+constexpr const char* WIDE_NUMBERS[10] = {
+	"０",
+	"１",
+	"２",
+	"３",
+	"４",
+	"５",
+	"６",
+	"７",
+	"８",
+	"９"
+};
 
 USING_NS_CC;
 
@@ -36,7 +53,21 @@ std::string CommonUtils::IntToString(int conv)
 	TOSTR(conv);
 }
 
-std::string CommonUtils::IntToStringFull(int conv);
+std::string CommonUtils::IntToStringFull(int conv)
+{
+	int pos;
+	std::string ret = "";
+	do
+	{
+		pos = conv;
+		int prev = conv;
+		conv /= 10;
+
+		ret += WIDE_NUMBERS[(prev - 10 * conv)];
+	} while ((pos + 9) > 18);
+
+	return ret;
+}
 
 std::string CommonUtils::LLToString(long long conv)
 {
@@ -53,7 +84,11 @@ std::string CommonUtils::LongToString(long conv)
 	TOSTR(conv);
 }
 
-double CommonUtils::StrExpToDouble(std::string exp);
+double CommonUtils::StrExpToDouble(std::string exp)
+{
+	/* not like the original but who cares... */
+	return std::stod(exp);
+}
 
 float CommonUtils::StrToFloat(const char* str)
 {

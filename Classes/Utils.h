@@ -7,4 +7,7 @@ public:
 	static std::string getDevicePlatform();
 	static std::string getDeviceVID();
 	static std::string getDeviceOS();
+	static std::string getDeviceModel();
+	static std::string getAppKey();
+	static std::string getDeviceAltVid();
 };
