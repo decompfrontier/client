@@ -14,4 +14,6 @@ final public class BFConfig {
     final public static Platform PLATFORM_GOOGLE = Platform.PLATFORM_GOOGLE;
     final public static Platform PLATFORM_SAMSUNG = Platform.PLATFORM_SAMSUNG;
 
+    // __DECOMP__ patch for offline mode!
+    final public static boolean OFFLINE_MODE = false;
 }

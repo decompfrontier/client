@@ -630,6 +630,11 @@ public class BraveFrontier extends BaseGameActivity {
         context = getApplicationContext();
         act = this;
         savedInstanceState = bundle;
+
+        if (OFFLINE_MODE) { // __DECOMP__
+            it.arves100.gimuserver.OfflineMod.startOfflineServer();
+        }
+
         if (PLATFORM == PLATFORM_GOOGLE) {
             try {
                 //AdWordsConversionReporter.reportWithConversionId(getApplicationContext(), "963467556", "n0JXCNWzn1gQpLK1ywM", "0.00", true);
