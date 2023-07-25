@@ -4,8 +4,10 @@
 void SaveUtils::saveUserDefaults(std::string key, std::string value)
 {
 	key = "key" + key;
-	value = "magic_key_saved_as_v2" + value;
 
+	if (value.empty())
+		value = "magic_key_saved_as_v2";
+		
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	GET_JNI("setSharedPerfString", "(Ljava/lang/String;Ljava/lang/String;)V");
 
