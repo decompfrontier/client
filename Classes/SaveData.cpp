@@ -176,7 +176,7 @@ std::string SaveData::getArenaBattleID()
 
 bool SaveData::getBoostItemResetFlg()
 {
-	auto p = SaveUtils::loadUserDefaults("boost_item_rese");
+	auto p = SaveUtils::loadUserDefaults("boost_item_reset");
 	if (p == "valid")
 		return true;
 
@@ -228,13 +228,13 @@ bool SaveData::getDeviceTransferFlg()
 
 bool SaveData::getEp3BoostItemResetFlg()
 {
-	auto p = SaveUtils::loadUserDefaults("(ep3_boost_item_"); // reset?
+	auto p = SaveUtils::loadUserDefaults("ep3_boost_item_reset");
 	return p == "valid";
 }
 
 bool SaveData::getEp3TitleLogoFlg()
 {
-	auto p = SaveUtils::loadUserDefaults("$EP3_TITLE_LOGO_"); // EY?
+	auto p = SaveUtils::loadUserDefaults("EP3_TITLE_LOGO_KEY");
 	return p == "valid";
 }
 
