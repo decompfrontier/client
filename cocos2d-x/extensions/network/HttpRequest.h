@@ -30,6 +30,13 @@
 
 NS_CC_EXT_BEGIN
 
+class CCHttpResponse;
+class CCHttpRequest;
+class CCHttpClient;
+
+typedef void (*HttpCallbackSuccess)(void*, CCHttpClient* client, CCHttpResponse* res, double delta);
+typedef void (*HttpCallbackFail)(void*, CCHttpClient* client, CCHttpResponse* res, double delta);
+
 /** 
  @brief defines the object which users must packed for CCHttpClient::send(HttpRequest*) method.
  Please refer to samples/TestCpp/Classes/ExtensionTest/NetworkTest/HttpClientTest.cpp as a sample
@@ -45,6 +52,12 @@ public:
         kHttpPost,
         kHttpUnkown,
     } HttpRequestType;
+
+    // __DECOMP__
+    typedef enum
+    {
+        kDefault,
+    } HttpRequestHandlingType;
     
     /** Constructor 
         Because HttpRequest object will be used between UI thead and network thread,
@@ -61,6 +74,15 @@ public:
         _pTarget = NULL;
         _pSelector = NULL;
         _pUserData = NULL;
+
+        // __DECOMP__
+        _cbSelector = NULL;
+        _isLoadingScreenShown = false;
+        _a14 = false;
+        _a15 = false;
+        _requestTime = 0;
+        _successCb = NULL;
+        _failCb = NULL;
     };
     
     /** Destructor */
@@ -175,7 +197,57 @@ public:
     {
         return _pSelector;
     }
+
+    // DECOMP
+    inline void setCallbackHolder(CCObject* x)
+    {
+        _cbSelector = x;
+
+        if (_cbSelector)
+        {
+            _cbSelector->retain();
+        }
+    }
+
+    inline void setLoadingScreenShowFlag(bool f)
+    {
+        _isLoadingScreenShown = f;
+    }
+
+    inline bool isLoadingScreenShown() const
+    {
+        return _isLoadingScreenShown;
+    }
+
+    inline void setSpecial(bool b1, bool b2)
+    {
+        _a14 = b1;
+        _a15 = b2;
+    }
+
+    inline void setRequestTime(time_t t)
+    {
+        _requestTime = t;
+    }
+
+    inline HttpCallbackSuccess getSuccessCb()
+    {
+        return _successCb;
+    }
+
+    inline void setSuccessCb(HttpCallbackSuccess cb)
+    {
+        _successCb = cb;
+    }
+
+    inline void setFailCb(HttpCallbackFail cb)
+    {
+        _failCb = cb;
+    }
         
+    std::vector<std::string> getHeaders() const { return _headers; }
+    void addHeader(std::string p) { _headers.push_back(p); }
+
 protected:
     // properties
     HttpRequestType             _requestType;    /// kHttpRequestGet, kHttpRequestPost or other enums
@@ -185,6 +257,15 @@ protected:
     CCObject*          _pTarget;        /// callback target of pSelector function
     SEL_CallFuncND     _pSelector;      /// callback function, e.g. MyLayer::onHttpResponse(CCObject *sender, void *data)
     void*                       _pUserData;      /// You can add your customed data here 
+
+    // __DECOMP__
+    std::vector<std::string> _headers;
+    CCObject* _cbSelector;
+    bool _isLoadingScreenShown;
+    bool _a14, _a15;
+    time_t _requestTime;
+    HttpCallbackSuccess _successCb;
+    HttpCallbackFail _failCb;
 };
 
 NS_CC_EXT_END

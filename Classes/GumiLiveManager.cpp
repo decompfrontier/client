@@ -5,6 +5,7 @@
 #include "GumiLiveConstants.h"
 #include "NetworkManager.h"
 #include "ServerConfig.h"
+#include "SaveData.h"
 
 SET_SHARED_SINGLETON(GumiLiveManager);
 
@@ -60,7 +61,7 @@ void GumiLiveManager::appendLoginCredentials(std::string& ret)
 	ret += ",";
 	ret += Utils::getDeviceOS();
 	ret += ",";
-	ret += ?;//unk!
+	ret += unk2[8];//unk!
 	ret += ",";
 	ret += cocos2d::CCUserDefault::sharedUserDefault()->getStringForKey(PWConstants::DEVICE_ID);
 	ret += ",";
@@ -68,7 +69,7 @@ void GumiLiveManager::appendLoginCredentials(std::string& ret)
 	ret += ",";
 	ret += str_unk2; // unk2!
 	ret += ",";
-	ret += str_unk; // unk3!,
+	ret += token;
 }
 
 void GumiLiveManager::NotifyGumiLiveLoginSuccessful()
@@ -89,7 +90,42 @@ void GumiLiveManager::OnLoginConfirmationOkPressed(void*)
 
 void GumiLiveManager::SavePreviousGumiLiveSession()
 {
-	// TODO
+	if (!unk6.length() || (unk7.length() && !unk8.length()))
+		return;
+
+	auto sd = SaveData::shared();
+	sd->deleteKeyChain();
+
+	if (!unk7.length())
+		str_unk2 = unk8;
+	else
+		str_unk2 = unk7;
+
+	if (facebookUserId.length() > 0)
+	{
+		//unk9 = unk12;
+		facebookUserId = "";
+		setLastLoginTypeToUserDefault(enumGumiLiveLoginType::Binding);
+	}
+
+	/*
+	if (unk12[40])
+	{
+		if (!unk12[48])
+		{
+			loginType = enumGumiLiveLoginType::Unknown;
+			sd->saveKeyChain();
+			unk6 = "";
+			unk7 = "";
+			return;
+		}
+	}
+
+	// ?
+	unk12[16] = unk12[56];
+	unk12[40] = "";*/
+
+	setLastLoginTypeToUserDefault(enumGumiLiveLoginType::AppleBinding);
 }
 
 void GumiLiveManager::loginToGumiLive(enumGumiLiveLoginType type, CCDictionary* data)
@@ -97,36 +133,110 @@ void GumiLiveManager::loginToGumiLive(enumGumiLiveLoginType type, CCDictionary* 
 	switch (type)
 	{
 	case enumGumiLiveLoginType::Facebook:
+		mngr->networkRequestFacebookGumiLiveLogin(data);
 		break;
 
 	case enumGumiLiveLoginType::BindCheck:
+		mngr->networkRequestFacebookGumiLiveLoginBindCheck(data);
 		break;
 
 	case enumGumiLiveLoginType::Binding:
+		mngr->networkRequestFacebookGumiLiveLoginBinding(data);
 		break;
 
 	case enumGumiLiveLoginType::ExsitingLogin:
+		mngr->networkRequestGumiLiveExistingLogin(data);
 		break;
 
 	case enumGumiLiveLoginType::NewUser:
+		mngr->networkRequestGumiLiveNewUserLogin(data);
 		break;
 
 	case enumGumiLiveLoginType::NewUserBinding:
+		mngr->networkRequestGumiLiveNewUserLoginBinding(data);
 		break;
 
 	case enumGumiLiveLoginType::Guest:
+		mngr->networkRequestFacebookGumiLiveLogin(data);
 		break;
 
 	case enumGumiLiveLoginType::AppleSignIn:
+		mngr->networkRequestAppleSignInGumiLiveLogin(data);
 		break;
 
 	case enumGumiLiveLoginType::AppleBindCheck:
+		mngr->networkRequestAppleSignInGumiLiveLoginBindCheck(data);
 		break;
 
 	case enumGumiLiveLoginType::AppleBinding:
+		mngr->networkRequestAppleSignInGumiLiveLoginBinding(data);
 		break;
 
 	default:
 		break;
 	}
+}
+
+void GumiLiveManager::bindCheck(cocos2d::CCObject* obj)
+{
+	auto dict = (cocos2d::CCDictionary*)obj;
+	auto tokenKey = dict->objectForKey(TOKEN_KEY);
+	auto gameKey = dict->objectForKey(GAME_USER_ID_KEY);
+
+	mngr->networkRequestGumiLiveExistData((cocos2d::CCString*)tokenKey, (cocos2d::CCString*)gameKey);
+}
+
+void GumiLiveManager::checkGuestAccountStatusForCurrentDevice()
+{
+	mngr->networkRequestCheckGuestAccount();
+}
+
+void GumiLiveManager::forgotPasswordFromNotification(cocos2d::CCObject* ptr)
+{
+	mngr->networkRequestPasswordChange((cocos2d::CCString*)ptr);
+}
+
+void GumiLiveManager::getFriendData(cocos2d::CCMutableArray<PWFacebookUser*>* out)
+{
+	mngr->networkRequestFacebookFriendData(out);
+}
+
+std::string GumiLiveManager::getGumiLiveApplicationID()
+{
+	return mngr->GetAppKey();
+}
+
+enumGumiLiveLoginType GumiLiveManager::getLastLoginTypeFromUserDefault()
+{
+	auto s = EnumString<enumGumiLiveLoginType>::From(enumGumiLiveLoginType::Unknown);
+
+	auto sd = SaveData::shared();
+
+	// TODO
+
+	enumGumiLiveLoginType e;
+	EnumString<enumGumiLiveLoginType>::To(e, x);
+	return e;
+}
+
+std::string GumiLiveManager::getRequestInProgressString()
+{
+	return EnumString<enumGumiLiveLoginType>::From(loginType);
+}
+
+std::string GumiLiveManager::getValueAsString(Json::Value& value)
+{
+	if (value.isInt())
+	{
+		return CommonUtils::IntToString(value.asInt());
+	}
+	else if (value.isString())
+	{
+		return value.asString();
+	}
+}
+
+bool GumiLiveManager::hasAttemptedAppleSignIn()
+{
+	auto sd = SaveData::shared();
 }

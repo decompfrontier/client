@@ -41,6 +41,13 @@ static pthread_mutex_t  s_responseQueueMutex;
 static sem_t *          s_pSem = NULL;
 static unsigned long    s_asyncRequestCount = 0;
 
+// __DECOMP__ custom code!
+static const char* caCertPemDirectory = NULL;
+static int downloadProgress = 0;
+static time_t downloadTimerAfterInst = 0;
+static long g_lastBufferSize = 0;
+static double g_dlNowCheck = 0.0;
+
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #define CC_ASYNC_HTTPREQUEST_USE_NAMED_SEMAPHORE 1
 #else
@@ -82,12 +89,49 @@ size_t writeData(void *ptr, size_t size, size_t nmemb, void *stream)
     return sizes;
 }
 
+size_t writeFileData(void* ptr, size_t size, size_t nmemb, void* stream)
+{
+    return fwrite(ptr, size, nmemb, (FILE*)stream);
+}
+
+int progress_callback(void* clientp,
+    double dltotal,
+    double dlnow,
+    double ultotal,
+    double ulnow)
+{
+    if (dltotal != 0.0)
+    {
+        if (g_dlNowCheck != dlnow)
+        {
+            g_dlNowCheck = dlnow;
+            downloadProgress = (int)(dlnow + g_lastBufferSize) / (dltotal + g_lastBufferSize);
+            downloadTimerAfterInst = clock();
+        }
+
+        auto currentTime = clock();
+        if (g_dlNowCheck == 0.0)
+        {
+            downloadTimerAfterInst = currentTime;
+        }
+
+        auto timerProg = (currentTime - downloadTimerAfterInst) / 1000000.0;
+
+        if (timerProg <= 25.0)
+            return 0;
+
+        return 1;
+    }
+
+    return 0;
+}
+
 // Prototypes
 bool configureCURL(CURL *handle);
 int processGetTask(CCHttpRequest *request, write_callback callback, void *stream, int32_t *errorCode);
 int processPostTask(CCHttpRequest *request, write_callback callback, void *stream, int32_t *errorCode);
-// int processDownloadTask(HttpRequest *task, write_callback callback, void *stream, int32_t *errorCode);
-
+//int processDownloadTask(HttpRequest *task, write_callback callback, void *stream, int32_t *errorCode);
+int processFileTask(CCHttpRequest* request, write_callback callback, void* stream, int32_t* errorCode);
 
 // Worker thread
 static void* networkThread(void *data)
@@ -96,13 +140,15 @@ static void* networkThread(void *data)
     
     while (true) 
     {
+// __DECOMP__: bf doesn't have the semaphore code, but I don't really mind...
+// 
         // Wait for http request tasks from main thread
         int semWaitRet = sem_wait(s_pSem);
         if (semWaitRet < 0) {
             CCLog("HttpRequest async thread semaphore error: %s\n", strerror(errno));
             break;
         }
-        
+
         if (need_quit)
         {
             break;
@@ -154,6 +200,11 @@ static void* networkThread(void *data)
                                            &responseCode);
                 break;
             
+            // __DECOMP__
+            case CCHttpRequest::kHttpUnkown:
+                retValue = processFileTask(request, writeFileData, response->getResponseData(), &responseCode);
+                break;
+
             default:
                 CCAssert(true, "CCHttpClient: unkown request type, only GET and POSt are supported");
                 break;
@@ -231,7 +282,7 @@ bool configureCURL(CURL *handle)
         return false;
     }
 
-    /* BRAVE FRONTIER CUSTOM CODE */
+    /* BRAVE FRONTIER CUSTOM CODE (__DECOMP__) */
 
     code = curl_easy_setopt(handle, CURLOPT_NOSIGNAL, 1);
     if (code != CURLE_OK) {
@@ -243,6 +294,19 @@ bool configureCURL(CURL *handle)
         return false;
     }
 
+#ifdef _DEBUG
+    code = curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0);
+#else
+    code = curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 2);
+#endif
+    if (code != CURLE_OK) {
+        return false;
+    }
+
+    code = curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0);
+    if (code != CURLE_OK) {
+        return false;
+    }
 
     code = curl_easy_setopt(handle, CURLOPT_CAINFO, nullptr);
     if (code != CURLE_OK) {
@@ -250,16 +314,6 @@ bool configureCURL(CURL *handle)
     }
 
     code = curl_easy_setopt(handle, CURLOPT_CAPATH, nullptr);
-    if (code != CURLE_OK) {
-        return false;
-    }
-
-
-#ifdef _DEBUG
-    code = curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0);
-#else
-    code = curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 2);
-#endif
     if (code != CURLE_OK) {
         return false;
     }
@@ -300,10 +354,26 @@ int processGetTask(CCHttpRequest *request, write_callback callback, void *stream
 {
     CURLcode code = CURL_LAST;
     CURL *curl = curl_easy_init();
-    
+    curl_slist* slist = nullptr;
+
     do {
         if (!configureCURL(curl)) 
         {
+            break;
+        }
+
+        // __DECOMP__
+        
+
+        for (auto& req : request->getHeaders())
+        {
+            slist = curl_slist_append(slist, req.c_str());
+        }
+
+        code = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
+        if (code != CURLE_OK)
+        {
+            curl_slist_free_all(slist);
             break;
         }
         
@@ -330,7 +400,6 @@ int processGetTask(CCHttpRequest *request, write_callback callback, void *stream
         {
             break;
         }
-        
         code = curl_easy_perform(curl);
         if (code != CURLE_OK) 
         {
@@ -343,7 +412,8 @@ int processGetTask(CCHttpRequest *request, write_callback callback, void *stream
             code = CURLE_HTTP_RETURNED_ERROR;
         }
     } while (0);
-    
+    if (slist)
+        curl_slist_free_all(slist);
     if (curl) {
         curl_easy_cleanup(curl);
     }
@@ -356,9 +426,23 @@ int processPostTask(CCHttpRequest *request, write_callback callback, void *strea
 {
     CURLcode code = CURL_LAST;
     CURL *curl = curl_easy_init();
-    
+    curl_slist* slist = nullptr;
+
     do {
         if (!configureCURL(curl)) {
+            break;
+        }
+
+        // __DECOMP__
+        for (auto& req : request->getHeaders())
+        {
+            slist = curl_slist_append(slist, req.c_str());
+        }
+
+        code = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist);
+        if (code != CURLE_OK)
+        {
+            curl_slist_free_all(slist);
             break;
         }
         
@@ -396,11 +480,97 @@ int processPostTask(CCHttpRequest *request, write_callback callback, void *strea
             code = CURLE_HTTP_RETURNED_ERROR;
         }
     } while (0);
+    if (slist)
+        curl_slist_free_all(slist);
     if (curl) {
-        curl_easy_cleanup(curl);
+        curl_easy_cleanup(curl);        
     }
     
     return (code == CURLE_OK ? 0 : 1);    
+}
+
+int processFileTask(CCHttpRequest* request, write_callback callback, void* stream, int32_t* responseCode)
+{
+    CURLcode code = CURL_LAST;
+    CURL* curl = curl_easy_init();
+    FILE* fpx = nullptr;
+
+    do {
+        int32_t code;
+        code = curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, s_errorBuffer);
+        if (code != CURLE_OK) {
+            return false;
+        }
+        code = curl_easy_setopt(curl, CURLOPT_TIMEOUT, 0);
+        if (code != CURLE_OK) {
+            return false;
+        }
+        code = curl_easy_setopt(curl, CURLOPT_LOW_SPEED_LIMIT, 10);
+        if (code != CURLE_OK) {
+            return false;
+        }
+        code = curl_easy_setopt(curl, CURLOPT_LOW_SPEED_TIME, 10);
+        if (code != CURLE_OK) {
+            return false;
+        }
+        code = curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
+        if (code != CURLE_OK) {
+            return false;
+        }
+        code = curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, progressfunc);
+        if (code != CURLE_OK) {
+            return false;
+        }
+
+        code = curl_easy_setopt(curl, CURLOPT_URL, request->getUrl());
+        if (code != CURLE_OK) {
+            break;
+        }
+        code = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, callback);
+        if (code != CURLE_OK) {
+            break;
+        }
+        code = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, callback);
+        if (code != CURLE_OK) {
+            break;
+        }
+
+        struct stat ss;
+        stat(request->getRequestData(), &ss);
+        g_lastBufferSize = ss.st_size;
+
+        code = curl_easy_setopt(curl, CURLOPT_RESUME_FROM, g_lastBufferSize);
+        if (code != CURLE_OK) {
+            break;
+        }
+        fpx = fopen(request->getRequestData(), "ab");
+        code = curl_easy_setopt(curl, CURLOPT_FILE, fpx);
+        if (code != CURLE_OK) {
+            break;
+        }
+        code = curl_easy_perform(curl);
+        if (code != CURLE_OK) {
+            if (code == CURLE_BAD_DOWNLOAD_RESUME || code == CURLE_RANGE_ERROR)
+            {
+                // NOT FROM DECOMP BUT WELL....
+                fclose(fpx);
+                fpx = nullptr;
+
+                remove(request->getRequestData());
+                break;
+            }
+
+            code = CURLE_HTTP_RETURNED_ERROR;
+        }
+    } while (0);
+    if (fpx)
+        fclose(fpx);
+    if (curl) {
+        curl_easy_cleanup(curl);
+        downloadTimerAfterInst = 0;
+    }
+
+    return (code == CURLE_OK ? 0 : 1);
 }
 
 // HttpClient implementation
@@ -408,6 +578,7 @@ CCHttpClient* CCHttpClient::getInstance()
 {
     if (s_pHttpClient == NULL) {
         s_pHttpClient = new CCHttpClient();
+        curl_global_init(CURL_GLOBAL_ALL); // __DECOMP__ BF custom data
     }
     
     return s_pHttpClient;
@@ -427,6 +598,20 @@ CCHttpClient::CCHttpClient()
     CCDirector::sharedDirector()->getScheduler()->scheduleSelector(
                     schedule_selector(CCHttpClient::dispatchResponseCallbacks), this, 0, false);
     CCDirector::sharedDirector()->getScheduler()->pauseTarget(this);
+
+    // __DECOMP__ -> BRAVE FRONTIER CUSTOM CODE
+    caCertPemDirectory = CCFileUtils::sharedFileUtils()->fullPathFromRelativePath("cacert.pem");
+}
+
+// __DECOMP__
+int CCHttpClient::getProgressOfDownload()
+{
+    return downloadProgress;
+}
+
+void CCHttpClient::setDownloadTimerAfterInterruption()
+{
+    downloadTimerAfterInst = clock();
 }
 
 CCHttpClient::~CCHttpClient()
@@ -462,7 +647,7 @@ bool CCHttpClient::lazyInitThreadSemphore()
         
         s_pSem = &s_sem;
 #endif
-        
+
         s_requestQueue = new CCArray();
         s_requestQueue->init();
         

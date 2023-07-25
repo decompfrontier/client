@@ -13,6 +13,11 @@
 #include "jni/JniHelper.h"
 constexpr const char* BF_JNI_CLASS = ",/sg/gumi/bravefrontier/BraveFrontierJNI";
 
+#define GET_JNI_(method, signature) \
+	JniMethodInfo method; \
+	std::string className = BF_JNI_CLASS; \
+	if (JniHelper::getStaticMethodInfo(&method, className.c_str(), method, signature)) \
+
 #define GET_JNI(method, signature) \
 	JniMethodInfo method; \
 	std::string className = BF_JNI_CLASS; \
@@ -49,8 +54,12 @@ enum class ReinforcementType : uint
 	Max,
 };
 
+// json
+#include <json/json.h>
+
 // game
 #include "Singleton.h"
 #include "CrashlyticsUtil.h"
 #include "CommonUtils.h"
 #include "ServerConfig.h"
+#include "EnumString.h"

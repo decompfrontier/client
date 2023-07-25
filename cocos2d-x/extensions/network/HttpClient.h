@@ -109,6 +109,11 @@ public:
         _certificateProvider = prov;
     }
         
+
+    // __DECOMP__
+    int getProgressOfDownload();
+    void setDownloadTimerAfterInterruption();
+
 private:
     CCHttpClient();
     virtual ~CCHttpClient();
@@ -126,8 +131,6 @@ private:
     SGCertificateProvider* _certificateProvider;
     int _timeoutForConnect;
     int _timeoutForRead;
-    
-    // std::string reqId;
 };
 
 // end of Network group

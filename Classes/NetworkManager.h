@@ -7,28 +7,44 @@ class NetworkManager : public cocos2d::CCObject
 public:
 	enum class API_VERSION
 	{
+		Default = 0,
 		V1 = 1,
 		V2 = 2,
 	};
 
-	enum class Host
+	enum class HOST
 	{
-		_Unk0,
-		_Unk1,
-		_Unk2,
+		SlApi, // last version of GUMI Live host
+		LiveApi, // the one that was like live.gumi.sg/api/1.1 (apiv2) or 1.0 (apiv1)
+		Max,
 	};
+
+	enum class CONTENT_TYPE
+	{
+		Json,
+		UrlEncoded,
+	};
+
+	struct HostUrl
+	{
+		std::string url;
+		uint64_t unk;
+	};
+
+	typedef void (cocos2d::CCObject::* RequestComplete)(cocos2d::CCNode*, void*);
+	typedef bool (cocos2d::CCObject::* RequestFail)(cocos2d::CCNode*, void*);
 
 	NetworkManager();
 	~NetworkManager();
 
+	void NetworkRequest(HOST host, API_VERSION version, std::string filePath, cocos2d::CCDictionary* phpArguments, cocos2d::extension::CCHttpRequest::HttpRequestType reqType, cocos2d::extension::CCHttpRequest::HttpRequestHandlingType handleType, CONTENT_TYPE contentType, std::string, const char* notificationId, cocos2d::CCObject* cbHolder, RequestComplete onComplete, RequestFail onFail, bool, bool, bool);
+	
 	std::string getStringForAPIVersion(API_VERSION version);
 	void onNetworkRequestResponse(cocos2d::CCNode* node, void* user);
 	void onNetworkRequestComplete(void* user, bool, bool);
 	void forwardResponse(cocos2d::extension::CCHttpResponse* resp);
-	void NetworkRequestGet(Host host, API_VERSION ver, std::string unk, const char* unk2);
 
-	void setGameUrl(const std::string& str) { gameUrl = str; }
-	const std::string& getGameUrl() const { return gameUrl; }
+	void NetworkRequestGet(HOST host, API_VERSION apiVersion, std::string filePath, char const* cocosNotificationId, cocos2d::CCObject* cbHolder, RequestComplete onComplete, RequestFail onFail, bool, bool, cocos2d::CCDictionary* phpArguments, cocos2d::extension::CCHttpRequest::HttpRequestHandlingType = cocos2d::extension::CCHttpRequest::kDefault);
 
 	void setServiceUrl(const std::string& str) { servicePhpUrl = str; }
 	const std::string& getServiceUrl() const { return servicePhpUrl; }
@@ -40,16 +56,13 @@ public:
 	const std::string& getAppKey() const { return apiUrl; }
 
 private:
-	_BYTE unk2[27];
+	//_BYTE unk2[27];
 	std::string apiUrl;
-	_BYTE unk3[8];
-	std::string gameUrl;
-	_BYTE unk4[8];
-	std::string unkUrl;
-	_BYTE unk5[8];
+	HostUrl hostsUrl[(int)HOST::Max];
+	//_BYTE unk5[8];
 	std::string servicePhpUrl;
-	_BYTE unk6[8];
+	//_BYTE unk6[8];
 	std::string servicePhpUrl2;
-	_BYTE unk[13];
+	//_BYTE unk[13];
 };
 

@@ -10,4 +10,9 @@ public:
 	static std::string getDeviceModel();
 	static std::string getAppKey();
 	static std::string getDeviceAltVid();
+	static std::string getUniqueIdentifier();
+	static std::string URLEncodedString(std::string input);
+	static std::string getBundleName();
+	static time_t getCurrentTimeMs();
+
 };
