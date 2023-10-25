@@ -37,14 +37,33 @@ public:
 	NetworkManager();
 	~NetworkManager();
 
-	void NetworkRequest(HOST host, API_VERSION version, std::string filePath, cocos2d::CCDictionary* phpArguments, cocos2d::extension::CCHttpRequest::HttpRequestType reqType, cocos2d::extension::CCHttpRequest::HttpRequestHandlingType handleType, CONTENT_TYPE contentType, std::string, const char* notificationId, cocos2d::CCObject* cbHolder, RequestComplete onComplete, RequestFail onFail, bool, bool, bool);
+	void NetworkRequest(HOST host, API_VERSION version, std::string filePath, cocos2d::CCDictionary* phpArguments, cocos2d::extension::CCHttpRequest::HttpRequestType reqType, cocos2d::extension::CCHttpRequest::HttpRequestHandlingType handleType, CONTENT_TYPE contentType, std::string, const char* tag, cocos2d::CCObject* cbHolder, RequestComplete onComplete, RequestFail onFail, bool, bool, bool);
+	void NetworkRequestGet(HOST host, API_VERSION apiVersion, std::string filePath, char const* tag, cocos2d::CCObject* cbHolder, RequestComplete onComplete, RequestFail onFail, bool, bool, cocos2d::CCDictionary* phpArguments, cocos2d::extension::CCHttpRequest::HttpRequestHandlingType = cocos2d::extension::CCHttpRequest::HttpRequestHandlingType::kDefault);
+	void NetworkRequestPost(HOST host, API_VERSION apiVersion, std::string, char const* tag, cocos2d::CCObject* cbHolder, RequestComplete onComplete, RequestFail onFail, bool, bool, cocos2d::CCDictionary* phpArguments, cocos2d::extension::CCHttpRequest::HttpRequestHandlingType = cocos2d::extension::CCHttpRequest::HttpRequestHandlingType::kDefault);
+	void networkRequestFile(const char*, std::string, const char*, const char*, cocos2d::CCObject* cbHolder, RequestComplete onComplete);
+
+	void OnErrorCancelPressed(void*);
+	void OnErrorRetryPressed(void*);
+	void OnTokenExpisedOkPressed(void*);
+
+	void WebViewBattleFAQURL();
+	void WebViewCreditsURL();
+	void WebViewGeneralFAQURL();
+	void WebViewOtherFAQURL();
+	void WebviewDailyBonusURL();
+	void WebviewDailyBonusURL();
+	void WebviewLiveChatURL();
+	void WebviewLoginURL();
+	void WebviewNewsURL();
+	void WebviewSocialURL();
+	void WebviewTwoLineChatURL();
 	
-	std::string getStringForAPIVersion(API_VERSION version);
 	void onNetworkRequestResponse(cocos2d::CCNode* node, void* user);
 	void onNetworkRequestComplete(void* user, bool, bool);
+
 	void forwardResponse(cocos2d::extension::CCHttpResponse* resp);
 
-	void NetworkRequestGet(HOST host, API_VERSION apiVersion, std::string filePath, char const* cocosNotificationId, cocos2d::CCObject* cbHolder, RequestComplete onComplete, RequestFail onFail, bool, bool, cocos2d::CCDictionary* phpArguments, cocos2d::extension::CCHttpRequest::HttpRequestHandlingType = cocos2d::extension::CCHttpRequest::kDefault);
+	std::string getStringForAPIVersion(API_VERSION version);
 
 	void setServiceUrl(const std::string& str) { servicePhpUrl = str; }
 	const std::string& getServiceUrl() const { return servicePhpUrl; }

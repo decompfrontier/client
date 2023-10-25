@@ -3,6 +3,23 @@
 class Utils
 {
 public:
+	class FpsTracker
+	{
+	public:
+		SHARED_SINGLETON(FpsTracker);
+
+		FpsTracker();
+		~FpsTracker();
+
+		bool areBGEffectsOn();
+		int getFrameRate();
+		bool isFrameRateBelowThreshold();
+		void setBGEffectsOn(bool b);
+		void startTracker();
+		void update();
+		
+	};
+	static void CompareStringNumbers(std::string, std::string);
 	static void showLoadingScreen(cocos2d::extension::CCHttpRequest* req, bool, cocos2d::CCLayer*, bool);
 	static std::string getDevicePlatform();
 	static std::string getDeviceVID();

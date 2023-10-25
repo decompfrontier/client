@@ -25,7 +25,7 @@ SHARED_SINGLETON_BODY(GumiLiveManager)
 
 void GumiLiveManager::init()
 {
-	mngr = new GumiLiveNetworkManagement();
+	mngr = new GumiLiveNetworkManagement(this);
 
 	auto netMngr = NetworkManager::shared();
 	auto ptServerUrl = CCUserDefault::sharedUserDefault()->getStringForKey(PT_SERVER_URL);

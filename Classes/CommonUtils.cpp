@@ -1,6 +1,11 @@
 ﻿#include "pch.h"
 #include "CommonUtils.h"
 #include "GameLayer.h"
+#include "FileLoader.h"
+
+#ifndef _WIN32
+#include <dirent.h>
+#endif
 
 /*
 	__DECOMP__ TODO: Once we get this working please refactor this to use C++11
@@ -347,7 +352,7 @@ std::string CommonUtils::dictionaryWordBreak(std::string& wordBreak, std::string
 	GET_JNI("dictionaryWordBreak", "(Ljava/lang/String;)Ljava/lang/String;");
 	auto jstr = method.env->NewStringUTF(wordBreak.c_str());
 	auto jstr_ret = method.env->CallStaticObjectMethod(method.classID, method.methodID, jstr);
-	std::string retstr = "";
+	std::string result = "";
 
 	method.env->DeleteLocalRef(jstr);
 
@@ -358,7 +363,7 @@ std::string CommonUtils::dictionaryWordBreak(std::string& wordBreak, std::string
 		method.env->ReleaseStringUTFChars(jstr_ret, resdata);
 		method.env->DeleteLocalRef(jstr_ret);
 		method.env->DeleteLocalRef(method.classID);
-		return a2;
+		return result;
 	}
 
 	if (wordBreak != result)
@@ -457,4 +462,223 @@ std::string CommonUtils::getFileExtension(const char* name)
 	}
 
 	return "";
+}
+
+void CommonUtils::deleteLocalFile(const std::string& prefix, const std::string& suffix)
+{
+#ifndef _WIN32
+	struct dirent** namelist;
+	auto x = CommonUtils::getLocalPath();
+
+	auto n = scandir(x.c_str(), &namelist, nullptr, alphasort);
+
+	for (; n > 0; n--)
+	{
+		std::string d_name = namelist[n]->d_name;
+		bool is_ok = false;
+
+		if (d_name.find(prefix) != std::string::npos &&
+			d_name.rfind(suffix) != std::string::npos)
+			deleteLocalFile(x + "/" + d_name);
+
+		free(namelist[n]);
+	}
+
+	free(namelist);
+#endif
+}
+
+void CommonUtils::deleteLocalFiles(std::string prefix, std::string suffix)
+{
+#ifndef _WIN32
+	struct dirent* direntf;
+	auto x = CommonUtils::getLocalPath();
+	DIR* dir = opendir(x.c_str());
+
+	if (!dir)
+		return;
+
+	for (direntf = readdir(dir); direntf != NULL; direntf = readdir(dir))
+	{	
+		std::string d_name = direntf->d_name;
+		bool is_ok = false;
+
+		if (d_name.find(prefix) != std::string::npos &&
+			d_name.rfind(suffix) != std::string::npos)
+		{
+			CommonUtils::getLocalPath(d_name);
+			remove(d_name.c_str());
+		}
+	}
+
+	closedir(dir);
+#endif
+}
+
+void CommonUtils::deleteLocalFilesWithExtension(std::string ext)
+{
+#ifndef _WIN32
+	struct dirent* direntf;
+	auto x = CommonUtils::getLocalPath();
+	DIR* dir = opendir(x.c_str());
+
+	if (!dir)
+		return;
+
+	for (direntf = readdir(dir); direntf != NULL; direntf = readdir(dir))
+	{
+		std::string d_name = direntf->d_name;
+		bool is_ok = false;
+
+		if (d_name.rfind(suffix) != std::string::npos)
+		{
+			CommonUtils::getLocalPath(d_name);
+			remove(d_name.c_str());
+		}
+	}
+
+	closedir(dir);
+#endif
+}
+
+void CommonUtils::enableBit(uint& res, uint bit)
+{
+	res |= (1 << bit);
+}
+
+void CommonUtils::enableBit(uint& res, uint bit)
+{
+	res &= ~(1 << bit);
+}
+
+void CommonUtils::disableDim()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	GET_JNI("disableDim", "()V");
+	bool ret = method.env->CallStaticVoidMethod(method.classID, method.methodID);
+	method.env->DeleteLocalRef(method.classID);
+#endif
+}
+
+void CommonUtils::enableDim()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	GET_JNI("enableDim", "()V");
+	bool ret = method.env->CallStaticVoidMethod(method.classID, method.methodID);
+	method.env->DeleteLocalRef(method.classID);
+#endif
+}
+
+float CommonUtils::getBatteryLevel()
+{
+	return 1.0f; // ok...
+}
+
+bool CommonUtils::existsLocalFile(const std::string& file)
+{
+	if (file.empty())
+		return false;
+
+	return FileLoader::shared()->isFileAlreadyDownloaded(file);
+}
+
+std::string CommonUtils::getDeviceID()
+{
+	return CommonUtils::getDeviceAdvertisingID();
+}
+
+std::string CommonUtils::getDeviceAdvertisingID()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	GET_JNI("getDeviceAdvertisingID", "()Ljava/lang/String;");
+	auto jstr_ret = method.env->CallStaticObjectMethod(method.classID, method.methodID, jstr);
+	std::string result = "";
+
+	if (jstr_ret)
+	{
+		const char* resdata = method.env->GetStringUTFChars(jstr_ret, 0);
+		result = resdata;
+		method.env->ReleaseStringUTFChars(jstr_ret, resdata);
+		method.env->DeleteLocalRef(jstr_ret);
+		method.env->DeleteLocalRef(method.classID);
+		return result;
+	}
+
+	method.env->DeleteLocalRef(method.classID);
+	return "";
+#else
+	/* __DECOMP__ TODO */
+#endif
+}
+
+std::string CommonUtils::getDeviceManufacturer()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	GET_JNI("getDeviceManufacturer", "()Ljava/lang/String;");
+	auto jstr_ret = method.env->CallStaticObjectMethod(method.classID, method.methodID, jstr);
+	std::string result = "";
+
+	if (jstr_ret)
+	{
+		const char* resdata = method.env->GetStringUTFChars(jstr_ret, 0);
+		result = resdata;
+		method.env->ReleaseStringUTFChars(jstr_ret, resdata);
+		method.env->DeleteLocalRef(jstr_ret);
+		method.env->DeleteLocalRef(method.classID);
+		return result;
+	}
+
+	method.env->DeleteLocalRef(method.classID);
+	return "";
+#else
+	/* __DECOMP__ TODO */
+#endif
+}
+
+std::string CommonUtils::getDeviceName()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	GET_JNI("getDeviceModel", "()Ljava/lang/String;");
+	auto jstr_ret = method.env->CallStaticObjectMethod(method.classID, method.methodID, jstr);
+	std::string result = "";
+
+	if (jstr_ret)
+	{
+		const char* resdata = method.env->GetStringUTFChars(jstr_ret, 0);
+		result = resdata;
+		method.env->ReleaseStringUTFChars(jstr_ret, resdata);
+		method.env->DeleteLocalRef(jstr_ret);
+		method.env->DeleteLocalRef(method.classID);
+		return result;
+	}
+
+	method.env->DeleteLocalRef(method.classID);
+	return "";
+#else
+	/* __DECOMP__ TODO */
+#endif
+}
+
+std::string CommonUtils::getDeviceVersion()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	GET_JNI("getDeviceVersio", "()Ljava/lang/String;");
+	auto jstr_ret = method.env->CallStaticObjectMethod(method.classID, method.methodID, jstr);
+	std::string result = "";
+
+	if (jstr_ret)
+	{
+		const char* resdata = method.env->GetStringUTFChars(jstr_ret, 0);
+		result = resdata;
+		method.env->ReleaseStringUTFChars(jstr_ret, resdata);
+		method.env->DeleteLocalRef(jstr_ret);
+		method.env->DeleteLocalRef(method.classID);
+		return result;
+	}
+
+	method.env->DeleteLocalRef(method.classID);
+	return "";
+#else
+	/* __DECOMP__ TODO */
+#endif
 }

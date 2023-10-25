@@ -137,6 +137,8 @@
     <ClCompile Include="..\Classes\CommonUtils.cpp" />
     <ClCompile Include="..\Classes\CrashlyticsUtil.cpp" />
     <ClCompile Include="..\Classes\GameLayer.cpp" />
+    <ClCompile Include="..\Classes\GameScene.cpp" />
+    <ClCompile Include="..\Classes\GameSprite.cpp" />
     <ClCompile Include="..\Classes\GumiLiveManager.cpp" />
     <ClCompile Include="..\Classes\GumiLiveNetworkManagement.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
@@ -150,6 +152,8 @@
     <ClCompile Include="..\Classes\SaveUtils.cpp" />
     <ClCompile Include="..\Classes\ScrlLayer.cpp" />
     <ClCompile Include="..\Classes\ServiceRequestManager.cpp" />
+    <ClCompile Include="..\Classes\StringLabel.cpp" />
+    <ClCompile Include="..\Classes\StringLabelList.cpp" />
     <ClCompile Include="..\Classes\TextManager.cpp" />
     <ClCompile Include="..\Classes\UserConfigInfo.cpp" />
     <ClCompile Include="..\Classes\UserInfo.cpp" />
@@ -158,6 +162,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Classes\AIMst.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\BFCertificateProvider.h" />
     <ClInclude Include="..\Classes\CommonUtils.h" />
@@ -165,7 +170,10 @@
     <ClInclude Include="..\Classes\CrashlyticsUtil.h" />
     <ClInclude Include="..\Classes\DefineMst.h" />
     <ClInclude Include="..\Classes\EnumString.h" />
+    <ClInclude Include="..\Classes\FileLoader.h" />
     <ClInclude Include="..\Classes\GameLayer.h" />
+    <ClInclude Include="..\Classes\GameScene.h" />
+    <ClInclude Include="..\Classes\GameSprite.h" />
     <ClInclude Include="..\Classes\GumiLiveManager.h" />
     <ClInclude Include="..\Classes\GumiLiveConstants.h" />
     <ClInclude Include="..\Classes\GumiLiveNetworkManagement.h" />
@@ -182,6 +190,8 @@
     <ClInclude Include="..\Classes\ServerConfig.h" />
     <ClInclude Include="..\Classes\ServiceRequestManager.h" />
     <ClInclude Include="..\Classes\Singleton.h" />
+    <ClInclude Include="..\Classes\StringLabel.h" />
+    <ClInclude Include="..\Classes\StringLabelList.h" />
     <ClInclude Include="..\Classes\TextManager.h" />
     <ClInclude Include="..\Classes\UserConfigInfo.h" />
     <ClInclude Include="..\Classes\UserInfo.h" />

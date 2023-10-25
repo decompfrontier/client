@@ -1,5 +1,7 @@
 #pragma once
 
+#include "StringLabelList.h"
+
 class CommonUtils
 {
 public:
@@ -38,19 +40,20 @@ public:
 	static std::string decodeCStringForBase64(const char* data, const char* key);
 	static std::string decompress_string(const char* data, int);
 	static void deleteCache();
-	static void deleteLocalFile(const std::string& str);
-	static void deleteLocalFile(const std::string&, const std::string);
-	static void deleteLocalFilesWithExtension(std::string);
-	static std::string dictionaryWordBreak(std::string&, std::string&);
-	static uint disableBit(uint&, uint);
+	static void deleteLocalFile(const std::string& fileToDelete);
+	static void deleteLocalFile(const std::string& prefix, const std::string& suffix);
+	static void deleteLocalFiles(std::string prefix, std::string suffix);
+	static void deleteLocalFilesWithExtension(std::string ext);
+	static std::string dictionaryWordBreak(std::string& wordBreak, std::string& result);
+	static uint disableBit(uint& res, uint bit);
 	static void disableDim();
 	static void downloadBundlePriority(std::string, std::string, bool);
-	static void enableBit(uint&, uint);
+	static void enableBit(uint& res, uint bit);
 	static void enableDim();
 	static std::string encodeCStringForBase64(const char*, const char*);
-	static bool existsBundleFile(const std::string&);
-	static bool existsLocalFile(const std::string&);
-	static int getBatteryLevel();
+	static bool existsBundleFile(const std::string& file);
+	static bool existsLocalFile(const std::string& file);
+	static float getBatteryLevel();
 	static int getBatteryState();
 	static int getBlackTexture();
 	static int getBuildPlatformID();
@@ -60,17 +63,17 @@ public:
 	static unk getCsvList(const std::string&);
 	static unk getCsvListForLocal(const std::string&);
 	static unk getCsvListForResource(const std::string&);
-	static int getDeviceAdvertisingID();
-	static int getDeviceID();
-	static int getDeviceManufacturer();
-	static int getDeviceName();
-	static int getDeviceVersion();
+	static std::string getDeviceAdvertisingID();
+	static std::string getDeviceID();
+	static std::string getDeviceManufacturer();
+	static std::string getDeviceName();
+	static std::string getDeviceVersion();
 	static int getDistance(int, int, int, int);
 	static std::string getFileExtension(const char*);
 	static std::string getFileName(const char*);
 	static std::string getFileName(const std::string& p) { return getFileName(p.c_str()); }
 	static std::string getFilePathFromLocalThenBundle(std::string) { return ""; }
-	static void getLocalPath(std::string&);
+	static void getLocalPath(std::string& file);
 	static std::string getLocalPath();
 	static int getNetworkState();
 	static time_t getNowUnitxTime();
@@ -84,8 +87,69 @@ public:
 	static int getQueryMap(const std::string&);
 	static int getRandom(int, int);
 	static int getRandomForFloat(float, float);
-	static int getResourcePath(std::string&);
+	static int getResourcePath(std::string& pathFromBundle);
 	static int getResourceUrl(bool);
-
-	/* todo: to finish ... */
+	static int getScreenHeight();
+	static int getScreenWidth();
+	static int getSecondsFromDate(std::string);
+	static int getStringWidth(const std::string& int);
+	static std::string getTargetOs();
+	static unk getTexture(const std::string&);
+	static unk getTexture(const std::string&, bool, bool);
+	static unk getTexture(const std::string&, const std::string&, bool);
+	static unk getTextureForAll(std::string);
+	static unk getTextureForLocal(const std::string&);
+	static unk getTextureForLocal(const std::string&, bool);
+	static unk getTextureForResource(const std::string&);
+	static unk getTextureForResourceLan(const std::string&);
+	static unk getTimerLeftStringFromSeconds(const std::string&);
+	static std::string getUniqID();
+	static void initGrouthBeat();
+	static bool isBatteryCharging();
+	static bool isCanSimultaneousDownload();
+	static bool isEnableBit(uint&, uint);
+	static bool isTouchObject(cocos2d::CCNode*, cocos2d::CCTouch*);
+	static bool isTouchObject(cocos2d::CCNode*, cocos2d::CCTouch*, int, int);
+	static unk judgePercent(float);
+	static unk leaveBreadcumb(const std::string&);
+	static unk numUTF8Chars(std::string, int);
+	static unk openUrl(std::string url);
+	static unk outputLogcat(const std::string&);
+	static unk parseList(const std::string&, const std::string&);
+	static unk parseList2(std::string&, std::string&);
+	static unk parseListWithQuotedStrings(std::string&, std::string&);
+	static unk removeDuplicate(cocos2d::CCMutableArray<cocos2d::CCInteger*>*);
+	static unk eraseAllBits(uint&, uint);
+	static unk saveFile(const std::string&, const std::string&);
+	static unk saveScreenForCameraRoll(const std::string&);
+	static unk saveScreenShot();
+	static unk sendAppDriverActionResult(const std::string&);
+	static unk sendGrowthBeatEventLaunch();
+	static unk sendInvitationFaceBook(const std::string&, const std::string&);
+	static unk sendInvitationLine(const std::string&, const std::string&);
+	static unk sendInvitationMail(const std::string&, const std::string&);
+	static unk sendInvitationTwitter(const std::string&, const std::string&);
+	static unk sendMailWithImage(const std::string&, const std::string&, const std::string&);
+	static unk setAudioResignBehavour();
+	static unk setBadgeNumber(int);
+	static unk setConstrainLabelSize(StringLabel*, float);
+	static unk setConstrainLabelSize(StringLabelList*, float);
+	static unk setSleepLabel(bool);
+	static unk sharedApplication(const std::string&);
+	static unk showPlayPhoneButton(bool);
+	static unk showToastMessage(const std::string&, int);
+	static unk showWebView();
+	static unk setArray(cocos2d::CCMutableArray<cocos2d::CCInteger*>*);
+	static unk split(const std::string&, const char*);
+	static unk split(const std::string&, const char*, std::vector<std::string>&);
+	static unk splitInt(const std::string&, const char*);
+	static unk splitInt(const std::string&, const char*, std::vector<int>&);
+	static unk strReplace(std::string, const std::string&, const std::string&);
+	static unk stringFormat(int, int);
+	static unk stringFormatLong(long long, int);
+	static unk stringifyIntList(const std::vector<int>&, const std::string&);
+	static unk stringifyList(const std::vector<std::string>&, const std::string&);
+	static unk textureFilledWhite(const std::string&);
+	static unk urlDecode(const char*);
+	static unk urlEncode(const char*);
 };
