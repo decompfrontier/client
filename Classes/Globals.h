@@ -1,0 +1,24 @@
+#pragma once
+
+void androInit();
+void funcSG();
+void initUCS();
+void drawMGS();
+void playEvo();
+void whereAllCall();
+void diamBuy();
+void dunInit();
+void setEvoBackground();
+void actualizeEnergy();
+void energyDraw();
+void updateItems();
+void itemRemove();
+void setColorOfPlayer();
+void setColorOfPlayer2();
+void callSG();
+void diamondsInit();
+void checkRandU();
+void dataDa();
+void drawUnitOnScreen2();
+void drawUnitOnScreen1();
+void drawUnitOnScreen();

@@ -63,3 +63,5 @@ enum class ReinforcementType : uint
 #include "CommonUtils.h"
 #include "ServerConfig.h"
 #include "EnumString.h"
+#include "MstList.h"
+

@@ -7,6 +7,7 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "AppDelegate.h"
 #include "SuperAnim.h"
+#include "NativeCallbackHandler.h"
 #include "PTRateThisAppPopup.h"
 
 /* jni */
@@ -66,7 +67,11 @@ void Java_sg_gumi_bravefrontier_BraveFrontierJNI_nativeRateThisAppPopupCallback(
 }
 
 
-void Java_sg_gumi_bravefrontier_BraveFrontierJNI_backButtonCallback();
+void Java_sg_gumi_bravefrontier_BraveFrontierJNI_backButtonCallback()
+{
+    NativeCallbackHandler::shared()->onBackButtonCalled();
+}
+
 void Java_sg_gumi_bravefrontier_BraveFrontierJNI_nativeDownloadCallback(JNIEnv* env, jobject thisz, jlong obj, jbyteArray downloadedData, jstring error);
 
 } /* extern "C" */

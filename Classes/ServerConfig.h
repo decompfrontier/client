@@ -2,6 +2,16 @@
 
 #include "ServiceRequestManager.h"
 
+constexpr long long LOCAL_NOTIFICATION_TIMER_FOR_DAILY_TASKS = 43200; // seconds
+constexpr unsigned int APP_VERSION = 1163;
+constexpr unsigned int APP_VERSION_ANDROID = APP_VERSION;
+constexpr unsigned int APP_VERSION_KINDLE = APP_VERSION;
+constexpr unsigned int APP_VERSION_KINDLE = APP_VERSION;
+
+constexpr const char GUMILIVE_HMAC_KEY[] = "2398asdflibt19adklk";
+constexpr const char GUMILIVE_IDENTIFIER_AES_KEY[] = "7410958164354871";
+constexpr const char GUMILIVE_IDENTIFIER_IV[] = "Bfw4encrypedPass";
+
 /*
 	Server configuration
 */
@@ -67,5 +77,5 @@ static std::string SERVICE_PHP_URL2()
 
 static std::string PHP_URL()
 {
-	return ServiceRequestManager::shared()->getServiceEndpoint("\bgame", "ios.bfww.gumi.s");
+	return ServiceRequestManager::shared()->getServiceEndpoint("game", "ios.bfww.gumi.sg");
 }

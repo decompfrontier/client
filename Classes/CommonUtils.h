@@ -93,7 +93,7 @@ public:
 	static int getScreenWidth();
 	static int getSecondsFromDate(std::string);
 	static int getStringWidth(const std::string& int);
-	static std::string getTargetOs();
+	static int getTargetOs();
 	static unk getTexture(const std::string&);
 	static unk getTexture(const std::string&, bool, bool);
 	static unk getTexture(const std::string&, const std::string&, bool);
@@ -111,11 +111,11 @@ public:
 	static bool isTouchObject(cocos2d::CCNode*, cocos2d::CCTouch*);
 	static bool isTouchObject(cocos2d::CCNode*, cocos2d::CCTouch*, int, int);
 	static unk judgePercent(float);
-	static unk leaveBreadcumb(const std::string&);
+	static void leaveBreadcumb(const std::string&);
 	static unk numUTF8Chars(std::string, int);
 	static unk openUrl(std::string url);
 	static unk outputLogcat(const std::string&);
-	static unk parseList(const std::string&, const std::string&);
+	static std::vector<std::string> parseList(const std::string& list, const std::string& delim);
 	static unk parseList2(std::string&, std::string&);
 	static unk parseListWithQuotedStrings(std::string&, std::string&);
 	static unk removeDuplicate(cocos2d::CCMutableArray<cocos2d::CCInteger*>*);

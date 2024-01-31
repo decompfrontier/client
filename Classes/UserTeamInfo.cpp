@@ -21,9 +21,9 @@ int UserTeamInfo::getFightRecoveryTime() const
 	if (!timer)
 		return 0;
 
-	// TODO: fix...
-	auto v3 = timer & DefineMst::shared()->getRecoverTimeFight();
+	auto v3 = timer % DefineMst::shared()->getRecoverTimeFight();
 
+	// TODO: document the why of this
 	if ((v3 + 59) >= 119)
 		return (int)(v3 / 60);
 
@@ -56,6 +56,9 @@ void UserTeamInfo::setActionPoint(int v)
 
 void UserTeamInfo::setActionRestTimer(int v)
 {
+	if (v <= 0)
+		v = 0;
+
 	XOR_SET(actionRestTimer);
 	actionRestTimerTimestamp = CommonUtils::getNowUnitxTime();
 }
@@ -80,7 +83,7 @@ void UserTeamInfo::setExp(int v)
 	XOR_SET(exp);
 
 	if (exp > 0 && getExp() < exp)
-		Utils::submitHighScorePlayeExp();
+		Utils::submitHighScorePlayerExp();
 }
 
 void UserTeamInfo::setFightPoint(int v)
@@ -90,6 +93,9 @@ void UserTeamInfo::setFightPoint(int v)
 
 void UserTeamInfo::setFightRestTimer(int v)
 {
+	if (v <= 0)
+		v = 0;
+
 	XOR_SET(fightRestTimer);
 	fightRestTimerTimestamp = CommonUtils::getNowUnitxTime();
 }
@@ -163,7 +169,8 @@ void UserTeamInfo::decActionRestTimer()
 {
 	if (actionRestTimerMagic != actionRestTimerXor)
 	{
-        auto diff = CommonUtils::getNowUnitxTime() - actionRestTimerTimestamp;
+		auto current = CommonUtils::getNowUnitxTime();
+        auto diff = current - actionRestTimerTimestamp;
         for (int i = 0; i < diff; i++)
         {
             setActionRestTimer(getActionRestTimer() - 1);
@@ -190,6 +197,44 @@ void UserTeamInfo::decActionRestTimer()
 
         }
 
-		actionRestTimerTimestamp = actionRestTimerMagic;
+		actionRestTimerTimestamp = current;
+	}
+}
+
+
+void UserTeamInfo::decFightRestTimer()
+{
+	if (fightRestTimerXor != fightRestTimerMagic)
+	{
+		auto current = CommonUtils::getNowUnitxTime();
+		auto diff = current - fightRestTimerTimestamp;
+		
+		for (int i = 0; i < diff; i++)
+		{
+			setFightRestTimer(getFightRestTimer() - 1);
+
+			if (DefineMst::shared()->getRecoverTimeFight() > 0)
+			{
+				if (!(getFightRestTimer() % DefineMst::shared()->getRecoverTimeFight()))
+				{
+					setFightPoint(getFightPoint() + 1);
+				}
+			}
+			else
+			{
+				std::string msg = "Bad getRecoverTimeFight(): " + CommonUtils::IntToString(DefineMst::shared()->getRecoverTimeFight());
+				CommonUtils::leaveBreadcumb(msg);
+			}
+
+			if (getFightPoint() > getMaxFightPoint())
+			{
+				setFightPoint(getMaxFightPoint());
+			}
+
+			if (getActionRestTimer() <= 0)
+				break;
+		}
+
+		fightRestTimerTimestamp = current;
 	}
 }

@@ -247,3 +247,8 @@ void SaveData::loadKeyChain()
 	}
 	auto password = SaveUtils::getPasswordFromKeyChain(DEFAULT_KEY_CHAIN);
 }
+
+std::string SaveData::getServiceRequestEndpoint()
+{
+	return SaveUtils::loadUserDefaults("srepParm");
+}

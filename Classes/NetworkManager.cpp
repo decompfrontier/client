@@ -108,7 +108,7 @@ void NetworkManager::NetworkRequest(HOST host, API_VERSION version, std::string 
 
 	std::string accepts = "Accept:application/json; charset=utf-8";
 	auto length = CCString::createWithFormat("Content-Length: %lu", contentData.empty() ? 0 : (uint32_t)contentData.length());
-	auto extraHeader = CCString::createWithFormat("GCLIENTID: %s %s", Utils::getDevicePlatform(), Utils::getBundleName());
+	auto extraHeader = CCString::createWithFormat("GCLIENTID: %s_%s", Utils::getDevicePlatform(), Utils::getBundleName());
 
 	CCHttpRequest* rq = new CCHttpRequest();
 	rq->setRequestType(reqType);

@@ -682,3 +682,40 @@ std::string CommonUtils::getDeviceVersion()
 	/* __DECOMP__ TODO */
 #endif
 }
+
+std::vector<std::string> CommonUtils::parseList(const std::string& list, const std::string& delim)
+{
+	// NOTE: this is not what the decomp does but it should be ok anyway
+	std::vector<std::string> o;
+	size_t off = 0;
+	if (list.empty())
+		return o;
+
+	if (list[0] == ' ')
+		return o;
+
+	while (true)
+	{
+		auto pos = list.find(delim, off);
+		if (pos == std::string::npos)
+		{
+			o.push_back(list.substr(off));
+			break;
+		}
+
+		auto x = list.substr(off, pos);
+		o.push_back(x);
+		off += pos + 1;
+	}
+
+	return o;
+}
+
+int CommonUtils::getTargetOs()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	return 2;
+#else
+	return -1; /* TODO */
+#endif
+}

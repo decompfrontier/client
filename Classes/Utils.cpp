@@ -19,7 +19,7 @@ std::string Utils::getDevicePlatform()
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	return "Android";
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) // __DECOMP__
-	return "Win32";
+	return "Windows";
 #else
 #error "Unknown platform"
 #endif
@@ -79,3 +79,8 @@ std::string Utils::getDeviceOS()
 	return ""; // TODO: __DECOMP__
 #endif
 }
+
+std::string Utils::mInfo = "";
+int Utils::magic_num1 = 0x5B88;
+int Utils::point_num_name = 0x0F;
+int Utils::point_num_123 = 0x4D2;

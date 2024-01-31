@@ -91,7 +91,7 @@ public:
 	void getRecFlg();
 	void getRecUseSettingFlg();
 	bool getResumeFlag() const { return resumeFlag; }
-	void getServiceRequestEndpoint();
+	std::string getServiceRequestEndpoint();
 	void getSortFlg(int);
 	void getSphereSortFlg(int);
 	void getSphereSortFlg(int);
