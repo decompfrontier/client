@@ -139,6 +139,7 @@
     <ClCompile Include="..\Classes\CommonUtils.cpp" />
     <ClCompile Include="..\Classes\CrashlyticsUtil.cpp" />
     <ClCompile Include="..\Classes\DailyTaskPrizeMst.cpp" />
+    <ClCompile Include="..\Classes\FirstDescMst.cpp" />
     <ClCompile Include="..\Classes\GameLayer.cpp" />
     <ClCompile Include="..\Classes\GameScene.cpp" />
     <ClCompile Include="..\Classes\GameSprite.cpp" />
@@ -160,7 +161,9 @@
     <ClCompile Include="..\Classes\StringLabelList.cpp" />
     <ClCompile Include="..\Classes\TextManager.cpp" />
     <ClCompile Include="..\Classes\UserConfigInfo.cpp" />
+    <ClCompile Include="..\Classes\UserDebugInfo.cpp" />
     <ClCompile Include="..\Classes\UserInfo.cpp" />
+    <ClCompile Include="..\Classes\UserInfoResponse.cpp" />
     <ClCompile Include="..\Classes\UserTeamInfo.cpp" />
     <ClCompile Include="..\Classes\Utils.cpp" />
     <ClCompile Include="main.cpp" />
@@ -170,6 +173,7 @@
     <ClInclude Include="..\Classes\AITerm.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\BaseRequest.h" />
+    <ClInclude Include="..\Classes\BaseResponse.h" />
     <ClInclude Include="..\Classes\BaseScene.h" />
     <ClInclude Include="..\Classes\BFCertificateProvider.h" />
     <ClInclude Include="..\Classes\CommonUtils.h" />
@@ -179,6 +183,7 @@
     <ClInclude Include="..\Classes\DefineMst.h" />
     <ClInclude Include="..\Classes\EnumString.h" />
     <ClInclude Include="..\Classes\FileLoader.h" />
+    <ClInclude Include="..\Classes\FirstDescMst.h" />
     <ClInclude Include="..\Classes\GameLayer.h" />
     <ClInclude Include="..\Classes\GameScene.h" />
     <ClInclude Include="..\Classes\GameSprite.h" />
@@ -188,14 +193,17 @@
     <ClInclude Include="..\Classes\GumiLiveNetworkManagement.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\JsonGroup.h" />
+    <ClInclude Include="..\Classes\JsonNetworkNames.h" />
     <ClInclude Include="..\Classes\JsonNode.h" />
     <ClInclude Include="..\Classes\JsonParam.h" />
     <ClInclude Include="..\Classes\LocalNotificationManager.h" />
     <ClInclude Include="..\Classes\MstList.h" />
     <ClInclude Include="..\Classes\NetworkManager.h" />
+    <ClInclude Include="..\Classes\NoticeListMst.h" />
     <ClInclude Include="..\Classes\pch.h" />
     <ClInclude Include="..\Classes\PWConstants.h" />
     <ClInclude Include="..\Classes\PWFacebookUser.h" />
+    <ClInclude Include="..\Classes\ResponseData.h" />
     <ClInclude Include="..\Classes\SaveData.h" />
     <ClInclude Include="..\Classes\SaveDataKeys.h" />
     <ClInclude Include="..\Classes\SaveUtils.h" />
@@ -207,7 +215,9 @@
     <ClInclude Include="..\Classes\StringLabelList.h" />
     <ClInclude Include="..\Classes\TextManager.h" />
     <ClInclude Include="..\Classes\UserConfigInfo.h" />
+    <ClInclude Include="..\Classes\UserDebugInfo.h" />
     <ClInclude Include="..\Classes\UserInfo.h" />
+    <ClInclude Include="..\Classes\UserInfoResponse.h" />
     <ClInclude Include="..\Classes\UserTeamInfo.h" />
     <ClInclude Include="..\Classes\Utils.h" />
     <ClInclude Include="..\Classes\NativeCallbackHandler.h" />
