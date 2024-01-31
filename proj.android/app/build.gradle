@@ -1,5 +1,5 @@
 plugins {
-    id('com.android.application') version '7.4.1'
+    id('com.android.application') version '8.1.0'
     id 'com.google.gms.google-services'
 }
 
@@ -22,6 +22,9 @@ android {
         versionName '2.19.6.0'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -39,6 +42,7 @@ android {
             }
         }
     }
+    namespace 'sg.gumi.bravefrontier'
 }
 
 dependencies {
