@@ -54,6 +54,8 @@ enum class ReinforcementType : uint
 	Max,
 };
 
+constexpr const auto PKEY_TUTORIAL_SKIP = "pkey_tutorial_skip";
+
 // json
 #include <json/json.h>
 
@@ -64,4 +66,4 @@ enum class ReinforcementType : uint
 #include "ServerConfig.h"
 #include "EnumString.h"
 #include "MstList.h"
-
+#include "JsonNetworkNames.h"

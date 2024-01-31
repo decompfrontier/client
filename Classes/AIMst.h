@@ -12,26 +12,20 @@ public:
 	AIMst() = default;
 	virtual ~AIMst() = default;
 
-	auto getAiID() const { return m_id; }
-	auto getActTarget() const noexcept { return m_actTarget; }
-	auto getActionID() const { return m_actionId; }
-	auto getPercent() const noexcept { return m_percent; }
-	auto getPriority() const noexcept { return m_priority; }
-	auto getSearchTerm() const { return m_searchTerm; }
-	cocos2d::CCMutableArray<AITerm*> getActTermList() const;
+	CC_SYNTHESIZE(std::string, m_id, AiID);
+	CC_SYNTHESIZE(float, m_actTarget, ActTarget);
+	CC_SYNTHESIZE(std::string, m_actionId, ActionID);
+	CC_SYNTHESIZE(float, m_percent, Percent);
+	CC_SYNTHESIZE(int, m_priority, Priority);
+	CC_SYNTHESIZE(std::string, m_searchTerm, SearchTerm);
+	CC_SYNTHESIZE(std::string, m_actTermParams, ActTermParams);
+
 	cocos2d::CCMutableArray<AITerm*> getPartyActTermList() const;
+	cocos2d::CCMutableArray<AITerm*> getActTermList() const;
 	void parseAITerm(const std::string& data);
-	void setActTarget(int at) noexcept { m_actTarget = at; }
-	void setActTermParams(std::string p) { m_actTermParams = p; }
-	void setActionID(std::string p) { m_actionId = p; }
-	void setAiID(std::string p) { m_id = p; }
-	void setPercent(float p) noexcept  { m_percent = p; }
-	void setPriority(int p) noexcept { m_priority = p; }
-	void setSearchTerm(std::string p) { m_searchTerm = p; }
-private:
-	std::string m_id, m_searchTerm, m_actionId, m_actTermParams, m_partyActTermList;
-	float m_percent, m_actTarget;
-	int m_priority;
+
+protected:
+	std::string m_partyActTermList;
 };
 
 class AIMstList : public MstList<AIMst*>

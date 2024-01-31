@@ -8,13 +8,15 @@ public:
 	BaseRequest() = default;
 	virtual ~BaseRequest() = default;
 
-	void addGroup(const char* group)
+	JsonGroup* addGroup(const char* group)
 	{
 		auto p = new JsonGroup(group);
 		m_groups.addObject(p);
+		p->release();
+		return p;
 	}
 
-	void addGumiliveParams(JsonNode* node);
+	void addGumiliveParams(JsonNode* root);
 	virtual void create() {}
 	void createCampaignReceiptInfoTag();
 	void createDungeonEventUserInfoTag();
@@ -27,7 +29,7 @@ public:
 	virtual std::string getSendData() = 0;
 	virtual std::string getUrl() const { return "/actionSymbol/action.php"; } // /gme/action/
 	virtual bool isAsync() const { return false; }
-	void replaceGroup(const char* group);
+	JsonGroup* replaceGroup(const char* group);
 
 protected:
 	cocos2d::CCMutableArray<JsonGroup*> m_groups;

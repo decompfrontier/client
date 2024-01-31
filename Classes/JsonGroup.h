@@ -8,6 +8,16 @@ public:
 	JsonGroup(const char* groupName) : m_groupName(groupName) {}
 	virtual ~JsonGroup() = default;
 
+	const char* getGroupName() const { return m_groupName; }
+
+	JsonNode* addNode()
+	{
+		auto p = new JsonNode();
+		m_nodes.addObject(p);
+		p->release();
+		return p;
+	}
+
 	std::string getSendData(std::string out)
 	{
 		out = "\"";
@@ -28,7 +38,6 @@ public:
 
 		return out;
 	}
-
 
 protected:
 	const char* m_groupName;

@@ -82,5 +82,6 @@ std::string Utils::getDeviceOS()
 
 std::string Utils::mInfo = "";
 int Utils::magic_num1 = 0x5B88;
-int Utils::point_num_name = 0x0F;
+int Utils::point_num_name = 15;
 int Utils::point_num_123 = 0x4D2;
+std::string Utils::pointerName = "";

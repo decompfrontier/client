@@ -22,3 +22,9 @@ void dataDa();
 void drawUnitOnScreen2();
 void drawUnitOnScreen1();
 void drawUnitOnScreen();
+
+extern bool FUNC_FIRST_DESC;
+extern bool FUNC_NOTICE_LIST;
+extern bool FUNC_AMAZON_COINS_REWARD_CONTROL;
+
+void SET_DLC_URL(const std::string& url);

@@ -8,6 +8,13 @@ public:
 	SaveData();
 	~SaveData();
 
+	CC_SYNTHESIZE(std::string, m_userId, UserID);
+	CC_SYNTHESIZE_READONLY(std::string, m_contactID, ContactID);
+	CC_SYNTHESIZE(std::string, m_handleName, HandleName);
+	CC_SYNTHESIZE(int, m_paidGemsCount, GumiLivePaidGemsCount);
+	CC_SYNTHESIZE_READONLY(int, m_modeChangeCnt, ModeChangeCnt);
+	CC_SYNTHESIZE(bool, m_resumeFlag, ResumeFlag);
+
 	void UnitImgTypeDataDel();
 	void addParam(std::string&, std::string);
 	void clearAchievementSortFlg();
@@ -54,18 +61,16 @@ public:
 	long getCADailyCoolingPeriodStart();
 	long getCAWeeklyResetTime();
 	std::string getCampaignScriptAgain();
-	std::string getContactID() const { return contactID; }
+
 	std::string getCsvSring(std::string str);
 	bool getDeviceTransferFlg();
 	bool getEp3BoostItemResetFlg();
 	bool getEp3TitleLogoFlg();
 	void getEventTokenStatus();
-	void getFirstDescInfo();
+	const std::string& getFirstDescInfo();
 	void getFriendID();
 	void getFriendSortFlg();
 	void GrandQuestIconFlg();
-	int getGumiLivePaidGemsCount() const { return paidGemsCount; }
-	std::string getHandleName() const { return handleName; }
 	void getItemDictSortFlg(int);
 	void getItemSetID();
 	void getItemSortFlg(int);
@@ -74,7 +79,6 @@ public:
 	void getLobiSignupFlg();
 	void getLoginErrorCnt();
 	void getLoginState();
-	unsigned int getModeChangeCnt() const { return modeChangeCount; }
 	void getMultiFirstPlayFlg();
 	void getMultiRoomAutoJoinValue();
 	void getMultiRoomInvitationLimitValue();
@@ -90,7 +94,6 @@ public:
 	void getRaidRestartErrorCnt();
 	void getRecFlg();
 	void getRecUseSettingFlg();
-	bool getResumeFlag() const { return resumeFlag; }
 	std::string getServiceRequestEndpoint();
 	void getSortFlg(int);
 	void getSphereSortFlg(int);
@@ -99,7 +102,6 @@ public:
 	void getTitleErrorCnt();
 	void getUnitDictSortFlg(int);
 	void getUnitGatchaFixSortFlg(int);
-	std::string getUserID() const { return userId; }
 	void incLoginErrorCnt();
 	void incRaidRestartErrorCnt();
 	void incTitleErrorCnt();
@@ -177,8 +179,6 @@ public:
 	void setFriendID(std::string);
 	void setFriendSortFlg(std::string, int);
 	void setGrandQuestIconFlg(bool);
-	void setGumilivePaidGemsCount(int paidGems) { paidGemsCount = paidGems; }
-	void setHandleName(std::string handleName) { this->handleName = handleName; }
 	void setItemDictSortFlg(std::string, int);
 	void setItemSortFlg(std::string, int);
 	void setLoadResourceMstVersion(int);
@@ -213,20 +213,4 @@ public:
 	void setTitleErrorCnt(int);
 	void setUnitDictSortFlg(std::string, int);
 	void setUseSummonTickets(bool);
-	void setUserID(std::string userid) { this->userId = userid; }
-
-private:
-	// byte[3];
-	std::string userId;
-	// byte[8]
-	std::string handleName;
-	// byte[8]
-	unsigned int modeChangeCount;
-	// byte[4]
-	std::string contactID;
-	// byte[16]
-	bool resumeFlag;
-	// byte[28]
-	int paidGemsCount;
-	// byte[25]
 };

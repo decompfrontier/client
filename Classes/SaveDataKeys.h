@@ -9,4 +9,4 @@ constexpr auto SORT_SPHERE_FILTER_KEY = "sort_sphere_filter_key_";
 
 constexpr auto SAVE_KEY_VALID = "valid";
 constexpr auto SAVE_KEY_INVALID = "invalid";
-constexpr auto SAVE_KEY_DEFAULT_3 = "\n0,0,0";
+constexpr auto SAVE_KEY_DEFAULT_3 = "0,0,0";

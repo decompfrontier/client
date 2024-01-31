@@ -127,3 +127,7 @@ void callSG()
 {
 	UPDATE_MINFO_2("CF3");
 }
+
+bool FUNC_FIRST_DESC = true;
+bool FUNC_NOTICE_LIST = false;
+bool FUNC_AMAZON_COINS_REWARD_CONTROL = false;

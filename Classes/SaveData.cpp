@@ -3,6 +3,7 @@
 #include "SaveDataKeys.h"
 #include "SaveUtils.h"
 #include "CommonUtils.h"
+#include "UserConfigInfo.h"
 
 SET_SHARED_SINGLETON(SaveData);
 

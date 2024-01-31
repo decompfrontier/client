@@ -24,6 +24,7 @@ public:
 	static int point_num_name;
 	static int point_num_123;
 	static std::string mInfo;
+	static std::string pointerName;
 
 	static void CompareStringNumbers(std::string, std::string);
 	static void GCD(int, int);
@@ -106,7 +107,7 @@ public:
 	static void getURLEncodedDeviceModel();
 	static void hasDeepLinkParam();
 	static void hasModGame();
-	static void hasReportedID();
+	static bool hasReportedID();
 	static void isAndroidManifestCRC32Correct();
 	static void isApplicationRunningInBackgroundMode();
 	static void isBundleNameCorrect();

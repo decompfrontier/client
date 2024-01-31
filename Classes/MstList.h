@@ -26,6 +26,11 @@ public:
 		return m_array.getObjectAtIndex(x);
 	}
 
+	void removeObject(int x)
+	{
+		m_array.removeObjectAtIndex(x);
+	}
+
 	void removeAllObjects()
 	{
 		m_array.removeAllObjects(true);

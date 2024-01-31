@@ -27,6 +27,7 @@ public:
 	{
 		auto param = new JsonParam(k, v);
 		m_array.addObject(param);
+		param->release();
 	}
 
 	std::string getSendData(std::string& out)

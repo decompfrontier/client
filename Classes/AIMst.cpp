@@ -18,6 +18,7 @@ cocos2d::CCMutableArray<AITerm*> AIMst::getPartyActTermList() const
 		term->setParam(termData[3]);
 
 		res.addObject(term);
+		term->release();
 	}
 
 	return res;
@@ -37,6 +38,7 @@ cocos2d::CCMutableArray<AITerm*> AIMst::getActTermList() const
 		term->setParam(termData[1]);
 
 		res.addObject(term);
+		term->release();
 	}
 }
 

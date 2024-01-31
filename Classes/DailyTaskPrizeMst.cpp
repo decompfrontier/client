@@ -17,10 +17,15 @@ const std::string& DailyTaskPrizeMst::getTaskPrizeDesc() const
 	return TextManager::shared()->getText(m_prizeDesc.c_str());
 }
 
-const std::string& DailyTaskPrizeMst::getTaskPrizeTitle() const
+std::string DailyTaskPrizeMst::getTaskPrizeTitle()
 {
 	return TextManager::shared()->getText(m_prizeTitle.c_str());
 }
+
+long DailyTaskPrizeMst::getTimeLimit() { return m_timeLimit; }
+void DailyTaskPrizeMst::setTaskPrizeTitle(std::string t) { m_prizeTitle = t; }
+void DailyTaskPrizeMst::setTaskPrizeDesc(std::string t) { m_prizeDesc = t; }
+void DailyTaskPrizeMst::setTimeLimit(long t) { m_timeLimit = t; m_startTimeLimit = CommonUtils::getNowUnitxTime(); }
 
 cocos2d::CCMutableArray<DailyTaskPrizeMst*> DailyTaskPrizeMstList::getLeastUnclaimedMileStonePrize()
 {
