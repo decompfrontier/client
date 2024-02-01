@@ -18,7 +18,7 @@ std::string Utils::getDevicePlatform()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	return "Android";
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) // __DECOMP__
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	return "Windows";
 #else
 #error "Unknown platform"

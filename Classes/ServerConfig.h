@@ -16,6 +16,8 @@ constexpr const char GUMILIVE_IDENTIFIER_IV[] = "Bfw4encrypedPass";
 	Server configuration
 */
 
+constexpr const auto BASE_REQUEST_ACTION_URL = "/actionSymbol/action.php";
+
 constexpr const char* SERVICE_API_URL =
 #ifdef _DEBUG
 	"127.0.0.1";
@@ -35,6 +37,14 @@ constexpr const char* API_URL =
 	"http://127.0.0.1:9960/";
 #else
 	"https://api-sl.gl.gumi.sg/";
+#endif
+
+#ifdef _DEBUG
+constexpr const char* API_PROTOCOL = "http://";
+constexpr const char* API_PROTOCOL_PORT = ":80";
+#else
+constexpr const char* API_PROTOCOL = "https://";
+constexpr const char* API_PROTOCOL_PORT = ":443";
 #endif
 
 constexpr const char* API_CA_CERT = 

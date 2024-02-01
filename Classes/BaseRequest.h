@@ -27,7 +27,7 @@ public:
 	void createVersionTag();
 	virtual void debugLog(const char* log) {}
 	virtual std::string getSendData() = 0;
-	virtual std::string getUrl() const { return "/actionSymbol/action.php"; } // /gme/action/
+	virtual std::string getUrl() const { return BASE_REQUEST_ACTION_URL; } // /gme/action/
 	virtual bool isAsync() const { return false; }
 	JsonGroup* replaceGroup(const char* group);
 

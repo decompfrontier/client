@@ -11,30 +11,28 @@ SET_SHARED_SINGLETON(GumiLiveManager);
 
 using namespace cocos2d;
 
-/* not 100% the same as original but who cares... */
-SHARED_SINGLETON_BODY(GumiLiveManager)
+GumiLiveManager::GumiLiveManager() : m_mngr(nullptr)
 {
-	if (!SINGLETON_INSTANCE(GumiLiveManager))
-	{
-		SINGLETON_NEW(GumiLiveManager);
-		SINGLETON_INSTANCE(GumiLiveManager)->init();
-	}
+	init();
+}
 
-	return SINGLETON_INSTANCE(GumiLiveManager);
+GumiLiveManager::~GumiLiveManager()
+{
+
 }
 
 void GumiLiveManager::init()
 {
-	mngr = new GumiLiveNetworkManagement(this);
+	m_mngr = new GumiLiveNetworkManagement(this);
 
 	auto netMngr = NetworkManager::shared();
 	auto ptServerUrl = CCUserDefault::sharedUserDefault()->getStringForKey(PT_SERVER_URL);
 
 	if (ptServerUrl.empty())
 	{
-		std::string url = "https://";
+		std::string url = API_PROTOCOL;
 		url += PHP_URL();
-		url += ":80";
+		url += API_PROTOCOL_PORT;
 		netMngr->setGameUrl(url);
 	}
 
@@ -42,7 +40,8 @@ void GumiLiveManager::init()
 	if (ptServerUrl != netMngr->getGameUrl())
 		netMngr->setGameUrl(ptServerUrl);
 
-	netMngr->setServiceUrl(SERVICE_PHP_URL());
+	netMngr->setOriginalGameUrl(PHP_URL());
+	netMngr->setServiceUrl1(SERVICE_PHP_URL());
 	netMngr->setServiceUrl2(SERVICE_PHP_URL2());
 	netMngr->setAppKey(Utils::getAppKey());
 
@@ -61,15 +60,15 @@ void GumiLiveManager::appendLoginCredentials(std::string& ret)
 	ret += ",";
 	ret += Utils::getDeviceOS();
 	ret += ",";
-	ret += unk2[8];//unk!
+	ret += m_mngr->getAppKey();
 	ret += ",";
 	ret += cocos2d::CCUserDefault::sharedUserDefault()->getStringForKey(PWConstants::DEVICE_ID);
 	ret += ",";
 	ret += Utils::getDeviceAltVid();
 	ret += ",";
-	ret += str_unk2; // unk2!
+	ret += m_gumiLiveId;
 	ret += ",";
-	ret += token;
+	ret += m_gumiLiveToken;
 }
 
 void GumiLiveManager::NotifyGumiLiveLoginSuccessful()
@@ -80,10 +79,7 @@ void GumiLiveManager::NotifyGumiLiveLoginSuccessful()
 void GumiLiveManager::OnLoginConfirmationOkPressed(void*)
 {
 	if (!SINGLETON_INSTANCE(GumiLiveManager))
-	{
 		SINGLETON_NEW(GumiLiveManager);
-		SINGLETON_INSTANCE(GumiLiveManager)->init();
-	}
 
 	CCNotificationCenter::sharedNotificationCenter()->postNotification(GUMI_LIVE_LOGIN_SUCCESSFUL);
 }
@@ -93,8 +89,7 @@ void GumiLiveManager::SavePreviousGumiLiveSession()
 	if (!unk6.length() || (unk7.length() && !unk8.length()))
 		return;
 
-	auto sd = SaveData::shared();
-	sd->deleteKeyChain();
+	SaveData::shared()->deleteKeyChain();
 
 	if (!unk7.length())
 		str_unk2 = unk8;
@@ -105,7 +100,7 @@ void GumiLiveManager::SavePreviousGumiLiveSession()
 	{
 		//unk9 = unk12;
 		facebookUserId = "";
-		setLastLoginTypeToUserDefault(enumGumiLiveLoginType::Binding);
+		setLastLoginTypeToUserDefault(enumGumiLiveLoginType::FacebookBinding);
 	}
 
 	/*
@@ -130,46 +125,48 @@ void GumiLiveManager::SavePreviousGumiLiveSession()
 
 void GumiLiveManager::loginToGumiLive(enumGumiLiveLoginType type, CCDictionary* data)
 {
+	m_loginType = type;
+
 	switch (type)
 	{
-	case enumGumiLiveLoginType::Facebook:
-		mngr->networkRequestFacebookGumiLiveLogin(data);
+	case enumGumiLiveLoginType::FacebookSignIn:
+		m_mngr->networkRequestFacebookGumiLiveLogin(data);
 		break;
 
-	case enumGumiLiveLoginType::BindCheck:
-		mngr->networkRequestFacebookGumiLiveLoginBindCheck(data);
+	case enumGumiLiveLoginType::FacebookBindCheck:
+		m_mngr->networkRequestFacebookGumiLiveLoginBindCheck(data);
 		break;
 
-	case enumGumiLiveLoginType::Binding:
-		mngr->networkRequestFacebookGumiLiveLoginBinding(data);
+	case enumGumiLiveLoginType::FacebookBinding:
+		m_mngr->networkRequestFacebookGumiLiveLoginBinding(data);
 		break;
 
 	case enumGumiLiveLoginType::ExsitingLogin:
-		mngr->networkRequestGumiLiveExistingLogin(data);
+		m_mngr->networkRequestGumiLiveExistingLogin(data);
 		break;
 
 	case enumGumiLiveLoginType::NewUser:
-		mngr->networkRequestGumiLiveNewUserLogin(data);
+		m_mngr->networkRequestGumiLiveNewUserLogin(data);
 		break;
 
 	case enumGumiLiveLoginType::NewUserBinding:
-		mngr->networkRequestGumiLiveNewUserLoginBinding(data);
+		m_mngr->networkRequestGumiLiveNewUserLoginBinding(data);
 		break;
 
 	case enumGumiLiveLoginType::Guest:
-		mngr->networkRequestFacebookGumiLiveLogin(data);
+		m_mngr->networkRequestFacebookGumiLiveLogin(data);
 		break;
 
 	case enumGumiLiveLoginType::AppleSignIn:
-		mngr->networkRequestAppleSignInGumiLiveLogin(data);
+		m_mngr->networkRequestAppleSignInGumiLiveLogin(data);
 		break;
 
 	case enumGumiLiveLoginType::AppleBindCheck:
-		mngr->networkRequestAppleSignInGumiLiveLoginBindCheck(data);
+		m_mngr->networkRequestAppleSignInGumiLiveLoginBindCheck(data);
 		break;
 
 	case enumGumiLiveLoginType::AppleBinding:
-		mngr->networkRequestAppleSignInGumiLiveLoginBinding(data);
+		m_mngr->networkRequestAppleSignInGumiLiveLoginBinding(data);
 		break;
 
 	default:
@@ -183,27 +180,27 @@ void GumiLiveManager::bindCheck(cocos2d::CCObject* obj)
 	auto tokenKey = dict->objectForKey(TOKEN_KEY);
 	auto gameKey = dict->objectForKey(GAME_USER_ID_KEY);
 
-	mngr->networkRequestGumiLiveExistData((cocos2d::CCString*)tokenKey, (cocos2d::CCString*)gameKey);
+	m_mngr->networkRequestGumiLiveExistData((cocos2d::CCString*)tokenKey, (cocos2d::CCString*)gameKey);
 }
 
 void GumiLiveManager::checkGuestAccountStatusForCurrentDevice()
 {
-	mngr->networkRequestCheckGuestAccount();
+	m_mngr->networkRequestCheckGuestAccount();
 }
 
-void GumiLiveManager::forgotPasswordFromNotification(cocos2d::CCObject* ptr)
+void GumiLiveManager::forgotPasswordFromNotification(cocos2d::CCObject* username)
 {
-	mngr->networkRequestPasswordChange((cocos2d::CCString*)ptr);
+	m_mngr->networkRequestPasswordChange(dynamic_cast<cocos2d::CCString*>(username));
 }
 
-void GumiLiveManager::getFriendData(cocos2d::CCMutableArray<PWFacebookUser*>* out)
+void GumiLiveManager::getFriendData(cocos2d::CCMutableArray<PWFacebookUser*>* friends)
 {
-	mngr->networkRequestFacebookFriendData(out);
+	m_mngr->networkRequestFacebookFriendData(friends);
 }
 
 std::string GumiLiveManager::getGumiLiveApplicationID()
 {
-	return mngr->GetAppKey();
+	return m_mngr->getAppKey();
 }
 
 enumGumiLiveLoginType GumiLiveManager::getLastLoginTypeFromUserDefault()
@@ -221,7 +218,7 @@ enumGumiLiveLoginType GumiLiveManager::getLastLoginTypeFromUserDefault()
 
 std::string GumiLiveManager::getRequestInProgressString()
 {
-	return EnumString<enumGumiLiveLoginType>::From(loginType);
+	return EnumString<enumGumiLiveLoginType>::From(m_loginType);
 }
 
 std::string GumiLiveManager::getValueAsString(Json::Value& value)
@@ -239,4 +236,97 @@ std::string GumiLiveManager::getValueAsString(Json::Value& value)
 bool GumiLiveManager::hasAttemptedAppleSignIn()
 {
 	auto sd = SaveData::shared();
+}
+
+void GumiLiveManager::bindCheck(cocos2d::CCObject* obj)
+{
+	auto dict = dynamic_cast<cocos2d::CCDictionary*>(obj);
+
+	auto tokenKey = dict->objectForKey(TOKEN_KEY);
+	auto userIdKey = dict->objectForKey(GAME_USER_ID_KEY);
+	m_mngr->networkRequestGumiLiveExistData(dynamic_cast<cocos2d::CCString*>(tokenKey), dynamic_cast<cocos2d::CCString*>(userIdKey));
+}
+
+void GumiLiveManager::marketSamsung(std::string receipt, std::string clientId)
+{
+	// DECOMP NOTE: No reason to go this route...
+	//if (!SINGLETON_INSTANCE(GumiLiveManager))
+	//	SINGLETON_NEW(GumiLiveManager);
+	//auto liveMngr = SINGLETON_INSTANCE(GumiLiveManager);
+
+	auto dct = CCDictionary::create();
+
+	dct->setObject(CCString::create(getGumiLiveID()), GUMI_LIVEID);
+	dct->setObject(CCString::create(Utils::getAppKey()), GUMI_APPKEY);
+
+	CCString* ccUserId;
+	if (receipt.empty())
+		ccUserId = CCString::create("samsung_1");
+	else
+		ccUserId = CCString::createWithFormat("samsung_%s", receipt.c_str());
+
+	dct->setObject(CCString::create(receipt), GUMI_RECEIPT);
+	dct->setObject(ccUserId, GUMI_CLIENTID);
+
+	NetworkManager::shared()->NetworkRequest(
+		NetworkManager::HOST::SlApi,
+		NetworkManager::API_VERSION::Default,
+		GUMI_LIVE_PATH_WALLET_SAMSUNG,
+		dct,
+		extension::CCHttpRequest::kHttpGet,
+		extension::CCHttpRequest::HttpRequestHandlingType::kDefault,
+		NetworkManager::CONTENT_TYPE::UrlEncoded,
+		"",
+		PWConstants::PURCHASE_VERIFY_TAG,
+		this,
+		(NetworkManager::RequestComplete)&GumiLiveManager::paymentVerified,
+		nullptr,
+		false,
+		true,
+		true
+	);
+}
+
+std::string GumiLiveManager::getValueAsString(Json::Value& v)
+{
+	if (v.isInt())
+	{
+		// this is technically what the code does but inlined
+		return CommonUtils::IntToString(v.asInt());
+	}
+	else if (v.isString())
+		return v.asString();
+
+	return "";
+}
+
+void GumiLiveManager::onFriendDataUnSuccessful()
+{
+	CCNotificationCenter::sharedNotificationCenter()->postNotification(GUMI_LIVE_FRIEND_DATA);
+}
+
+void GumiLiveManager::setLastLoginTypeToUserDefault(enumGumiLiveLoginType type)
+{
+	SaveData::shared()-> ? ? ? ;
+}
+
+void GumiLiveManager::paymentVerified(cocos2d::CCNode* node, void* userData)
+{
+	if (NetworkManager::shared()->onNetworkRequestComplete(userData, false, true))
+	{
+		Json::Value v;
+		Utils::ReadIntoJson(userData, v, false);
+
+		CCInteger* obj;
+
+		auto amount = v[GUMI_PAYMENT_TOPUP_AMOUNT].asInt();
+		auto status = v[GUMI_PAYMENT_STATUS].asString(); // I think this is done just to raise the exception if it's not found
+
+		if (!amount)
+			obj = CCInteger::create(-v[GUMI_PAYMENT_STATUS_NO].asInt());
+		else
+			obj = CCInteger::create(amount);
+
+		CCNotificationCenter::sharedNotificationCenter()->postNotification(PWConstants::GUMI_LIVE_PURCHASE_VERIFIED, obj);
+	}
 }

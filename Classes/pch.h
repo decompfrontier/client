@@ -5,6 +5,7 @@
 #include "cocos-ext.h"  // Extensions
 #include "SimpleAudioEngine.h" // CocosDenshion
 #include "CCMutableArray.h" // COMPATIBILITY WITH COCOS2D-X v1 API
+#include "CCBool.h" // INTRODUCED IN NEWER VERSIONS OF COCOS2D-X BUT THE TARGET BF COCOA DOESN'T HAVE IT?
 
 // zlib
 #include <zlib.h>

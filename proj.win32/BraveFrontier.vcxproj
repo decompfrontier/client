@@ -75,7 +75,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\external\jsoncpp\include;$(ProjectDir)..\external\includes;$(ProjectDir)..\cocos2d-x\extensions;$(ProjectDir)..\cocos2d-x\cocos2dx;$(ProjectDir)..\cocos2d-x\CocosDenshion\include;$(ProjectDir)..\cocos2d-x\cocos2dx\include;$(ProjectDir)..\cocos2d-x\cocos2dx\kazmath\include;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\zlib;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;..\Classes\compat1;..\Classes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\external\jsoncpp\include;$(ProjectDir)..\external\includes;$(ProjectDir)..\cocos2d-x\extensions;$(ProjectDir)..\cocos2d-x\cocos2dx;$(ProjectDir)..\cocos2d-x\CocosDenshion\include;$(ProjectDir)..\cocos2d-x\cocos2dx\include;$(ProjectDir)..\cocos2d-x\cocos2dx\kazmath\include;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\zlib;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;..\Classes\compat2;..\Classes\compat1;..\Classes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -104,7 +104,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\external\jsoncpp\include;$(ProjectDir)..\external\includes;$(ProjectDir)..\cocos2d-x\extensions;$(ProjectDir)..\cocos2d-x\cocos2dx;$(ProjectDir)..\cocos2d-x\CocosDenshion\include;$(ProjectDir)..\cocos2d-x\cocos2dx\include;$(ProjectDir)..\cocos2d-x\cocos2dx\kazmath\include;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\zlib;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;..\Classes\compat1;..\Classes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\external\jsoncpp\include;$(ProjectDir)..\external\includes;$(ProjectDir)..\cocos2d-x\extensions;$(ProjectDir)..\cocos2d-x\cocos2dx;$(ProjectDir)..\cocos2d-x\CocosDenshion\include;$(ProjectDir)..\cocos2d-x\cocos2dx\include;$(ProjectDir)..\cocos2d-x\cocos2dx\kazmath\include;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\zlib;$(ProjectDir)..\cocos2d-x\cocos2dx\platform\third_party\win32\OGLES;..\Classes\compat2;..\Classes\compat1;..\Classes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -178,6 +178,7 @@
     <ClInclude Include="..\Classes\BFCertificateProvider.h" />
     <ClInclude Include="..\Classes\CommonUtils.h" />
     <ClInclude Include="..\Classes\compat1\CCMutableArray.h" />
+    <ClInclude Include="..\Classes\compat2\CCBool.h" />
     <ClInclude Include="..\Classes\CrashlyticsUtil.h" />
     <ClInclude Include="..\Classes\DailyTaskPrizeMst.h" />
     <ClInclude Include="..\Classes\DefineMst.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="..\Classes\JsonParam.h" />
     <ClInclude Include="..\Classes\LocalNotificationManager.h" />
     <ClInclude Include="..\Classes\MstList.h" />
+    <ClInclude Include="..\Classes\NativeCallbackHandler.h" />
     <ClInclude Include="..\Classes\NetworkManager.h" />
     <ClInclude Include="..\Classes\NoticeListMst.h" />
     <ClInclude Include="..\Classes\pch.h" />
@@ -220,7 +222,6 @@
     <ClInclude Include="..\Classes\UserInfoResponse.h" />
     <ClInclude Include="..\Classes\UserTeamInfo.h" />
     <ClInclude Include="..\Classes\Utils.h" />
-    <ClInclude Include="..\Classes\NativeCallbackHandler.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

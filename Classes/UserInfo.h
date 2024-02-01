@@ -5,6 +5,9 @@ class UserInfo : public cocos2d::CCObject
 	SHARED_SINGLETON(UserInfo);
 
 public:
+	UserInfo();
+	virtual ~UserInfo() = default;
+
 	CC_SYNTHESIZE(std::string, m_userId, UserID);
 	CC_SYNTHESIZE(std::string, m_purchaseReceipt, purchaseReceipt);
 	CC_SYNTHESIZE(std::string, m_purchaseSig, purchaseSignature);
@@ -22,7 +25,7 @@ public:
 	CC_SYNTHESIZE(std::string, m_encryptFriendID, EncryptedFriendID);
 	CC_SYNTHESIZE(std::string, m_finishedEvtId, FinishedEventID);
 	CC_SYNTHESIZE(std::string, m_friendID, FriendID);
-	CC_SYNTHESIZE(int, m_friendInvFlag, FriendInivitationFlg);
+	CC_SYNTHESIZE(int, m_friendInvFlag, FriendInvitationFlg);
 	CC_SYNTHESIZE(std::string, m_handleName, HandleName);
 	CC_SYNTHESIZE(int, m_lastTutoChapterID, LastTutoChapuerID);
 	CC_SYNTHESIZE(int, m_playTutoChapterID, PlayTutoChapterID);
@@ -45,14 +48,13 @@ public:
 	CC_SYNTHESIZE(std::string, m_finishedEventType, FinishedEventType);
 	CC_PROPERTY(bool, m_skipMainTutorialFlag, SkipMainTutorialFlag);
 	CC_SYNTHESIZE(bool, m_triggerTutorialEnabled, TriggerableTutorialEnabled);
+	CC_SYNTHESIZE_READONLY(std::vector<std::string>, m_vFirstDesc, FirstDescs);
 
 	void clearFirstDescID(const std::string& v);
 	void clearFirstDescs();
 	void clearScriptDesc(const std::string& v);
 	bool existUser();
 	const std::string& getFacebookId() const;
-	void getFirstDescs();
-	void getFriendInvitationFlg();
 	const std::string& getGumiLiveToken() const;
 	const std::string& getGumiLiveUserId() const;
 	const std::string& getLobiHandleName() const;
@@ -61,7 +63,7 @@ public:
 	void incArenaTutoChapterID() { m_arenaTutoChapterId++; }
 	void incTutoChapterID() { m_tutoChapterID++; }
 	bool isArenaTutoPlaying() const;
-	bool isFirstDesc(const std::string& v) const;
+	bool isFirstDesc(const std::string& v);
 	bool isInAmazonControlGroup() const;
 	bool isScriptDesc(const std::string& v) const;
 	bool isTutoPlaying() const;
@@ -70,4 +72,7 @@ public:
 	void setServiceRequestEndpointParam(const std::string& v);
 	std::string getServiceRequestEndpointParam() const;
 	bool setTriggerableTutorial(bool) { m_triggerTutorialEnabled = false; }
+
+protected:
+	std::vector<std::string> m_vScriptDesc;
 };

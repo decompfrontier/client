@@ -7,7 +7,7 @@ class NetworkManager : public cocos2d::CCObject
 public:
 	enum class API_VERSION
 	{
-		Default = 0,
+		Default = 0, // used for SL api
 		V1 = 1,
 		V2 = 2,
 	};
@@ -16,6 +16,7 @@ public:
 	{
 		SlApi, // last version of GUMI Live host
 		LiveApi, // the one that was like live.gumi.sg/api/1.1 (apiv2) or 1.0 (apiv1)
+		External, // external api to forward to (eg. gme)
 		Max,
 	};
 
@@ -35,7 +36,7 @@ public:
 	typedef bool (cocos2d::CCObject::* RequestFail)(cocos2d::CCNode*, void*);
 
 	NetworkManager();
-	~NetworkManager();
+	~NetworkManager() = default;
 
 	void NetworkRequest(HOST host, API_VERSION version, std::string filePath, cocos2d::CCDictionary* phpArguments, cocos2d::extension::CCHttpRequest::HttpRequestType reqType, cocos2d::extension::CCHttpRequest::HttpRequestHandlingType handleType, CONTENT_TYPE contentType, std::string, const char* tag, cocos2d::CCObject* cbHolder, RequestComplete onComplete, RequestFail onFail, bool, bool, bool);
 	void NetworkRequestGet(HOST host, API_VERSION apiVersion, std::string filePath, char const* tag, cocos2d::CCObject* cbHolder, RequestComplete onComplete, RequestFail onFail, bool, bool, cocos2d::CCDictionary* phpArguments, cocos2d::extension::CCHttpRequest::HttpRequestHandlingType = cocos2d::extension::CCHttpRequest::HttpRequestHandlingType::kDefault);
@@ -59,29 +60,20 @@ public:
 	void WebviewTwoLineChatURL();
 	
 	void onNetworkRequestResponse(cocos2d::CCNode* node, void* user);
-	void onNetworkRequestComplete(void* user, bool, bool);
+	bool onNetworkRequestComplete(void* user, bool, bool);
 
 	void forwardResponse(cocos2d::extension::CCHttpResponse* resp);
 
 	std::string getStringForAPIVersion(API_VERSION version);
 
-	void setServiceUrl(const std::string& str) { servicePhpUrl = str; }
-	const std::string& getServiceUrl() const { return servicePhpUrl; }
-
-	void setServiceUrl2(const std::string& str) { servicePhpUrl2 = str; }
-	const std::string& getServiceUrl2() const { return servicePhpUrl2; }
-
-	void setAppKey(const std::string& str) { apiUrl = str; }
-	const std::string& getAppKey() const { return apiUrl; }
+	CC_SYNTHESIZE(std::string, m_apiUrl, ApiUrl);
+	CC_SYNTHESIZE(std::string, m_servicePhpUrl1, ServiceUrl1);
+	CC_SYNTHESIZE(std::string, m_servicePhpUrl2, ServiceUrl2);
+	CC_SYNTHESIZE(std::string, m_appKey, AppKey);
+	CC_SYNTHESIZE(std::string, m_origGameUrl, OriginalGameUrl);
+	CC_SYNTHESIZE(std::string, m_gameUrl, GameUrl);
 
 private:
-	//_BYTE unk2[27];
-	std::string apiUrl;
 	HostUrl hostsUrl[(int)HOST::Max];
-	//_BYTE unk5[8];
-	std::string servicePhpUrl;
-	//_BYTE unk6[8];
-	std::string servicePhpUrl2;
-	//_BYTE unk[13];
 };
 

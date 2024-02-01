@@ -69,7 +69,7 @@ bool UserInfoResponse::readParam(int, int, const char* key, const char* value, b
 	}
 	else if (strcmp(key, USERINFO_FRIENDINVITATIONFLAG) == 0)
 	{
-		info->setFriendInivitationFlg(CommonUtils::StrToInt(value));
+		info->setFriendInvitationFlg(CommonUtils::StrToInt(value));
 	}
 	else if (strcmp(key, USERINFO_EARLYBIRD_END) == 0)
 	{
@@ -120,7 +120,11 @@ bool UserInfoResponse::readParam(int, int, const char* key, const char* value, b
 		if (i != 1)
 			FeatureGatingHandler::shared()->setFeatureDate(i);
 	}
-	// TODO: missing "32k0ahkD"
+	else if (strcmp(key, "32k0ahkD") == 0)
+	{
+		// TODO: Discover what's this
+		info->set ? ? ? ? (value);
+	}
 	else if (strcmp(key, USERINFO_SERVICEREQUESTENDPOINTPARAM) == 0)
 	{
 		info->setServiceRequestEndpointParam(value);

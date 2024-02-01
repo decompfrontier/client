@@ -7,8 +7,10 @@ class GumiLiveManager;
 class GumiLiveNetworkManagement : public cocos2d::CCObject
 {
 public:
-	GumiLiveNetworkManagement(GumiLiveManager* mngr);
-	~GumiLiveNetworkManagement();
+	GumiLiveNetworkManagement(GumiLiveManager* mngr) : m_mngr(mngr) {}
+	~GumiLiveNetworkManagement() = default;
+
+	CC_SYNTHESIZE_READONLY(std::string, m_appKey, AppKey);
 
 	void networkRequestAppleGumiLiveExistData(cocos2d::CCString*, cocos2d::CCString*);
 	void networkRequestAppleSignInGumiLiveLogin(cocos2d::CCDictionary*);
@@ -20,14 +22,14 @@ public:
 	void networkRequestFacebookGumiLiveLoginBindCheck(cocos2d::CCDictionary*);
 	void networkRequestFacebookGumiLiveLoginBinding(cocos2d::CCDictionary*);
 	void networkRequestGuestGumiLiveLogin(void);
-	void networkRequestGumiLiveExistData(cocos2d::CCString*, cocos2d::CCString*);
+	void networkRequestGumiLiveExistData(cocos2d::CCString* tokenKey, cocos2d::CCString* userIdKey);
 	void networkRequestGumiLiveExistingLogin(cocos2d::CCDictionary*);
 	void networkRequestGumiLiveNewUserLogin(cocos2d::CCDictionary* data);
 	void networkRequestGumiLiveNewUserLoginBinding(cocos2d::CCDictionary*);
-	void networkRequestPasswordChange(cocos2d::CCString*);
+	void networkRequestPasswordChange(cocos2d::CCString* username);
 	void onCheckGuestAccountJsonObtained(Json::Value&);
-	void onFriendDataRequestComplete(cocos2d::CCNode*, void*);
-	void onFriendDataRequestError(cocos2d::CCNode*, void*);
+	void onFriendDataRequestComplete(cocos2d::CCObject*, void*);
+	void onFriendDataRequestError(cocos2d::CCObject*, void*);
 	void onGumiLiveRequestPasswordResetJsonObtained(Json::Value&);
 	void onGumiLiveTokenRequestAppleSignInBindCheckJsonObtained(Json::Value&);
 	void onGumiLiveTokenRequestAppleSignInExistDataJsonObtained(Json::Value&);
@@ -41,11 +43,8 @@ public:
 	void onGumiLiveTokenRequestGuestUserJsonObtained(Json::Value&);
 	void onGumiLiveTokenRequestNewUserBindingJsonObtained(Json::Value&);
 	void onGumiLiveTokenRequestNewUserJsonObtained(Json::Value&);
-	void onNetworkRequestComplete(cocos2d::CCNode*, void*);
-
-	std::string GetAppKey() const { return appKey; }
-
-private:
-	std::string appKey;
-	//_BYTE[0x10];
+	
+protected:
+	void onNetworkRequestComplete(cocos2d::CCObject* res, void* userData);
+	GumiLiveManager* m_mngr;
 };

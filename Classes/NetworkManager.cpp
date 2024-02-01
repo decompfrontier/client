@@ -12,16 +12,16 @@ SET_SHARED_SINGLETON(NetworkManager);
 
 NetworkManager::NetworkManager()
 {
-	apiUrl = API_URL;
+	m_apiUrl = API_URL;
 	CCHttpClient::getInstance()->setCertificateProvider(BFCertificateProvider::shared());
 }
 
 std::string NetworkManager::getStringForAPIVersion(API_VERSION version)
 {
 	if (version == API_VERSION::V2)
-		return GUMI_LIVE_URLPATH_V2;
+		return GUMI_LIVE_API_URLPATH_V2;
 
-	return GUMI_LIVE_URLPATH_V1;
+	return GUMI_LIVE_API_URLPATH_V1;
 }
 
 void NetworkManager::forwardResponse(cocos2d::extension::CCHttpResponse* resp)
@@ -38,19 +38,19 @@ void NetworkManager::NetworkRequest(HOST host, API_VERSION version, std::string 
 {
 	std::stringstream buf;
 
-	if (apiUrl.empty())
+	if (m_apiUrl.empty())
 	{
 		buf << hostsUrl[(int)host].url;
 	}
 	else
-		buf << apiUrl;
+		buf << m_apiUrl;
 
 	if (host == HOST::LiveApi)
 	{
 		if (version == API_VERSION::V2)
-			buf << GUMI_LIVE_URLPATH_V2;
+			buf << GUMI_LIVE_API_URLPATH_V2;
 		else if (version == API_VERSION::V1)
-			buf << GUMI_LIVE_URLPATH_V1;
+			buf << GUMI_LIVE_API_URLPATH_V1;
 	}
 
 	buf << filePath;

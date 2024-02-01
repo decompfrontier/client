@@ -3,6 +3,8 @@
 #include "TextManager.h"
 #include "UserTeamInfo.h"
 
+SET_SHARED_SINGLETON(DailyTaskPrizeMstList);
+
 long long DailyTaskPrizeMst::getRemainingTime() const
 {
 	auto diff = (m_timeLimit + m_startTimeLimit) - CommonUtils::getNowUnitxTime();

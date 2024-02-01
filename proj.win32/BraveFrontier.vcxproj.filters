@@ -12,6 +12,9 @@
     <Filter Include="Classes\compat1">
       <UniqueIdentifier>{a472c55d-e5f5-413e-8196-beb4f3acefa7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\compat2">
+      <UniqueIdentifier>{caf1c4fe-511f-4ae1-ae72-67104d5a6202}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp">
@@ -223,9 +226,6 @@
     <ClInclude Include="..\Classes\FileLoader.h">
       <Filter>Classes</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\NativeCallbackHandler.h">
-      <Filter>win32</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\DailyTaskPrizeMst.h">
       <Filter>Classes</Filter>
     </ClInclude>
@@ -272,6 +272,12 @@
       <Filter>Classes</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\UserDebugInfo.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\compat2\CCBool.h">
+      <Filter>Classes\compat2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NativeCallbackHandler.h">
       <Filter>Classes</Filter>
     </ClInclude>
   </ItemGroup>

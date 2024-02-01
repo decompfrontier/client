@@ -4,7 +4,7 @@
 
 SET_SHARED_SINGLETON(FirstDescMstList);
 
-const std::string& getStringForRequest()
+const std::string& FirstDescMstList::getStringForRequest()
 {
 	return SaveData::shared()->getFirstDescInfo();
 }
