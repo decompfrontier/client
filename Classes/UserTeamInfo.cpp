@@ -49,34 +49,22 @@ void UserTeamInfo::incZel(int zel)
 	setZel(maxZel); // note: in decomp this was inline
 }
 
-void UserTeamInfo::setActionPoint(int v)
-{
-	XOR_SET(actionPoint);
-}
+void UserTeamInfo::setActionPoint(int v) { XOR_SET(m_actionPoint); }
+int UserTeamInfo::getActionPoint() { return m_actionPointXor ^ m_actionPointMagic; }
+int UserTeamInfo::getActionRestTimer() { return m_actionRestTimerXor ^ m_actionRestTimerMagic; }
 
 void UserTeamInfo::setActionRestTimer(int v)
 {
 	if (v <= 0)
 		v = 0;
 
-	XOR_SET(actionRestTimer);
-	actionRestTimerTimestamp = CommonUtils::getNowUnitxTime();
+	XOR_SET(m_actionRestTimer);
+	m_actionRestTimerTimestamp = CommonUtils::getNowUnitxTime();
 }
 
-void UserTeamInfo::setAddUnitCnt(int v)
-{
-	XOR_SET(addUnitCount);
-}
-
-void UserTeamInfo::setAddWarehouseCnt(int v)
-{
-	XOR_SET(addWarehouseCount);
-}
-
-void UserTeamInfo::setBraveCoin(int v)
-{
-	XOR_SET(braveCoin);
-}
+void UserTeamInfo::setAddUnitCnt(int v) { XOR_SET(addUnitCount); }
+void UserTeamInfo::setAddWarehouseCnt(int v) { XOR_SET(addWarehouseCount); }
+void UserTeamInfo::setBraveCoin(int v) { XOR_SET(braveCoin); }
 
 void UserTeamInfo::setExp(int v)
 {

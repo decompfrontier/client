@@ -16,8 +16,6 @@ constexpr const char GUMILIVE_IDENTIFIER_IV[] = "Bfw4encrypedPass";
 	Server configuration
 */
 
-constexpr const auto BASE_REQUEST_ACTION_URL = "/actionSymbol/action.php";
-
 constexpr const char* SERVICE_API_URL =
 #ifdef _DEBUG
 	"127.0.0.1";

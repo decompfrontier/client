@@ -140,12 +140,16 @@
     <ClCompile Include="..\Classes\CrashlyticsUtil.cpp" />
     <ClCompile Include="..\Classes\DailyTaskPrizeMst.cpp" />
     <ClCompile Include="..\Classes\FirstDescMst.cpp" />
+    <ClCompile Include="..\Classes\FriendGetRequest.cpp" />
     <ClCompile Include="..\Classes\GameLayer.cpp" />
+    <ClCompile Include="..\Classes\GameResponseParser.cpp" />
     <ClCompile Include="..\Classes\GameScene.cpp" />
     <ClCompile Include="..\Classes\GameSprite.cpp" />
+    <ClCompile Include="..\Classes\GetUserInfoRequest.cpp" />
     <ClCompile Include="..\Classes\Globals.cpp" />
     <ClCompile Include="..\Classes\GumiLiveManager.cpp" />
     <ClCompile Include="..\Classes\GumiLiveNetworkManagement.cpp" />
+    <ClCompile Include="..\Classes\HeaderResponse.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\LocalNotificationManager.cpp" />
     <ClCompile Include="..\Classes\NetworkManager.cpp" />
@@ -157,6 +161,7 @@
     <ClCompile Include="..\Classes\SaveUtils.cpp" />
     <ClCompile Include="..\Classes\ScrlLayer.cpp" />
     <ClCompile Include="..\Classes\ServiceRequestManager.cpp" />
+    <ClCompile Include="..\Classes\SignalKeyResponse.cpp" />
     <ClCompile Include="..\Classes\StringLabel.cpp" />
     <ClCompile Include="..\Classes\StringLabelList.cpp" />
     <ClCompile Include="..\Classes\TextManager.cpp" />
@@ -165,6 +170,7 @@
     <ClCompile Include="..\Classes\UserInfo.cpp" />
     <ClCompile Include="..\Classes\UserInfoResponse.cpp" />
     <ClCompile Include="..\Classes\UserTeamInfo.cpp" />
+    <ClCompile Include="..\Classes\UserTeamInfoResponse.cpp" />
     <ClCompile Include="..\Classes\Utils.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -176,6 +182,8 @@
     <ClInclude Include="..\Classes\BaseResponse.h" />
     <ClInclude Include="..\Classes\BaseScene.h" />
     <ClInclude Include="..\Classes\BFCertificateProvider.h" />
+    <ClInclude Include="..\Classes\BodyResponse.h" />
+    <ClInclude Include="..\Classes\CCPropertyXor.h" />
     <ClInclude Include="..\Classes\CommonUtils.h" />
     <ClInclude Include="..\Classes\compat1\CCMutableArray.h" />
     <ClInclude Include="..\Classes\compat2\CCBool.h" />
@@ -185,15 +193,21 @@
     <ClInclude Include="..\Classes\EnumString.h" />
     <ClInclude Include="..\Classes\FileLoader.h" />
     <ClInclude Include="..\Classes\FirstDescMst.h" />
+    <ClInclude Include="..\Classes\FriendGetRequest.h" />
     <ClInclude Include="..\Classes\GameLayer.h" />
+    <ClInclude Include="..\Classes\GameResponseParser.h" />
     <ClInclude Include="..\Classes\GameScene.h" />
     <ClInclude Include="..\Classes\GameSprite.h" />
+    <ClInclude Include="..\Classes\GetUserInfoRequest.h" />
     <ClInclude Include="..\Classes\Globals.h" />
     <ClInclude Include="..\Classes\GumiLiveManager.h" />
     <ClInclude Include="..\Classes\GumiLiveConstants.h" />
     <ClInclude Include="..\Classes\GumiLiveNetworkManagement.h" />
+    <ClInclude Include="..\Classes\HeaderResponse.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\JsonGroup.h" />
+    <ClInclude Include="..\Classes\JsonNetworkAesKeys.h" />
+    <ClInclude Include="..\Classes\JsonNetworkEncryptedUrl.h" />
     <ClInclude Include="..\Classes\JsonNetworkNames.h" />
     <ClInclude Include="..\Classes\JsonNode.h" />
     <ClInclude Include="..\Classes\JsonParam.h" />
@@ -205,6 +219,7 @@
     <ClInclude Include="..\Classes\pch.h" />
     <ClInclude Include="..\Classes\PWConstants.h" />
     <ClInclude Include="..\Classes\PWFacebookUser.h" />
+    <ClInclude Include="..\Classes\RequestData.h" />
     <ClInclude Include="..\Classes\ResponseData.h" />
     <ClInclude Include="..\Classes\SaveData.h" />
     <ClInclude Include="..\Classes\SaveDataKeys.h" />
@@ -212,6 +227,7 @@
     <ClInclude Include="..\Classes\ScrlLayer.h" />
     <ClInclude Include="..\Classes\ServerConfig.h" />
     <ClInclude Include="..\Classes\ServiceRequestManager.h" />
+    <ClInclude Include="..\Classes\SignalKeyResponse.h" />
     <ClInclude Include="..\Classes\Singleton.h" />
     <ClInclude Include="..\Classes\StringLabel.h" />
     <ClInclude Include="..\Classes\StringLabelList.h" />
@@ -221,7 +237,9 @@
     <ClInclude Include="..\Classes\UserInfo.h" />
     <ClInclude Include="..\Classes\UserInfoResponse.h" />
     <ClInclude Include="..\Classes\UserTeamInfo.h" />
+    <ClInclude Include="..\Classes\UserTeamInfoResponse.h" />
     <ClInclude Include="..\Classes\Utils.h" />
+    <ClInclude Include="..\Classes\VersionInfoResponse.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

@@ -231,7 +231,7 @@ List of decompiled classes:
 - [ ] BindFBScene
 - [ ] BitmapLabel
 - [ ] BitmapLabelEx
-- [ ] BodyResponse
+- [x] BodyResponse
 - [ ] BossMonsterInfo
 - [ ] BuffDescList
 - [ ] BundleCategoryRefreshRequest
@@ -911,7 +911,7 @@ List of decompiled classes:
 - [ ] FriendDetailScene
 - [ ] FriendFavoriteRequest
 - [ ] FriendGetAgreeRequest
-- [ ] FriendGetRequest
+- [x] FriendGetRequest
 - [ ] FriendIdSearch2Scene
 - [ ] FriendIdSearchFriendRequestScene
 - [ ] FriendIdSearchScene
@@ -1064,7 +1064,7 @@ List of decompiled classes:
 - [ ] GetGiftInfoRequest
 - [ ] GetPlayerInfoRequest
 - [ ] GetScenarioPlayingInfoRequest
-- [ ] GetUserInfoRequest
+- [x] GetUserInfoRequest
 - [ ] GiftItemMst
 - [ ] GiftItemMstList
 - [ ] GiftItemMstResponse
@@ -2397,7 +2397,7 @@ List of decompiled classes:
 - [ ] ShopUnitBoxExtScene
 - [ ] ShopUseConnectScene
 - [ ] ShopUseRequest
-- [ ] SignalKeyResponse
+- [x] SignalKeyResponse
 - [ ] SimpleAudioEngineOpenSL
 - [ ] Slider
 - [ ] SlotActionRequest
@@ -2926,7 +2926,7 @@ List of decompiled classes:
 - [ ] UserTeamArenaArchive
 - [ ] UserTeamArenaArchiveResponse
 - [x] UserTeamInfo
-- [ ] UserTeamInfoResponse
+- [x] UserTeamInfoResponse
 - [ ] UserTournamentInfo
 - [ ] UserTournamentInfoList
 - [ ] UserTournamentInfoRequest

@@ -5,8 +5,11 @@
 class BaseResponse : public ResponseData
 {
 public:
-	BaseResponse() = default;
+	BaseResponse() : m_error(false) {}
 	virtual ~BaseResponse() = default;
 
-	virtual bool readParam(int, int, const char* key, const char* value, bool) = 0;
+	virtual bool readParam(int, int, const char* key, const char* value, bool isFirst) = 0;
+
+	CC_SYNTHESIZE_READONLY(bool, m_error, IsError);
 };
+

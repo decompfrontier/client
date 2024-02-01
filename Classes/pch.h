@@ -7,8 +7,9 @@
 #include "CCMutableArray.h" // COMPATIBILITY WITH COCOS2D-X v1 API
 #include "CCBool.h" // INTRODUCED IN NEWER VERSIONS OF COCOS2D-X BUT THE TARGET BF COCOA DOESN'T HAVE IT?
 
-// zlib
+// external
 #include <zlib.h>
+#include <picojson.h>
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "jni/JniHelper.h"
@@ -68,3 +69,6 @@ constexpr const auto PKEY_TUTORIAL_SKIP = "pkey_tutorial_skip";
 #include "EnumString.h"
 #include "MstList.h"
 #include "JsonNetworkNames.h"
+#include "JsonNetworkAesKeys.h"
+#include "JsonNetworkEncryptedUrl.h"
+#include "CCPropertyXor.h"

@@ -9,10 +9,15 @@ public:
 	UserTeamInfo() = default;
 	~UserTeamInfo() = default;
 
+	CC_PROPERTY(int, m_actionPointXor, ActionPoint);
+	CC_PROPERTY(int, m_actionRestTimerXor, ActionRestTimer);
+	CC_PROPERTY(int, m_addUnitCountXor, AddUnitCnt);
+	CC_SYNTHESIZE()
+
 	void decActionRestTimer(void);
 	void decFightRestTimer(void);
-	int getActionPoint(void) const { return actionPointXor ^ actionPointMagic; }
-	int getActionRestTimer(void) const { return actionRestTimerXor ^ actionRestTimerMagic; }
+
+
 	int getActiveDeckNum(void) const { return activeDeckNum; }
 	unsigned int getAddFrdCnt(void) const { return addFrdCount; }
 	int getAddUnitCnt(void) const { return addUnitCountXor ^ addUnitCountMagic; }
@@ -112,7 +117,7 @@ public:
 	}
 	void setInventorySpaceTickets(ushort v) { inventorySpaceTickets = v; }
 	void setItemSpaceTickets(ushort v) { itemSpaceTickets = v; }
-	void setKarma(int v);
+	void setKarma(unsigned int v);
 	void setLv(int v);
 	void setMaxActionPoint(int v);
 	void setMaxEqpSlotCnt(int v);
@@ -133,9 +138,10 @@ public:
 	void setUserID(std::string v) { userId = v; }
 	void setWantGift(std::string v) { wantedGift = v; }
 	void setWarehouseCnt(int v);
-	void setZel(int v);
+	void setZel(unsigned int v);
 
 private:
+	/*
 	std::string userId;
 	int levelXor;
 	uint8_t levelMagic;
@@ -226,4 +232,5 @@ private:
 	int completedTaskCount;
 	int mysteryBoxCount;
 	int gems[static_cast<int>(GemType::Max)];
+	*/
 };

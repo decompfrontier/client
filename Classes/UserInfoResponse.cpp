@@ -11,9 +11,21 @@
 #include "Globals.h"
 #include "FeatureGatingHandler.h"
 
-bool UserInfoResponse::readParam(int, int, const char* key, const char* value, bool)
+bool UserInfoResponse::readParam(int, int, const char* key, const char* value, bool isFirst)
 {
 	const auto& info = UserInfo::shared();
+
+	if (isFirst)
+	{
+		UserUnitInfoList::shared()->updateSummonerMst();
+		UserUnitInfoList::sharedOriginal()->updateSummonerMst();
+
+		if (SaveData::shared()->getHandleName() != info->getHandleName())
+		{
+			SaveData::shared()->setHandleName(info->getHandleName());
+			SaveData::shared()->saveKeyChain();
+		}
+	}
 
 	if (strcmp(key, USERINFO_USERID) == 0)
 	{
@@ -96,20 +108,7 @@ bool UserInfoResponse::readParam(int, int, const char* key, const char* value, b
 	{
 		info->setFirstDesc(value);
 	}
-
-	if (a6)
-	{
-		UserUnitInfoList::shared()->updateSummonerMst();
-		UserUnitInfoList::sharedOriginal()->updateSummonerMst();
-
-		if (SaveData::shared()->getHandleName() != info->getHandleName())
-		{
-			SaveData::shared()->setHandleName(info->getHandleName());
-			SaveData::shared()->saveKeyChain();
-		}
-	}
-
-	if (strcmp(key, USERINFO_DLCURL) == 0)
+	else if (strcmp(key, USERINFO_DLCURL) == 0)
 	{
 		SET_DLC_URL(value);
 	}

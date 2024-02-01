@@ -17,7 +17,6 @@ public:
 	}
 
 	void addGumiliveParams(JsonNode* root);
-	virtual void create() {}
 	void createCampaignReceiptInfoTag();
 	void createDungeonEventUserInfoTag();
 	void createNewsGetInfoTag();
@@ -25,11 +24,18 @@ public:
 	void createTutoUserInfoTag();
 	void createUserInfoTag();
 	void createVersionTag();
-	virtual void debugLog(const char* log) {}
-	virtual std::string getSendData() = 0;
-	virtual std::string getUrl() const { return BASE_REQUEST_ACTION_URL; } // /gme/action/
-	virtual bool isAsync() const { return false; }
+	virtual std::string getSendData();
 	JsonGroup* replaceGroup(const char* group);
+
+	virtual void create() {}
+	virtual void debugLog(const char* log) {}
+
+	virtual bool isAsync() const { return false; }
+	virtual const char* getUrl() const { return ACTIONURL_BASE; } // /gme/action/
+
+	virtual const char* getRequestID() const = 0;
+	virtual const char* getEncodeKey() const = 0;
+	virtual void createBody() = 0;
 
 protected:
 	cocos2d::CCMutableArray<JsonGroup*> m_groups;

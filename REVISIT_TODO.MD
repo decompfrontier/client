@@ -9,7 +9,6 @@ Notes on what I should revisit later, this document will be updated everytime, d
 - 8 unknown bytes (p253)
 
 ## UserInfoResponse
-- When argument a6 is decoded, adjust this file
 - When unk_str2 in UserInfo is decoded, adjust this file
 - Discover and update TutoChapterID
 

@@ -26,5 +26,6 @@ void drawUnitOnScreen();
 extern bool FUNC_FIRST_DESC;
 extern bool FUNC_NOTICE_LIST;
 extern bool FUNC_AMAZON_COINS_REWARD_CONTROL;
+extern bool FUNC_SUMMONER_UNIT;
 
 void SET_DLC_URL(const std::string& url);
