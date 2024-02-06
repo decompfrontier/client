@@ -5,17 +5,7 @@
 
 SET_SHARED_SINGLETON(UserTeamInfo);
 
-#define XOR_SET(x) \
-	int rng = 0; \
-	do \
-		rng = RANDOM_FUNC(); \
-	while (rng < 0); \
-	rng = (rng % 233) + 2; \
-	x##Xor = rng ^ v; \
-	x##Magic = rng; \
-	x = v;
-
-int UserTeamInfo::getFightRecoveryTime() const
+bool UserTeamInfo::getFightRecoveryTime() const
 {
 	auto timer = getFightRestTimer();
 	if (!timer)
@@ -49,116 +39,37 @@ void UserTeamInfo::incZel(int zel)
 	setZel(maxZel); // note: in decomp this was inline
 }
 
-void UserTeamInfo::setActionPoint(int v) { XOR_SET(m_actionPoint); }
-int UserTeamInfo::getActionPoint() { return m_actionPointXor ^ m_actionPointMagic; }
-int UserTeamInfo::getActionRestTimer() { return m_actionRestTimerXor ^ m_actionRestTimerMagic; }
+void UserTeamInfo::setActionPoint(int v) { CCX_SET(m_actionPoint, v); }
 
 void UserTeamInfo::setActionRestTimer(int v)
 {
 	if (v <= 0)
 		v = 0;
 
-	XOR_SET(m_actionRestTimer);
+	CCX_SET(m_actionRestTimer, v);
 	m_actionRestTimerTimestamp = CommonUtils::getNowUnitxTime();
 }
 
-void UserTeamInfo::setAddUnitCnt(int v) { XOR_SET(addUnitCount); }
-void UserTeamInfo::setAddWarehouseCnt(int v) { XOR_SET(addWarehouseCount); }
-void UserTeamInfo::setBraveCoin(int v) { XOR_SET(braveCoin); }
+int UserTeamInfo::getActionRestTimer() const { return CCX_GET(m_actionRestTimer); }
 
-void UserTeamInfo::setExp(int v)
-{
-	XOR_SET(exp);
+int UserTeamInfo::getArenaDeckNum() {
+	if (m_arenaDeckNum <= 0)
+		return 0;
 
-	if (exp > 0 && getExp() < exp)
-		Utils::submitHighScorePlayerExp();
+	return m_arenaDeckNum;
 }
 
-void UserTeamInfo::setFightPoint(int v)
-{
-	XOR_SET(fightPoint);
-}
+void UserTeamInfo::setArenaDeckNum(int v) { m_arenaDeckNum = v; }
 
-void UserTeamInfo::setFightRestTimer(int v)
-{
-	if (v <= 0)
-		v = 0;
-
-	XOR_SET(fightRestTimer);
-	fightRestTimerTimestamp = CommonUtils::getNowUnitxTime();
-}
-
-void UserTeamInfo::setFriendAgreeCnt(int v)
-{
-	XOR_SET(friendAgreeCount);
-}
-
-void UserTeamInfo::setFriendPoint(int v)
-{
-	XOR_SET(friendPoint);
-}
-
-void UserTeamInfo::setGiftRecieveCnt(int v)
-{
-	XOR_SET(giftReceiveCount);
-}
-
-void UserTeamInfo::setKarma(int v)
-{
-	XOR_SET(karma);
-}
-
-void UserTeamInfo::setMaxActionPoint(int v)
-{
-	XOR_SET(maxActionPoint);
-}
-
-void UserTeamInfo::setMaxEqpSlotCnt(int v)
-{
-	XOR_SET(maxEqpSlot);
-}
-
-void UserTeamInfo::setMaxFightPoint(int v)
-{
-	XOR_SET(maxFightPoint);
-}
-
-void UserTeamInfo::setMaxFrdCnt(int v)
-{
-	XOR_SET(maxFrdCount);
-}
-
-void UserTeamInfo::setMaxUnitCnt(int v)
-{
-	XOR_SET(maxUnitCount);
-}
-
-void UserTeamInfo::setLv(int v)
-{
-	XOR_SET(level);
-}
-
-void UserTeamInfo::setPresentCnt(int v)
-{
-	XOR_SET(presentCnt);
-}
-
-void UserTeamInfo::setWarehouseCnt(int v)
-{
-	XOR_SET(warehouseCnt);
-}
-
-void UserTeamInfo::setZel(int v)
-{
-	XOR_SET(zel);
-}
+void UserTeamInfo::setEnergyTickets(unsigned short v) { m_energyTickets = v; }
+unsigned short UserTeamInfo::getEnergyTickets() { return 1; }
 
 void UserTeamInfo::decActionRestTimer()
 {
-	if (actionRestTimerMagic != actionRestTimerXor)
+	if (m_actionRestTimerMagic != m_actionRestTimerXor)
 	{
 		auto current = CommonUtils::getNowUnitxTime();
-        auto diff = current - actionRestTimerTimestamp;
+        auto diff = current - m_actionRestTimerTimestamp;
         for (int i = 0; i < diff; i++)
         {
             setActionRestTimer(getActionRestTimer() - 1);
@@ -185,17 +96,17 @@ void UserTeamInfo::decActionRestTimer()
 
         }
 
-		actionRestTimerTimestamp = current;
+		m_actionRestTimerTimestamp = current;
 	}
 }
 
 
 void UserTeamInfo::decFightRestTimer()
 {
-	if (fightRestTimerXor != fightRestTimerMagic)
+	if (m_fightRestTimerXor != m_fightRestTimerMagic)
 	{
 		auto current = CommonUtils::getNowUnitxTime();
-		auto diff = current - fightRestTimerTimestamp;
+		auto diff = current - m_fightRestTimerTimestamp;
 		
 		for (int i = 0; i < diff; i++)
 		{
@@ -223,6 +134,84 @@ void UserTeamInfo::decFightRestTimer()
 				break;
 		}
 
-		fightRestTimerTimestamp = current;
+		m_fightRestTimerTimestamp = current;
 	}
+}
+
+
+void UserTeamInfo::setFightRestTimer(int v)
+{
+	CCX_SET(m_fightRestTimer, v);
+	m_fightRestTimerTimestamp = CommonUtils::getNowUnitxTime();
+}
+
+int UserTeamInfo::getFightRestTimer() const
+{
+	return m_fightRestTimerMagic ^ m_fightRestTimerXor;
+}
+
+int UserTeamInfo::getIndexMessageCount()
+{
+	return m_indexMessageCount;
+}
+
+void UserTeamInfo::setIndexMessageCount(int v)
+{
+	if (v >= 0)
+		m_indexMessageCount = v;
+}
+
+void UserTeamInfo::setInventorySpaceTickets(unsigned short v) { m_inventorySpaceTickets = v; }
+unsigned short UserTeamInfo::getInventorySpaceTickets() { return 1; }
+void UserTeamInfo::setItemSpaceTickets(unsigned short v) { m_itemSpaceTickets = v; }
+unsigned short UserTeamInfo::getItemSpaceTickets() { return 1; }
+int UserTeamInfo::getLv() const { return CCX_GET(m_level); }
+void UserTeamInfo::setLv(int v)
+{
+	CCX_SET(m_level, v);
+	Utils::submitHighScorePlayerRank(v);
+}
+
+void UserTeamInfo::setMultiDeckNum(int v) { m_multiDeckNum = v; }
+
+int UserTeamInfo::getMultiDeckNum()
+{
+	if (m_multiDeckNum != -1)
+		return m_multiDeckNum;
+
+	return 0;
+}
+
+void UserTeamInfo::setInboxMessagesCnt(int v)
+{
+	if (v >= 0)
+		m_inboxMessageCount = v;
+}
+
+int UserTeamInfo::getInboxMessagesCnt() { return m_indexMessageCount; }
+
+
+long long UserTeamInfo::getMaxWarehouseCnt() const
+{
+	return CCX_GET(m_addWarehouseCount) + CCX_GET(m_wareHouseCount);
+}
+
+long long UserTeamInfo::getSumFrdCnt() const
+{
+	return CCX_GET(m_maxFriendCount) + m_addFriendCount;
+}
+
+long long UserTeamInfo::getSumUnitCnt() const
+{
+	return CCX_GET(m_maxUnitCount) + CCX_GET(m_addUnitCount);
+}
+
+long long UserTeamInfo::getTotalGems() const
+{
+	return m_paidGems + m_freeGems;
+}
+
+unsigned long long UserTeamInfo::getTotalTickets() const
+{
+	return m_summonTicket + m_energyTickets + m_itemSpaceTickets + m_inventorySpaceTickets;
 }

@@ -185,7 +185,7 @@ public:
 	static void stayAwake(bool);
 	static void submitHighScoreArenaPoints();
 	static void submitHighScorePlayerExp();
-	static void submitHighScorePlayerRank();
+	static void submitHighScorePlayerRank(int rank);
 	static void test(cocos2d::CCMutableDictionary<std::string, cocos2d::CCString*>*, std::map<std::string, char>&, std::vector<std::string> const&, int, int);
 	static void trackDamage(int);
 	static void trackDungeon(char const*, std::string);

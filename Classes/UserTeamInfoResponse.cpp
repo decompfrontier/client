@@ -5,7 +5,7 @@
 
 bool UserTeamInfoResponse::readParam(int, int, const char* key, const char* value, bool isFirst)
 {
-	auto info = info->shared();
+	auto info = UserTeamInfo::shared();
 
     if (!strcmp(key, USERINFO_USERID))
         info->setUserID(value);
@@ -76,7 +76,7 @@ bool UserTeamInfoResponse::readParam(int, int, const char* key, const char* valu
         info->setActionRestTimer(CommonUtils::StrToInt(value));
     else if (!strcmp(key, USERTEAMINFO_FIGHTRESTTIMER))
     {
-        info->setFightRestTimer();
+        info->setFightRestTimer(CommonUtils::StrToInt(value));
     }
     else if (!strcmp(key, USERTEAMINFO_SUMMONTICKET))
     {
