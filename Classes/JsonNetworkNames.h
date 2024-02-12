@@ -121,3 +121,13 @@ constexpr const auto DAILYTASKMST_TASKTITLE = "T091Rsbe";
 constexpr const auto DAILYTASKMST_TASKDESC = "L2VkgH08";
 constexpr const auto DAILYTASKMST_PRESENTTYPE = "30Kw4WBa";
 constexpr const auto DAILYTASKMST_TARGETID = "TdDHf59J";
+constexpr const auto DAILYTASKMST_TARGETCOUNT = "wJsB35iH";
+constexpr const auto DAILYTASKMST_TARGETPARAM = "37moriMq";
+constexpr const auto DAILYTASKMST_BRAVEPOINTCOST = "4NuIwm77";
+constexpr const auto DAILYTASKMST_TIMELIMIT = "qY49LBjw";
+constexpr const auto DAILYTASKMST_MAXCLAIMCOUNT = "D2BlS89M";
+constexpr const auto DAILYTASKMST_CURRENTCLAIMCOUNT = "jT3oB57e";
+constexpr const auto DAILYTASKMST_ISMILESTONEPRIZE = "J3l5We66";
+
+// dailytaskmstbonuslist
+constexpr const auto DAILYTASKMSTBONUS_BONUSBRAVEPOINTS = "k3bD738b";

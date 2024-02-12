@@ -29,7 +29,7 @@ protected:
 	time_t m_startTimeLimit;
 };
 
-class DailyTaskPrizeMstList : public MstList<DailyTaskPrizeMst*>
+class DailyTaskPrizeMstList : public MstList<DailyTaskPrizeMst>
 {
 	SHARED_SINGLETON(DailyTaskPrizeMstList);
 

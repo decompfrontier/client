@@ -146,3 +146,7 @@ Notes on what I should revisit later, this document will be updated everytime, d
 
 ## Windows main
 - Actually reverse the entrypoint (which we only have the one for UWP sadly)
+
+## DailyTaskPrizeMstList
+- ISFIRST IS NOT CORRECT!!
+- a3 and a2?
