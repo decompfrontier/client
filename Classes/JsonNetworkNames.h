@@ -102,7 +102,6 @@ constexpr const auto USERTEAMINFO_ACTIONRESTTIMER = "f0IY4nj8";
 constexpr const auto USERTEAMINFO_FIGHTRESTTIMER = "jp9s8IyY";
 constexpr const auto USERTEAMINFO_FREEGEMS = "92uj7oXB";
 constexpr const auto USERTEAMINFO_ACTIVEDECK = "Z0Y4RoD7";
-constexpr const auto USERTEAMINFO_FIGHTRESTTIMER = "jp9s8IyY";
 constexpr const auto USERTEAMINFO_SUMMONTICKET = "9r3aLmaB";
 constexpr const auto USERTEAMINFO_SLOTGAMEFLAG = "s3uU4Lgb";
 constexpr const auto USERTEAMINFO_RAINBOWCOIN = "KAZmxkgy";
@@ -110,3 +109,15 @@ constexpr const auto USERTEAMINFO_BRAVEPOINTSTOTAL = "bya9a67k";
 constexpr const auto USERTEAMINFO_COLOSSEUMTICKET = "lKuj3Ier";
 constexpr const auto USERTEAMINFO_ARENADECKNUM = "gKNfIZiA";
 constexpr const auto USERTEAMINFO_REINFORCEMENTDECKS = "TwqMChon";
+constexpr const auto USERTEAMINFO_PAIDGEMS = "d37CaiX1";
+constexpr const auto USERTEAMINFO_MYSTERYBOXCOUNT = "Qo9doUsp";
+constexpr const auto USERTEAMINFO_INBOXMESSAGESCOUNT = "7qncTHUJ";
+constexpr const auto USERTEAMINFO_COMPLETEDTASKCOUNT = "3a8b9D8i";
+constexpr const auto USERTEAMINFO_CURRENTBRAVEPOINTS = "22rqpZTo";
+
+// dailytaskmstlist
+constexpr const auto DAILYTASKMST_TASKID = "d83aQ39U";
+constexpr const auto DAILYTASKMST_TASKTITLE = "T091Rsbe";
+constexpr const auto DAILYTASKMST_TASKDESC = "L2VkgH08";
+constexpr const auto DAILYTASKMST_PRESENTTYPE = "30Kw4WBa";
+constexpr const auto DAILYTASKMST_TARGETID = "TdDHf59J";

@@ -116,7 +116,7 @@ bool UserTeamInfoResponse::readParam(int, int, const char* key, const char* valu
     {
         info->setBravePointsTotal(CommonUtils::StrToInt(value));
     }
-    else if (!strcmp(key, "22rqpZTo"))
+    else if (!strcmp(key, USERTEAMINFO_CURRENTBRAVEPOINTS))
     {
         info->setBravePointsCurrent(CommonUtils::StrToInt(value));
     }
@@ -124,19 +124,19 @@ bool UserTeamInfoResponse::readParam(int, int, const char* key, const char* valu
     {
         info->setRainbowCoin(CommonUtils::StrToInt(value));
     }
-    else if (!strcmp(key, "3a8b9D8i"))
+    else if (!strcmp(key, USERTEAMINFO_COMPLETEDTASKCOUNT))
     {
         info->setCompletedTaskCount(CommonUtils::StrToInt(value));
     }
-    else if (!strcmp(key, "7qncTHUJ"))
+    else if (!strcmp(key, USERTEAMINFO_INBOXMESSAGESCOUNT))
     {
         info->setInboxMessagesCnt(CommonUtils::StrToInt(value));
     }
-    else if (!strcmp(key, "Qo9doUsp"))
+    else if (!strcmp(key, USERTEAMINFO_MYSTERYBOXCOUNT))
     {
         info->setMysteryBoxCount(CommonUtils::StrToInt(value));
     }
-    else if (!strcmp(key, "d37CaiX1"))
+    else if (!strcmp(key, USERTEAMINFO_PAIDGEMS))
     {
         info->setPaidGems(CommonUtils::StrToInt(value));
     }

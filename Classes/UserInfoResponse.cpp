@@ -15,18 +15,6 @@ bool UserInfoResponse::readParam(int, int, const char* key, const char* value, b
 {
 	const auto& info = UserInfo::shared();
 
-	if (isFirst)
-	{
-		UserUnitInfoList::shared()->updateSummonerMst();
-		UserUnitInfoList::sharedOriginal()->updateSummonerMst();
-
-		if (SaveData::shared()->getHandleName() != info->getHandleName())
-		{
-			SaveData::shared()->setHandleName(info->getHandleName());
-			SaveData::shared()->saveKeyChain();
-		}
-	}
-
 	if (strcmp(key, USERINFO_USERID) == 0)
 	{
 		info->setUserID(value);
@@ -127,6 +115,18 @@ bool UserInfoResponse::readParam(int, int, const char* key, const char* value, b
 	else if (strcmp(key, USERINFO_SERVICEREQUESTENDPOINTPARAM) == 0)
 	{
 		info->setServiceRequestEndpointParam(value);
+	}
+
+	if (isFirst)
+	{
+		UserUnitInfoList::shared()->updateSummonerMst();
+		UserUnitInfoList::sharedOriginal()->updateSummonerMst();
+
+		if (SaveData::shared()->getHandleName() != info->getHandleName())
+		{
+			SaveData::shared()->setHandleName(info->getHandleName());
+			SaveData::shared()->saveKeyChain();
+		}
 	}
 
 	return 1;
