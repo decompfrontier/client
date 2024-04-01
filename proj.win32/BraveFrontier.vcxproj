@@ -138,6 +138,9 @@
     <ClCompile Include="..\Classes\BFCertificateProvider.cpp" />
     <ClCompile Include="..\Classes\CommonUtils.cpp" />
     <ClCompile Include="..\Classes\CrashlyticsUtil.cpp" />
+    <ClCompile Include="..\Classes\DailyTaskBonusMstResponse.cpp" />
+    <ClCompile Include="..\Classes\DailyTaskMst.cpp" />
+    <ClCompile Include="..\Classes\DailyTaskMstResponse.cpp" />
     <ClCompile Include="..\Classes\DailyTaskPrizeMst.cpp" />
     <ClCompile Include="..\Classes\DailyTaskPrizeMstResponse.cpp" />
     <ClCompile Include="..\Classes\FirstDescMst.cpp" />
@@ -189,6 +192,10 @@
     <ClInclude Include="..\Classes\compat1\CCMutableArray.h" />
     <ClInclude Include="..\Classes\compat2\CCBool.h" />
     <ClInclude Include="..\Classes\CrashlyticsUtil.h" />
+    <ClInclude Include="..\Classes\DailyTaskBonusMst.h" />
+    <ClInclude Include="..\Classes\DailyTaskBonusMstResponse.h" />
+    <ClInclude Include="..\Classes\DailyTaskMst.h" />
+    <ClInclude Include="..\Classes\DailyTaskMstResponse.h" />
     <ClInclude Include="..\Classes\DailyTaskPrizeMst.h" />
     <ClInclude Include="..\Classes\DailyTaskPrizeMstResponse.h" />
     <ClInclude Include="..\Classes\DefineMst.h" />

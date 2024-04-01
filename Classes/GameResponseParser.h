@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RequestData.h"
+#include "BaseResponse.h"
 
 class GameResponseParser : public cocos2d::CCObject
 {
@@ -12,7 +13,7 @@ public:
 	void parseBodyTag(const std::map<std::string, picojson::value>&, const char*, const char* );
 	void parse(const char*, const char*);
 	void parse(const char*, RequestData* data);
-	void getResponseObject(const char*);
+	BaseResponse* getResponseObject(const char* group);
 	void addParseResponseAsyncCallback(float);
 	void addParseResponseAsync(const char*, RequestData* data);
 };

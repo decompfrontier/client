@@ -2,7 +2,6 @@
 
 
 // groups
-constexpr const auto GROUP_USERINFO = "IKqx1Cn9";
 constexpr const auto GROUP_MSTLIST = "KeC10fuL";
 constexpr const auto GROUP_GETUSERINFO = "563Dtye3";
 constexpr const auto GROUP_FRIENDGET = "StQIyohe";
