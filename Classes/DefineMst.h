@@ -1,6 +1,6 @@
 #pragma once
 
-class DefineMst
+class DefineMst : public cocos2d::CCNode
 {
 	SHARED_SINGLETON(DefineMst);
 

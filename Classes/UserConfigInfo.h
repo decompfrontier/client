@@ -1,6 +1,6 @@
 #pragma once
 
-class UserConfigInfo
+class UserConfigInfo : public cocos2d::CCObject
 {
 	SHARED_SINGLETON(UserConfigInfo);
 

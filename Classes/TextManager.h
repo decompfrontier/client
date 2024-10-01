@@ -1,6 +1,6 @@
 #pragma once
 
-class TextManager
+class TextManager : public cocos2d::CCObject
 {
 	SHARED_SINGLETON(TextManager);
 

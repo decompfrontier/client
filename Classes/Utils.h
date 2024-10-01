@@ -3,7 +3,7 @@
 class Utils
 {
 public:
-	class FpsTracker
+	class FpsTracker : public cocos2d::CCObject
 	{
 	public:
 		SHARED_SINGLETON(FpsTracker);
@@ -17,7 +17,7 @@ public:
 		void setBGEffectsOn(bool b);
 		void startTracker();
 		void update();
-		
+
 	};
 
 	static int magic_num1;

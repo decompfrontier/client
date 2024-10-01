@@ -1,6 +1,6 @@
 #pragma once
 
-class StringLabelList
+class StringLabelList : public cocos2d::CCNode
 {
 
 };

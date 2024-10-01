@@ -1,6 +1,6 @@
 #pragma once
 
-class DailyTaskMst
+class DailyTaskMst : public cocos2d::CCObject
 {
 public:
 	CC_SYNTHESIZE(int, m_bppTotal, BravePointsTotal);
