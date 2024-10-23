@@ -2,6 +2,7 @@
 
 
 // groups
+constexpr const auto GROUP_USERINFO = "IKqx1Cn9";
 constexpr const auto GROUP_MSTLIST = "KeC10fuL";
 constexpr const auto GROUP_GETUSERINFO = "563Dtye3";
 constexpr const auto GROUP_FRIENDGET = "StQIyohe";
@@ -131,6 +132,15 @@ constexpr const auto DAILYTASKMST_ISMILESTONEPRIZE = "J3l5We66";
 // dailytaskmstbonuslist
 constexpr const auto DAILYTASKMSTBONUS_BONUSBRAVEPOINTS = "k3bD738b";
 
+// dailyloginrewardsuserinfo
+constexpr const auto DAILYLOGINREWARDUSERINFO_ID = "XIvaD6Jp";
+constexpr const auto DAILYLOGINREWARDUSERINFO_USERCURRENTCOUNT = "35JXN4Ay";
+constexpr const auto DAILYLOGINREWARDUSERINFO_USERLIMITCOUNT = "5xStG99s";
+constexpr const auto DAILYLOGINREWARDUSERINFO_CURRENTDAY = "ad6i23pO";
+constexpr const auto DAILYLOGINREWARDUSERINFO_DAY = "u8iD6ka7";
+constexpr const auto DAILYLOGINREWARDUSERINFO_MESSAGE = "ZC0msu2L";
+constexpr const auto DAILYLOGINREWARDUSERINFO_NEXTREWARDID = "outas79f";
+
 // unitmstresponse
 constexpr const auto UNITMST_UNITID = "pn16CNah";
 constexpr const auto UNITMST_UNITNAME = "utP1c0CD";
@@ -174,20 +184,20 @@ constexpr const auto UNITMST_BADSTATERESISTS = "CEeqs63b";
 constexpr const auto UNITMST_ADJUSTEXP = "Gd4NS7H6";
 constexpr const auto UNITMST_HOMEIMGPOS = "1W9CxaFK";
 constexpr const auto UNITMST_DETAILIMGPOS = "6z54rgb3";
-constexpr const auto UNITMSG_CONFIRMIMGPOS = "MYK1fq6c";
-constexpr const auto UNITMSG_SUMMONIMGPOS = "KC3Jk8Br";
+constexpr const auto UNITMST_CONFIRMIMGPOS = "MYK1fq6c";
+constexpr const auto UNITMST_SUMMONIMGPOS = "KC3Jk8Br";
 constexpr const auto UNITMST_SKILLCUTINIMGPOS = "7hLR6pDN";
-constexpr const auto UNITMSG_HPDISPPOS = "3BpHN6VD";
-constexpr const auto UNITMSG_DISPORDER = "XuJL4pc5";
-constexpr const auto UNITMSG_MOVEOFFSET = "jFX0a7qe";
-constexpr const auto UNITMSG_CATEGORYNO = "9PsmH7tz";
-constexpr const auto UNITMSG_SKILLUPADJUST = "PXD4v2KY";
-constexpr const auto UNITMSG_VOICE = "QwN4hqJ2";
-constexpr const auto UNITMSG_GETTINGTYPE = "6yHMXYv1";
-constexpr const auto UNITMSG_EXTHOMEIMGPOS = "jyj6bl9P";
-constexpr const auto UNITMSG_EXTDETAILIMGPOS = "QHhOLCuk";
-constexpr const auto UNITMSG_EXTCONFIRMIMGPOS = "S0BjxW1F";
-constexpr const auto UNITMSG_EXTSUMMONIMGPOS = "psOjpTAv";
-constexpr const auto UNITMSG_EXTSKILLCUTINIMGPOS = "9y1vaEJk";
-constexpr const auto UNITMSG_CURSORDISPPOS = "Lkh6gYkT";
-constexpr const auto UNITMSG_DISPDICTFLAG = "S4ezp6uK";
+constexpr const auto UNITMST_HPDISPPOS = "3BpHN6VD";
+constexpr const auto UNITMST_DISPORDER = "XuJL4pc5";
+constexpr const auto UNITMST_MOVEOFFSET = "jFX0a7qe";
+constexpr const auto UNITMST_CATEGORYNO = "9PsmH7tz";
+constexpr const auto UNITMST_SKILLUPADJUST = "PXD4v2KY";
+constexpr const auto UNITMST_VOICE = "QwN4hqJ2";
+constexpr const auto UNITMST_GETTINGTYPE = "6yHMXYv1";
+constexpr const auto UNITMST_EXTHOMEIMGPOS = "jyj6bl9P";
+constexpr const auto UNITMST_EXTDETAILIMGPOS = "QHhOLCuk";
+constexpr const auto UNITMST_EXTCONFIRMIMGPOS = "S0BjxW1F";
+constexpr const auto UNITMST_EXTSUMMONIMGPOS = "psOjpTAv";
+constexpr const auto UNITMST_EXTSKILLCUTINIMGPOS = "9y1vaEJk";
+constexpr const auto UNITMST_CURSORDISPPOS = "Lkh6gYkT";
+constexpr const auto UNITMST_DISPDICTFLAG = "S4ezp6uK";
