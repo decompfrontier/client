@@ -23,23 +23,18 @@ look at [Brave Frontier: ReCoded](https://twitter.com/BFRecoded), a project with
 ## What's the project stauts?
 
 ### C++ decompilation
-You can see the file [DECOMPILATION_STATUS.MD](https://github.com/decompfrontier/client/blob/main/DECOMPILATION_STATUS.MD) for more information
-on the decompilation status.
+You can see the page [Client decompilation status](https://decompfrontier.github.io/pages/Status/decomp-status.html) for more information.
+
 The decompilation files will be updated as required for the offline mod.
 
 ### Java decompilation
-It's mostly complete, just some names might be missing for better understanding of BraveFrontierJNI, but it builds and runs 100% fine
-under IntelliJ Idea.
+It's complete, but it might need some names changes for better understanding of BraveFrontierJNI, but it builds and runs 100% fine under IntelliJ Idea.
 
 ### IOS decompilation
 Nothing started, this might be done after everything is done, as I don't think we have debug symbols there.
 
 ### WinRT decompilation
-Nothing started, this might be done after everything is done, as there is no PDB release and decompiling there
-is tidious due to the use of WinRT.
-
-### Win32 support
-Nothing done, this will be done after everything is done.
+Nothing started, this might be done after everything is done, as there is no PDB release and decompiling there is tidious due to the use of WinRT.
 
 ## Compiling
 
