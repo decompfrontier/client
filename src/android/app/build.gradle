@@ -1,0 +1,118 @@
+plugins {
+    //noinspection AndroidGradlePluginVersion
+    id('com.android.application') version '7.0.2' // this is newer but we cannot get this working on v3.x
+    id 'com.google.gms.google-services'
+}
+
+repositories {
+    google()
+    mavenCentral()
+    maven {
+        name = "Cuba platform"
+        url = uri('https://repo.cuba-platform.com/content/groups/work/')
+    }
+    maven {
+        name = "Tapjoy's maven repo"
+        url = uri("https://sdk.tapjoy.com/")
+    }
+}
+
+android {
+    //noinspection GradleDependency
+    compileSdkVersion 29
+    defaultConfig {
+        applicationId 'sg.gumi.bravefrontier'
+        minSdkVersion 16
+        //noinspection ExpiredTargetSdkVersion
+        targetSdkVersion 30
+        versionCode 11014182
+        versionName '2.19.6.0'
+        multiDexEnabled = true
+
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID=1'
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            packagingOptions {
+                doNotStrip '**.so'
+            }
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            version '3.31.0+'
+            path '../../../CMakeLists.txt'
+        }
+    }
+    sourceSets {
+        main {
+            resources {
+                assets
+                {
+                    srcDirs = ["../../../data"]
+                }
+            }
+        }
+    }
+    namespace 'sg.gumi.bravefrontier'
+}
+
+dependencies {
+    // guessed dependencies based from the date alone:
+
+    //noinspection GradleDependency
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+
+    //noinspection GradleDependency
+    implementation 'com.facebook.android:facebook-android-sdk:4.40.0'
+
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    // https://web.archive.org/web/20170326104526/https://developers.google.com/youtube/android/player/downloads/YouTubeAndroidPlayerApi-1.2.2.zip
+    implementation files("libs/YouTubeAndroidPlayerApi.jar")
+
+    implementation files('libs/httpclientandroidlib-1.1.2.jar')
+
+    implementation files('libs/GoogleConversionTrackingSdk-2.2.4.jar')
+
+    //noinspection OutdatedLibrary
+    implementation 'com.appsflyer:af-android-sdk:6.1.0'
+
+    //noinspection GradleDependency
+    implementation 'com.pusher:pusher-java-client:1.6.0'
+
+    //noinspection OutdatedLibrary
+    implementation 'com.tapjoy:tapjoy-android-sdk:11.6.0'
+
+    // ----------------------------------------------------------
+    // found dependencies in properties:
+
+    //noinspection GradleDependency
+    implementation 'com.android.billingclient:billing:3.0.0'
+
+    //noinspection GradleDependency
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
+
+    //noinspection GradleDependency
+    //implementation 'com.google.firebase:firebase-messaging:16.1.0'
+
+    //noinspection GradleDependency
+    implementation 'com.google.android.gms:play-services-analytics:15.0.0'
+
+    //noinspection GradleDependency
+    implementation 'com.google.android.gms:play-services-auth:15.0.0'
+
+    //noinspection GradleDependency
+    implementation 'com.google.android.gms:play-services-games:15.0.0'
+
+    //noinspection GradleDependency
+    implementation 'com.google.android.gms:play-services-location:15.0.0'
+}

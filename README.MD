@@ -1,59 +1,29 @@
-# Client
-Decompilation of Brave Frontier v2.19.6.0 (ARM64 Android)
+# Brave Frontier
 
-## What is this?
-The following is a **WIP**, **EXPERIMENTAL** and probably **NEVER COMPLETED** decompilation of the original, and last known version, of Brave Frontier (v2.19.6.0) from the Android ARM64 version.
+This project contains an experimental, **work-in-process** decompilation of Brave Frontier Client v.2.9.16.0 for Android ARMv8-a (64-bit), it might eventually be extended to
+more platforms.
 
-The C++ code was decompiled with [IDA Pro (64-bit)](https://hex-rays.com/), you can import the current IDC file from [here](https://github.com/decompfrontier/idaidc).
-The Java code was decompiled and fixed with [Krakatau](https://github.com/Storyyeller/Krakatau) and dependencies from the linked Android SDK.
+The project might not be buildable at the moment, for more information about what and the reason why this project was made,
+please see the page [Client decompilation architecture]() and [Client decompilation status](https://decompfrontier.github.io/pages/Status/decomp-status.html) for 
+the current progress of the project.
 
-Any special code for the extended functionlities (like a possible Offline Mod or PC edition) will be marked with `__DECOMP__`.
+## Building
+Currently only building the Android version can work, you should build it by opening `src/android` with Android Studio/IntelliJ and try to build.
 
-## Why this and not a recreation?
-I always wanted to start a decompilation of some games, Brave Frontier left us debugging symbols that we can analyze and have fun,
-and I originally did some experiments back in 2019 and 2022 which lead me to attempt my first decompilation with Brave.
+### Setting up firebase
+1. Go to [firebase console](https://console.firebase.google.com)
+2. Create a new project (or use an existing one)
+3. Create a new Android package by clicking the android icon
+4. Set the name to `Brave Frontier` and the package id to `sg.gumi.bravefrontier`
+5. Download `google-services.json` and put it inside the `src/android/app` directory.
+6. You can now build the game
 
-I feel like I want to preserve Brave in the original way it was written (using cocos2d-x and all the other trashies), which is why
-I belive a recreation would feel out of scope for this project (even if it will be completed in a lesser time and will provide
-better features).
-
-If you look for a recreation or something that has a proper goal, take a 
-look at [Brave Frontier: ReCoded](https://twitter.com/BFRecoded), a project with fairly better scope than this decomp.
-
-## What's the project stauts?
-
-### C++ decompilation
-You can see the page [Client decompilation status](https://decompfrontier.github.io/pages/Status/decomp-status.html) for more information.
-
-The decompilation files will be updated as required for the offline mod.
-
-### Java decompilation
-It's complete, but it might need some names changes for better understanding of BraveFrontierJNI, but it builds and runs 100% fine under IntelliJ Idea.
-
-### IOS decompilation
-Nothing started, this might be done after everything is done, as I don't think we have debug symbols there.
-
-### WinRT decompilation
-Nothing started, this might be done after everything is done, as there is no PDB release and decompiling there is tidious due to the use of WinRT.
-
-## Compiling
-
-### Windows
-1. Install Visual Studio 2022
-2. Open "Project.win32/BraveFrontier.sln"
-
-### Android
-**NOTE:** Building of libgame.so (actual brave frontier) is currently NOT supported!
-1. Install Android Studio (or IntelliJ IDEA)
-2. Open "Proj.android" directory
-
-### Other platforms
-This decompilation currently does **NOT** support any other platform than Android and Windows, if the project eventually gets finished
-I would like to enroll with cocos2d-x 4.0, cmake fixes to avoid as much JNI as possible so PC platforms (Windows, Linux and MacOS) would work. Once that is actually done, eventually iOS support can be remade entirely (or decompiled providing someone does know how...).
+## Matching
+Currently the infrastructure is not ready for matching, please keep an eye on the repo when this part is ready.
 
 ## Legal
-The source code of DecompFrontier is for **non-commercial use only**. If you use this code or create a derivate work you might not
-implement or impose a charge for any possible thing (like Microtransaction or access).
+As this project is made for the players by the players, I think this project should be used for **non-commercial use only**. 
+If you use this code or create a derivate work you might not implement or impose a charge for any possible thing (like Microtransactions or ads).
 
 Brave Frontier - (C) Alim Co., Ltd. All Rights Reserved.
 
