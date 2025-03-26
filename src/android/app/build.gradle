@@ -28,6 +28,7 @@ android {
         versionCode 11014182
         versionName '2.19.6.0'
         multiDexEnabled = true
+        ndkVersion '21.0.6113669'
 
         externalNativeBuild {
             cmake {
