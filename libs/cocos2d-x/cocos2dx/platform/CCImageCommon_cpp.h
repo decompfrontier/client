@@ -219,7 +219,7 @@ bool CCImage::_initWithJpgData(void * data, int nSize)
         jpeg_mem_src( &cinfo, (unsigned char *) data, nSize );
 
         /* reading the image header which contains image information */
-        jpeg_read_header( &cinfo, true );
+        jpeg_read_header( &cinfo, TRUE );
 
         // we only support RGB or grayscale
         if (cinfo.jpeg_color_space != JCS_RGB)
@@ -396,21 +396,21 @@ bool CCImage::_initWithPngData(void * pData, int nDatalen)
     return bRet;
 }
 
-static tmsize_t _tiffReadProc(thandle_t fd, void* buf, tmsize_t size)
+static tsize_t _tiffReadProc(thandle_t fd, void* buf, tsize_t size)
 {
     tImageSource* isource = (tImageSource*)fd;
     uint8* ma;
-    uint64 mb;
+    tsize_t mb;
     unsigned long n;
     unsigned long o;
-    tmsize_t p;
+    tsize_t p;
     ma=(uint8*)buf;
     mb=size;
     p=0;
     while (mb>0)
     {
         n=0x80000000UL;
-        if ((uint64)n>mb)
+        if (n>mb)
             n=(unsigned long)mb;
 
 
@@ -436,7 +436,7 @@ static tmsize_t _tiffReadProc(thandle_t fd, void* buf, tmsize_t size)
     return p;
 }
 
-static tmsize_t _tiffWriteProc(thandle_t fd, void* buf, tmsize_t size)
+static tsize_t _tiffWriteProc(thandle_t fd, void* buf, tsize_t size)
 {
     CC_UNUSED_PARAM(fd);
     CC_UNUSED_PARAM(buf);
@@ -445,38 +445,38 @@ static tmsize_t _tiffWriteProc(thandle_t fd, void* buf, tmsize_t size)
 }
 
 
-static uint64 _tiffSeekProc(thandle_t fd, uint64 off, int whence)
+static toff_t _tiffSeekProc(thandle_t fd, toff_t off, int whence)
 {
     tImageSource* isource = (tImageSource*)fd;
-    uint64 ret = -1;
+    toff_t ret = -1;
     do 
     {
         if (whence == SEEK_SET)
         {
             CC_BREAK_IF(off > isource->size-1);
-            ret = isource->offset = (uint32)off;
+            ret = isource->offset = (toff_t)off;
         }
         else if (whence == SEEK_CUR)
         {
             CC_BREAK_IF(isource->offset + off > isource->size-1);
-            ret = isource->offset += (uint32)off;
+            ret = isource->offset += (toff_t)off;
         }
         else if (whence == SEEK_END)
         {
             CC_BREAK_IF(off > isource->size-1);
-            ret = isource->offset = (uint32)(isource->size-1 - off);
+            ret = isource->offset = (toff_t)(isource->size-1 - off);
         }
         else
         {
             CC_BREAK_IF(off > isource->size-1);
-            ret = isource->offset = (uint32)off;
+            ret = isource->offset = (toff_t)off;
         }
     } while (0);
 
     return ret;
 }
 
-static uint64 _tiffSizeProc(thandle_t fd)
+static toff_t _tiffSizeProc(thandle_t fd)
 {
     tImageSource* pImageSrc = (tImageSource*)fd;
     return pImageSrc->size;
