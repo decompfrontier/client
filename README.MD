@@ -1,6 +1,6 @@
 # Brave Frontier
 
-This project contains an experimental, **work-in-process** decompilation of Brave Frontier Client v.2.9.16.0 for Android ARMv8-a (64-bit), it might eventually be extended to
+This project contains an experimental, **work-in-process** decompilation of Brave Frontier Client v.2.9.16.0 for Android x86_64 (64-bit), it might eventually be extended to
 more platforms.
 
 The project might not be buildable at the moment, for more information about what and the reason why this project was made,

@@ -2,12 +2,12 @@ def apply(config, args):
     import os
     import platform
 
-    config["baseimg"] = "replika/romset/global/libgame-armv8a.so"
-    config["mapfile"] = "replika/romset/global/libgame-armv8a.map"
+    config["baseimg"] = "replika/romset/global/libgame-x86_64.so"
+    config["mapfile"] = "replika/romset/global/libgame-x86_64.map"
     config["myimg"] = "replika/build/src/libgame.so"
     config["source_directories"] = ["."]
     # config["show_line_numbers_default"] = True
-    config["arch"] = "aarch64"
+    config["arch"] = "x86_64"
     config["map_format"] = "gnu" # gnu, mw, ms
     # config["build_dir"] = "build/" # only needed for mw and ms map format
     # config["expected_dir"] = "expected/" # needed for -o
