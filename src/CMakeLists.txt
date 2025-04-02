@@ -6,6 +6,7 @@ set(SRCS
 
 if (ANDROID)
     set(TARGET game)
+    set(LIB_PREFIX lib)
     add_library(${TARGET} SHARED ${SRCS})
     target_link_libraries(${TARGET} PRIVATE log GLESv2 m dl android OpenSLES)
 endif()

@@ -1,0 +1,11 @@
+build_target = "libgame.so"
+
+tools_path = "replika/"
+data_path = "replika/romset/android/global/arm64-v8a/"
+build_path = "replika/build/android-arm64-v8a/src/"
+
+functions_csv = "viking_functions.csv"
+data_symbols = "data_symbols.csv"
+
+original_elf = "libgame.so"
+base_address = 0x0

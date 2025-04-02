@@ -1,9 +1,15 @@
 # Main cmake bootstrap of Brave Frontier
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.20)
 project(BraveFrontier)
 
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED 98)
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    set(CLANG TRUE)
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set(GCC TRUE)
+endif()
 
 if (ANDROID)
     add_definitions(-DANDROID=1)
