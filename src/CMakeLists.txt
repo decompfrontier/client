@@ -2,6 +2,8 @@ set(SRCS
     AIMst.cpp
     AIMst.hpp
     Main_Android.cpp
+    Tapjoy.cpp
+    Tapjoy.hpp
 )
 
 if (ANDROID)
