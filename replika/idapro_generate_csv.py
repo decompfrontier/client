@@ -5,7 +5,7 @@ import ida_funcs
 # build a list from there
 
 # Exclude prefixes of thirdparty libraries
-EXCLUDE_NAME = [
+EXCLUDE_NAME_OLD = [
     # OpenSSL
     "OCSP_",
     "PEM_",
@@ -236,8 +236,6 @@ EXCLUDE_NAME = [
     # libTIFF
     "TIFF",
     "_TIFF",
-    # libcocos2d
-    "_ZN7cocos2d",
     # Android NDK
     "_ZNSt6__ndk1",
     "_ZTv0_n24_NSt6__ndk1",
@@ -260,8 +258,10 @@ EXCLUDE_NAME = [
     "compress",
     "uncompress",
     "base64",
-    # cocos2d-x (a clever guy wouldd use a regex)
-    "km",
+    # cocos2d-x (a clever guy would use a regex)
+    #"Log",
+    #"km",
+    #"_ZN7cocos2d",
     "_ZNK7cocos2d",
     "_ZThn24_N7cocos2d",
     "_ZThn88_N7cocos2d",
@@ -276,8 +276,15 @@ EXCLUDE_NAME = [
     "Java_org_cocos2dx_",
 ]
 
+EXCLUDE_NAME = [
+    # stubs
+    ".", # c++ forwarders
+    "nullsub_", # empty funcs
+    "j_", # jump stubs
+]
+
 # Exclude any function that starts with this name
-TOTAL_EXCLUDE = [
+TOTAL_EXCLUDE_OLD = [
     # cocos2d-x
     "lazyInitialize",
     "calculate_line_normal",
@@ -626,6 +633,8 @@ TOTAL_EXCLUDE = [
     "atol",
     "fmodf",
 ]
+
+TOTAL_EXCLUDE = []
 
 class GenerateData:
     def __init__(self):

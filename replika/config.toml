@@ -2,7 +2,7 @@ build_target = "libgame.so"
 
 tools_path = "replika/"
 data_path = "replika/romset/android/global/arm64-v8a/"
-build_path = "replika/build/android-arm64-v8a/src/"
+build_path = "replika/build/android-arm64/src/"
 
 functions_csv = "viking_functions.csv"
 data_symbols = "data_symbols.csv"

@@ -2,8 +2,12 @@ set(SRCS
     AIMst.cpp
     AIMst.hpp
     Main_Android.cpp
+	PWFacebook.cpp
+	PWFacebook.hpp
     Tapjoy.cpp
     Tapjoy.hpp
+	Utils.hpp
+	Utils.cpp
 )
 
 if (ANDROID)

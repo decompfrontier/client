@@ -28,3 +28,7 @@ If you use this code or create a derivate work you might not implement or impose
 Brave Frontier - (C) Alim Co., Ltd. All Rights Reserved.
 
 This project is not associated, affiliated or sponsored with/by Alim Co., Ltd or gumi Inc.
+
+## Notes
+Special thanks to the [Zelda Breath of the Wild](https://github.com/zeldaret/botw) decompilation project as many pieces of this
+infrastructure were based upon them.
