@@ -1,2 +1,2 @@
 #!/bin/sh
-./replika/viking/target/debug/check -wyo $*
+./replika/viking/target/debug/check -mwo $*

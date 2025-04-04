@@ -1,13 +1,21 @@
 set(SRCS
     AIMst.cpp
     AIMst.hpp
+    AsyncFileLoad.cpp
+    AsyncFileLoad.hpp
     Main_Android.cpp
+    Pch.hpp
 	PWFacebook.cpp
 	PWFacebook.hpp
+    PWFacebookAndroid.cpp
+    PWFacebookAndroid.hpp
+    PWFacebookUser.hpp
     Tapjoy.cpp
     Tapjoy.hpp
 	Utils.hpp
 	Utils.cpp
+    WrapAsyncFileLoad.cpp
+    WrapAsyncFileLoad.hpp
 )
 
 if (ANDROID)

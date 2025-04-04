@@ -10,7 +10,9 @@ namespace tapjoy
     {
     public:
 #ifdef __ANDROID__
-        static void setJavaVM(JavaVM *vm);
+        static int setJavaVM(JavaVM *vm);
+        static void setContext(jobject ctx);
 #endif
+
     };
 }

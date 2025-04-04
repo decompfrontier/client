@@ -10,7 +10,7 @@ def apply(config, args):
     config["source_directories"] = ["../src"]
     config["arch"] = "aarch64"
     config["map_format"] = "gnu" # gnu, mw, ms
-    config["make_command"] = ["ninja", "-C", "build/arm64"]
+    config["make_command"] = ["../make.bash" ]
     #config["build_dir"] = "replika/build/src" # only needed for mw and ms map format
     #config["objdump_flags"] = ["-m", "aarch64"]
     # config["expected_dir"] = "expected/" # needed for -o

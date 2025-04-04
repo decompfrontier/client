@@ -2,5 +2,6 @@
 
 class AIMst : public cocos2d::CCObject
 {
-    CC_SYNTHESIZE(std::string, aiId, AiID)
+    CC_SYNTHESIZE(int, priority, Priority);
+    CC_SYNTHESIZE(std::string, aiId, AiID);
 };

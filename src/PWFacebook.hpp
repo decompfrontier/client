@@ -8,8 +8,8 @@ typedef void (cocos2d::CCObject::* facebookSignal)(cocos2d::CCObject *data);
 class PWFacebook : public cocos2d::CCNode
 {
 public:
-	virtual void login();
-	virtual void logout();
+	virtual void login(bool) {}
+	virtual void logout() {}
 	virtual bool isLoggedIn() { return false; }
 	virtual void tryRestoreSession() {}
 	virtual bool wasAccessTokenLoadedAtStartUp() { return true; }

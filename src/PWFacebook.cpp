@@ -1,8 +1,6 @@
+#include "Pch.hpp"
 #include "PWFacebook.hpp"
 #include "Utils.hpp"
-#include <support/CCNotificationCenter.h>
-#include <CCScheduler.h>
-#include <CCDirector.h>
 
 void PWFacebook::onUserLogin()
 {
