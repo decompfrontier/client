@@ -1,0 +1,75 @@
+OpenSSL: 
+    Decomp match: OpenSSL 1.1.0c  10 Nov 2016" result = "compiler: /Users/leenjewel/workspaces/openssl_for_ios_and_android/tools/x86_64-android-toolchain/bin/x86_"
+					   "64-linux-android-gcc -DZLIB -DDSO_DLFCN -DHAVE_DLFCN_H -DNDEBUG -DOPENSSL_THREADS -DOPENSSL_NO_DYNAMIC_EN"
+					   "GINE -DOPENSSL_PIC -DOPENSSLDIR=\"\\\"/Users/leenjewel/workspaces/openssl_for_ios_and_android/tools/../ou"
+					   "tput/android/openssl-android-x86_64/ssl\\\"\" -DENGINESDIR=\"\\\"/Users/leenjewel/workspaces/openssl_for_"
+					   "ios_and_android/tools/../output/android/openssl-android-x86_64/lib/engines-1.1\\\"\" ";
+    Download link: https://github.com/leenjewel/openssl_for_ios_and_android/releases/download/20170105/openssl_curl_for_ios_android.20170105.zip
+
+    ARM64:
+.rodata:00000000023EF3C0 aCompilerAarch6 DCB "compiler: aarch64-linux-android-gcc --sysroot=/Users/james/bin/a"
+.rodata:00000000023EF3C0                                         ; DATA XREF: OpenSSL_version:loc_220B1DC↑o
+.rodata:00000000023EF400                 DCB "ndroid-ndk/platforms/android-21/arch-arm64 -DDSO_DLFCN -DHAVE_DL"
+.rodata:00000000023EF440                 DCB "FCN_H -DNDEBUG -DOPENSSL_THREADS -DOPENSSL_NO_DYNAMIC_ENGINE -DO"
+.rodata:00000000023EF480                 DCB "PENSSL_PIC -DOPENSSL_BN_ASM_MONT -DSHA1_ASM -DSHA256_ASM -DSHA51"
+.rodata:00000000023EF4C0                 DCB "2_ASM -DVPAES_ASM -DECP_NISTZ256_ASM -DPOLY1305_ASM -DOPENSSLDIR"
+.rodata:00000000023EF500                 DCB "=",0x22,"\",0x22,"/Users/james/Project/cocos2d-x-3rd-party-libs-"
+.rodata:00000000023EF532                 DCB "src/contrib/install-android/arm64/ssl\",0x22,0x22," -DENGINESDIR"
+.rodata:00000000023EF567                 DCB "=",0x22,"\",0x22,"/Users/james/Project/cocos2d-x-3rd-party-libs-"
+.rodata:00000000023EF599                 DCB "src/contrib/install-android/arm64/lib/engines-1.1\",0x22,0x22," "
+.rodata:00000000023EF5CE                 DCB 0
+.rodata:00000000023EF5CF                 ALIGN 0x10
+.rodata:00000000023EF5D0 aOpenssl110c10N DCB "OpenSSL 1.1.0c  10 Nov 2016",0
+
+    Direct match: https://github.com/cocos2d/cocos2d-x-3rd-party-libs-bin/tree/8dcfc483b62c8b7b7eaf29754ee5ecfa89814ddd
+
+
+libCURL:
+    Decomp match:  ; "7.51.0"
+    Download link: https://github.com/leenjewel/openssl_for_ios_and_android/releases/download/20170105/openssl_curl_for_ios_android.20170105.zip
+
+    ARM64 match: 7.52.1
+
+libXML2: 
+    Decomp match:
+		.rodata:00000000027935F8 a20909Gitandroi db '20909-GITandroid-o-mr1-iot-release-1.0.12-21-ga03fa162',0
+
+    Originated from libxml2 2.9.9 from android:
+    	Commit tag: android-o-mr1-iot-release-1.0.13 (a03fa162)
+	    Fully mached commit: https://android.googlesource.com/platform/external/libxml2/+/a03fa1623ff0721f5e99fbaa26cfaa8c1388868a
+	
+    Built from source, might not match!
+
+    Iconv and lzma are disabled as they are not found in the libgame.so
+
+libPNG:
+    libpng version 1.6.16 - December 22, 2014\n\n
+
+    Built from source, might not match!
+
+zLIB:
+    Decomp match:
+        const char *zlibVersion()
+        {
+        return "1.2.8";
+        }
+    
+    Built from source, might not match!
+
+
+libTIFF:
+	* Decomp match:
+        LIBTIFF, Version 3.9.2\nCopyright (c) 1988-1996 Sam Leffler\nCopyright (c) 1991-1996 Silicon Graphics, Inc.
+
+    ARM64 decomp match:
+        LIBTIFF, Version 4.0.3\nCopyright (c) 1988-1996 S
+
+    Built from source, might not match!
+
+libJPEG:
+    Decomp match:
+          jpeg_CreateCompress(v22, 90, 584LL);
+
+    jpeglib v9
+
+    Built from source, might not match!
