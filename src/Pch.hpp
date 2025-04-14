@@ -7,6 +7,10 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <map>
+
+// JSON parsing
+#include <picojson.h>
 
 #ifdef __ANDROID__
 // Android runtime
@@ -20,3 +24,6 @@
 #else
 #error "Unsupported compiler!"
 #endif
+
+// Game includes
+#include "RegionSwitch.hpp"

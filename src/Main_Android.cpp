@@ -33,7 +33,7 @@ extern "C"
         AsyncFileLoad* fl = (AsyncFileLoad*)obj; // what the fuck, seriously what the fuck!!!!
         jbyte* elements;
         bool isInError;
-        WrapAsyncFileLoad* wfl = /*(WrapAsyncFileLoad*)fl->getUserObj()*/;
+        WrapAsyncFileLoad* wfl = (WrapAsyncFileLoad*)fl->getUserObj();
         const char* errorStr = NULL;
         bool gotElements = false;
         jboolean copy;
