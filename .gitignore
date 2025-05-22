@@ -731,6 +731,8 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
+.vscode/
 
 # bf data
+libs/cocos2d-x/template/android/*
 data/*
