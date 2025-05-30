@@ -32,36 +32,6 @@
 #error "Unsupported compiler!"
 #endif
 
-// Cocos2d support macros
-
-/** CC_SYNTHESIZE_IS_READONLY is used to declare a protected variable.
- We can use getter to read the variable.
- @param varType : the type of variable.
- @param varName : variable name.
- @param funName : "is + funName" is the name of the getter.
- @warning : The getter is a public inline function.
- The variables and methods declared after CC_SYNTHESIZE_READONLY are all public.
- If you need protected or private, please declare.
- */
-#define CC_SYNTHESIZE_IS_READONLY(varType, varName, funName)\
-protected: varType varName;\
-public: virtual varType is##funName(void) const { return varName; }
-
- /** CC_SYNTHESIZE_READONLY2 is used to declare a protected variable.
-  We can use getter to read the variable.
-  @param varType : the type of variable.
-  @param varName : variable name.
-  @param funName : "is + funName" is the name of the getter. "set + funName" is the name of the setter.
-  @warning : The getter is a public inline function.
-  The variables and methods declared after CC_SYNTHESIZE_READONLY are all public.
-  If you need protected or private, please declare.
-  */
-#define CC_SYNTHESIZE_IS(varType, varName, funName)\
-protected: varType varName;\
-public: virtual varType is##funName(void) const { return varName; }
-
-#define CC_DECLARE(varType, varName)\
-protected: varType varName;
-
 // Game includes
+#include "CocosMacros.hpp"
 #include "RegionSwitch.hpp"

@@ -5,6 +5,8 @@ set(SRCS
     AsyncFileLoad.hpp
     BaseScene.cpp
     BaseScene.hpp
+    CcImages.hpp
+    CocosMacros.hpp
     CommonUtils.cpp
     CommonUtils.hpp
     GameLayer.cpp
